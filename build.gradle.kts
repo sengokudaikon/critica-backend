@@ -50,6 +50,13 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:2.2.4")
     implementation("de.nycode:bcrypt:2.3.0")
     implementation("io.ktor:ktor-server-auth-jwt:2.2.4")
+    implementation("org.testng:testng:7.7.0")
+    implementation("io.ktor:ktor-server-config-yaml:2.2.4")
+    implementation("io.ktor:ktor-server-swagger-jvm:2.2.4")
+    implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
+    implementation("org.flywaydb:flyway-core:9.16.0")
+    implementation("org.flywaydb:flyway-gradle-plugin:9.16.0")
+    implementation("com.zaxxer:HikariCP:5.0.1")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

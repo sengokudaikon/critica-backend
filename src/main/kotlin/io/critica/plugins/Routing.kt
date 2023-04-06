@@ -1,15 +1,23 @@
 package io.critica.plugins
 
+import io.critica.persistence.dao.UserDao
+import io.critica.presentation.Routes
 import io.ktor.server.application.*
-import io.ktor.server.resources.*
-import io.ktor.server.response.*
+import io.ktor.server.plugins.openapi.*
+import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
+import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 
 fun Application.configureRouting() {
-    install(Resources)
+    UserDao()
     routing {
-        get("/") {
-            call.respondText("Hello World!")
+        Routes()
+
+        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {
+            version = "4.15.5"
+        }
+        openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml") {
+            codegen = StaticHtmlCodegen()
         }
     }
 }
