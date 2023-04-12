@@ -21,6 +21,6 @@ val dotenv = dotenv {
     } else if (System.getenv("ENV") == "dev") {
         filename = ".env.development"
     } else {
-        filename = ".env.local"
+        filename = ".env"
     }
 }
