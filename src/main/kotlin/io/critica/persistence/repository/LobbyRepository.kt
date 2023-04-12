@@ -1,8 +1,8 @@
 package io.critica.persistence.repository
 
-import io.critica.application.lobby.CreateLobby
-import io.critica.application.lobby.DeleteLobby
-import io.critica.application.lobby.GetLobby
+import io.critica.application.lobby.request.CreateLobby
+import io.critica.application.lobby.request.DeleteLobby
+import io.critica.application.lobby.request.GetLobby
 import io.critica.domain.Lobby
 //import io.critica.domain.User
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync

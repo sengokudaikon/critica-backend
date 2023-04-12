@@ -1,8 +1,8 @@
 package io.critica.presentation.controller
 
-import io.critica.application.lobby.CreateLobby
-import io.critica.application.lobby.DeleteLobby
-import io.critica.application.lobby.GetLobby
+import io.critica.application.lobby.request.CreateLobby
+import io.critica.application.lobby.request.DeleteLobby
+import io.critica.application.lobby.request.GetLobby
 import io.critica.presentation.action.lobby.Lobby
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -13,17 +13,17 @@ class LobbyController(
     private val action: Lobby,
 ) {
     fun Routing.lobbyRoutes() {
-        route("/lobby") {
-            post("/create") {
-                val date = call.receiveParameters()["date"]!!
-                val creator = call.receiveParameters()["creator"]!!.toInt()
-                val name = call.receiveParameters()["name"]!!
-                val lobby = action.create(CreateLobby(date, creator, name))
+        route("api/lobby") {
+            post("create") {
+                val request = call.receive<CreateLobby>()
+                val date = request.date
+                val name = request.name
+                val lobby = action.create(CreateLobby(date, name = name))
 
                 call.respond(lobby)
             }
 
-            get("/get/{id}") {
+            get("get/{id}") {
                 val id = call.receiveParameters()["id"]?.toInt()
                 if (id == null) {
                     call.respondText("Invalid ID")
@@ -34,12 +34,12 @@ class LobbyController(
                 call.respond(lobby)
             }
 
-            get("/list") {
+            get("list") {
                 val lobbies = action.list()
                 call.respond(lobbies)
             }
 
-            put("/delete/{id}") {
+            put("delete/{id}") {
                 val id = call.receiveParameters()["id"]?.toInt()
 
                 if (id != null) {

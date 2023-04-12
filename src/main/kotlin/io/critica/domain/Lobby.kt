@@ -8,6 +8,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 class Lobby(
     id: EntityID<Int>,
 ): IntEntity(id) {
+
     companion object : IntEntityClass<Lobby>(Lobbies)
     var date by Lobbies.date
 //    var creator by User referencedOn Lobbies.creator

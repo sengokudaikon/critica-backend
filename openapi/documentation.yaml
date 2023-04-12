@@ -14,7 +14,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewLobby'
+              $ref: '#/components/schemas/CreateLobby'
       responses:
         '200':
           description: OK
@@ -35,159 +35,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
   /api/lobby/get/{id}:
-
-  /api/auth/register:
-    post:
-      summary: Register
-      description: Register
-      operationId: register
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Register'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequest'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /api/auth/login:
-    post:
-      summary: Login
-      description: Login
-      operationId: login
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /api/auth/logout:
-    post:
-      summary: Logout
-      description: Logout
-      operationId: logout
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OK'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /api/auth/login-admin:
-    post:
-      summary: Login Admin
-      description: Login Admin
-      operationId: loginAdmin
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /api/auth/register-admin:
-    post:
-      summary: Register Admin
-      description: Register Admin
-      operationId: registerAdmin
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Register'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequest'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /api/user/get:
     get:
-      summary: Get User
-      description: Get User
-      operationId: getUser
+      summary: Get Lobby
+      description: Get Lobby
+      operationId: getLobby
+      parameters:
+        - name: id
+          in: path
+          description: Lobby ID
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Lobby'
         '401':
           description: Unauthorized
           content:
@@ -200,14 +65,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
-  /api/user/profile/{id}:
+  /api/lobby/list:
     get:
-      summary: Get User Profile
-      description: Get User Profile
-      operationId: getUserProfile
+      summary: List Lobbies
+      description: List Lobbies
+      operationId: listLobbies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lobby'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /api/lobby/delete/{id}:
+    delete:
+      summary: Delete Lobby
+      description: Delete Lobby
+      operationId: deleteLobby
       parameters:
         - name: id
           in: path
+          description: Lobby ID
           required: true
           schema:
             type: integer
@@ -217,7 +107,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Lobby'
         '401':
           description: Unauthorized
           content:
@@ -230,262 +120,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
-  /game/create:
-    post:
-      summary: Create Game
-      description: Create Game
-      operationId: createGame
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewGame'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /game/start/{id}:
-    post:
-      summary: Start Game
-      description: Start Game
-      operationId: startGame
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /game/get/{id}:
-    get:
-      summary: Get Game
-      description: Get Game
-      operationId: getGame
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /game/update/{id}/day/{day}:
-    post:
-      summary: Update Game day
-      description: Update Game day
-      operationId: updateGameDay
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: day
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: candidates
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: votes
-          in: query
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateGame'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /game/update/{id}/night/{night}:
-    post:
-      summary: Update Game night
-      description: Update Game night
-      operationId: updateGameNight
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: night
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: shot
-          in: query
-          required: true
-          schema:
-              type: string
-        - name: sheriff
-          in: query
-          required: true
-          schema:
-              type: string
-        - name: don
-          in: query
-          required: true
-          schema:
-              type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateGame'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /game/list:
-    get:
-      summary: Get Games
-      description: Get Games
-      operationId: getGames
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /game/finish/{id}:
-    post:
-      summary: Finish Game
-      description: Finish Game
-      operationId: finishGame
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateGame'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-
 components:
   schemas:
+    CreateLobby:
+        type: object
+        properties:
+            date:
+              type: string
+            name:
+              type: string
+    Lobby:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        game:
+          type: array
+          items:
+              type: string
+        host:
+          type: string
+        players:
+          type: array
+          items:
+            type: string
+        maxPlayers:
+          type: integer
+          default: 10
+        isPrivate:
+          type: boolean
+        password:
+          type: string
+          nullable: true
     Login:
       type: object
       properties:
