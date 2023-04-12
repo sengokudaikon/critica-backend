@@ -8,9 +8,8 @@ import io.critica.domain.events.DayVote
 import io.critica.domain.events.NightEvent
 import io.critica.persistence.db.DayEvents
 import io.critica.persistence.db.Players
-import kotlinx.coroutines.Deferred
+import io.critica.persistence.exception.PlayerException
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 
 class EventRepository {
@@ -38,7 +37,7 @@ class EventRepository {
 
             val candidateExists = dayEvent.candidates.any { it.player.id.value == candidateId }
             if (!candidateExists) {
-                val player = Player.findById(candidateId)!!
+                val player = Player.findById(candidateId) ?: throw PlayerException.NotFound("Player not found")
                 dayEvent.candidates.plus(DayCandidate.new {
                     this.player = player
                     this.day = dayEvent
@@ -84,9 +83,9 @@ class EventRepository {
         return suspendedTransactionAsync {
             val dayEvent = DayEvent.find { DayEvents.game eq game.id }.first()
             dayEvent.votes.plus(DayVote.new {
-                this.player = Player.findById(voter)!!
+                this.player = Player.findById(voter)?: throw PlayerException.NotFound("Player not found")
                 this.day = dayEvent
-                this.target = Player.findById(target)!!
+                this.target = Player.findById(target)?: throw PlayerException.NotFound("Player not found")
             })
             dayEvent
         }.await()

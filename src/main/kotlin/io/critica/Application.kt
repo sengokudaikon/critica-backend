@@ -4,6 +4,7 @@ import com.codahale.metrics.Slf4jReporter
 import io.critica.config.AppConfig
 import io.critica.di.DatabaseFactory
 import io.critica.di.appModule
+import io.critica.presentation.controller.GameController
 import io.critica.presentation.controller.LobbyController
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
@@ -65,6 +66,7 @@ fun Application.main() {
 
 private fun Application.configRouting() {
     val lobbyController: LobbyController by inject()
+    val gameController: GameController by inject()
     routing {
         webSocket("/ws") { // websocketSession
             for (frame in incoming) {
@@ -92,6 +94,7 @@ private fun Application.configRouting() {
 
         route("api") {
             this@routing.lobbyRoutes(lobbyController)
+            this@routing.gameRoutes(gameController)
         }
     }
 }
@@ -175,5 +178,11 @@ private fun Application.configCache() {
 fun Routing.lobbyRoutes(controller: LobbyController) {
     with(controller) {
         lobbyRoutes()
+    }
+}
+
+fun Routing.gameRoutes(controller: GameController) {
+    with(controller) {
+        gameRoutes()
     }
 }

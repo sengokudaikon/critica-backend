@@ -1,10 +1,10 @@
-package io.critica.presentation.action.game
+package io.critica.usecase.game
 
 import io.critica.persistence.repository.EventRepository
 import io.critica.persistence.repository.GameRepository
 import io.critica.persistence.repository.PlayerRepository
 
-class Event(
+class EventUseCase(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val eventRepository: EventRepository,

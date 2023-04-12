@@ -1,5 +1,6 @@
 package io.critica.domain.events
 
+import io.critica.application.vote.DayVoteResponse
 import io.critica.domain.Player
 import io.critica.persistence.db.DayVotes
 import org.jetbrains.exposed.dao.IntEntity
@@ -13,4 +14,12 @@ class DayVote(
     var day by DayEvent referencedOn DayVotes.day
     var player by Player referencedOn DayVotes.player
     var target by Player referencedOn DayVotes.target
+
+    fun toResponse(): DayVoteResponse {
+        return DayVoteResponse(
+            dayNumber = this.day.day,
+            player = this.player.toResponse(),
+            target = this.target.toResponse(),
+        )
+    }
 }

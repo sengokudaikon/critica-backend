@@ -3,7 +3,7 @@ package io.critica.presentation.controller
 import io.critica.application.lobby.request.CreateLobby
 import io.critica.application.lobby.request.DeleteLobby
 import io.critica.application.lobby.request.GetLobby
-import io.critica.presentation.action.lobby.Lobby
+import io.critica.usecase.lobby.LobbyUseCase
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -11,7 +11,7 @@ import io.ktor.server.routing.*
 import org.joda.time.LocalTime
 
 class LobbyController(
-    private val action: Lobby,
+    private val action: LobbyUseCase,
 ) {
     fun Routing.lobbyRoutes() {
         route("api/lobby") {
@@ -46,8 +46,8 @@ class LobbyController(
 
                 val localTime = time?.let { LocalTime.parse(it) } ?: LocalTime.now()
 
-                val game = action.addGame(id, localTime)
-                call.respond(game)
+                val lobbyWithGame = action.addGame(id, localTime)
+                call.respond(lobbyWithGame)
             }
 
             patch("{id}/removeGame/{gameId}") {
@@ -56,10 +56,16 @@ class LobbyController(
                     call.respondText("Invalid ID", status = io.ktor.http.HttpStatusCode.BadRequest)
                     return@patch
                 }
+
                 val gameId = call.receiveParameters()["gameId"]?.toInt()
 
-                gameId?.let { it1 -> action.removeGame(id, it1) }
-                call.respondText("Game removed", status = io.ktor.http.HttpStatusCode.OK)
+                if (gameId == null ) {
+                    call.respondText("Invalid ID", status = io.ktor.http.HttpStatusCode.BadRequest)
+                    return@patch
+                }
+
+                val lobbyWithoutGame = action.removeGame(id, gameId)
+                call.respond(lobbyWithoutGame)
             }
 
             put("{id}/addPlayer") {
@@ -70,8 +76,8 @@ class LobbyController(
                     return@put
                 }
 
-//                val lobby = action.addPlayer(id, playerName)
-                call.respond("ok")
+                val lobby = action.addPlayer(id, playerName)
+                call.respond(lobby)
             }
 
             put("{id}/addPlayer/{playerId}") {
@@ -82,8 +88,8 @@ class LobbyController(
                     return@put
                 }
 
-//                val lobby = action.addPlayerById(id, playerId)
-                call.respond("ok")
+                val lobby = action.addPlayerById(id, playerId)
+                call.respond(lobby)
             }
 
             patch("{id}/removePlayer") {
@@ -94,8 +100,8 @@ class LobbyController(
                     return@patch
                 }
 
-//                val lobby = action.addPlayer(id, playerName)
-                call.respond("ok")
+                val lobby = action.removePlayer(id, playerName)
+                call.respond(lobby)
             }
 
             patch("{id}/removePlayer/{playerId}") {
@@ -106,8 +112,30 @@ class LobbyController(
                     return@patch
                 }
 
-//                val lobby = action.addPlayerById(id, playerId)
-                call.respond("ok")
+                val lobby = action.removePlayerById(id, playerId)
+                call.respond(lobby)
+            }
+
+            get("{id}/players") {
+                val id = call.receiveParameters()["id"]?.toInt()
+                if (id == null) {
+                    call.respondText("Invalid ID", status = io.ktor.http.HttpStatusCode.BadRequest)
+                    return@get
+                }
+
+                val players = action.getPlayers(id)
+                call.respond(players)
+            }
+
+            get("{id}/games") {
+                val id = call.receiveParameters()["id"]?.toInt()
+                if (id == null) {
+                    call.respondText("Invalid ID", status = io.ktor.http.HttpStatusCode.BadRequest)
+                    return@get
+                }
+
+                val games = action.getGames(id)
+                call.respond(games)
             }
 
             get("list") {
