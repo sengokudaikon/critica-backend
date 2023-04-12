@@ -26,13 +26,14 @@ fun Application.main() {
     configureHTTP()
     configureMonitoring()
     configureSerialization()
-    configureDatabases(config.dbConfig)
-    configureMigrations(config.dbConfig)
+    DatabaseFactory.init(dbConfig = config.dbConfig)
     configureSockets()
     configureRouting()
 
     val lobbyController: LobbyController by inject()
     routing {
-        lobbyRoutes(lobbyController)
+        route("/api") {
+            this@routing.lobbyRoutes(lobbyController)
+        }
     }
 }

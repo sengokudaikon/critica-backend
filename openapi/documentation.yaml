@@ -5,6 +5,37 @@ info:
 servers:
   - url: http://localhost:8080
 paths:
+  /api/lobby/create:
+    post:
+      summary: Create Lobby
+      description: Create Lobby
+      operationId: createLobby
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewLobby'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lobby'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /api/lobby/get/{id}:
+
   /api/auth/register:
     post:
       summary: Register

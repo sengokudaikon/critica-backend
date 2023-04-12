@@ -14,8 +14,9 @@ data class AppConfig(
             val dotenv = Dotenv.load()
             return AppConfig(
                 dbConfig = DbConfig(
+                    driver = dotenv["DB_DRIVER"],
                     url = dotenv["DB_URL"],
-                    user = dotenv["DB_USER"],
+                    username = dotenv["DB_USER"],
                     password = dotenv["DB_PASSWORD"],
                 ),
 //                jwtConfig = JwtConfig(
