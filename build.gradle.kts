@@ -1,3 +1,5 @@
+import io.github.cdimascio.dotenv.Dotenv
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -5,11 +7,33 @@ val exposed_version: String by project
 val postgres_version: String by project
 val koin_version: String by project
 
+group = "io.critica"
+version = "0.0.1"
+
 plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
     id("com.google.devtools.ksp") version "1.8.20-1.0.10"
+    id("org.flywaydb.flyway") version "7.15.0"
+    id("io.gitlab.arturbosch.detekt") version "1.19.0"
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    parallel = true
+    autoCorrect = true
+}
+
+val dotenv = Dotenv.configure().ignoreIfMissing().load()
+val flywayUrl = dotenv["FLYWAY_URL"]
+val flywayUser = dotenv["FLYWAY_USER"]
+val flywayPassword = dotenv["FLYWAY_PASSWORD"]
+
+flyway {
+    url = flywayUrl
+    user = flywayUser
+    password = flywayPassword
 }
 
 kotlin {
@@ -22,17 +46,46 @@ kotlin {
     }
 }
 
-group = "io.critica"
-version = "0.0.1"
+ktor {
+    fatJar {
+        archiveFileName.set("critica.jar")
+    }
+
+    docker {
+        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+        localImageName.set("sample-docker-image")
+        imageTag.set("0.0.1")
+        portMappings.set(listOf(
+            io.ktor.plugin.features.DockerPortMapping(
+                80,
+                8080,
+                io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+            )
+        ))
+
+        externalRegistry.set(
+            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
+                appName = provider { "critica-backend" },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+            )
+        )
+    }
+}
+
 application {
     mainClass.set("io.critica.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
-
 repositories {
     mavenCentral()
+}
+buildscript {
+    dependencies {
+        classpath("io.github.cdimascio:java-dotenv:5.2.2")
+    }
 }
 
 dependencies {
@@ -69,6 +122,15 @@ dependencies {
     implementation("io.insert-koin:koin-test:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.0")
+    implementation("io.ktor:ktor-server-host-common-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+tasks {
+    build {
+        dependsOn("detekt")
+    }
 }
