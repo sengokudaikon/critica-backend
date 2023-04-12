@@ -3,11 +3,23 @@ val kotlin_version: String by project
 val logback_version: String by project
 val exposed_version: String by project
 val postgres_version: String by project
+val koin_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
+    id("com.google.devtools.ksp") version "1.8.20-1.0.10"
+}
+
+kotlin {
+    sourceSets.main {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+
+    sourceSets.test {
+        kotlin.srcDir("build/generated/ksp/test/kotlin")
+    }
 }
 
 group = "io.critica"
@@ -24,6 +36,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.8.20-1.0.10")
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
@@ -47,16 +60,15 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("com.fasterxml.jackson:jackson-base:2.14.2")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.14.2")
-    implementation("io.ktor:ktor-server-auth:2.2.4")
     implementation("de.nycode:bcrypt:2.3.0")
-    implementation("io.ktor:ktor-server-auth-jwt:2.2.4")
     implementation("org.testng:testng:7.7.0")
-    implementation("io.ktor:ktor-server-config-yaml:2.2.4")
-    implementation("io.ktor:ktor-server-swagger-jvm:2.2.4")
-    implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
     implementation("org.flywaydb:flyway-core:9.16.0")
-    implementation("org.flywaydb:flyway-gradle-plugin:9.16.0")
     implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-core:$koin_version")
+    implementation("io.insert-koin:koin-test:$koin_version")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+    implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

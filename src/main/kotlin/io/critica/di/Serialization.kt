@@ -1,4 +1,4 @@
-package io.critica.plugins
+package io.critica.di
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*

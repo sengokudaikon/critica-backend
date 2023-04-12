@@ -1,4 +1,4 @@
-package io.critica.plugins
+package io.critica.di
 
 import io.critica.config.DbConfig
 import io.ktor.server.application.*
