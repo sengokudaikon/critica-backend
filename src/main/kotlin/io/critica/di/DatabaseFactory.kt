@@ -21,7 +21,6 @@ object DatabaseFactory {
             jdbcUrl = dbConfig.url
             this.username = dbConfig.username
             this.password = dbConfig.password
-            maximumPoolSize = 3
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
             validate()
@@ -34,7 +33,9 @@ object DatabaseFactory {
 
         if (drop) {
             transaction {
-                SchemaUtils.drop(*tables)
+                tables.forEach { table ->
+                    SchemaUtils.drop(table)
+                }
                 SchemaUtils.drop(Table("flyway_schema_history"))
             }
         }
@@ -53,7 +54,9 @@ object DatabaseFactory {
         }
 
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(*tables)
+            tables.forEach { table ->
+                SchemaUtils.createMissingTablesAndColumns(table)
+            }
         }
 
         if (flyway?.info()?.current() == null) {

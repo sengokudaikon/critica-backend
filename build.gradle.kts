@@ -1,3 +1,5 @@
+import io.github.cdimascio.dotenv.Dotenv
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -10,6 +12,25 @@ plugins {
     id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
     id("com.google.devtools.ksp") version "1.8.20-1.0.10"
+    id("org.flywaydb.flyway") version "7.15.0"
+    id("io.gitlab.arturbosch.detekt") version "1.19.0"
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    parallel = true
+    autoCorrect = true
+}
+
+val dotenv = Dotenv.configure().ignoreIfMissing().load()
+val flywayUrl = dotenv["FLYWAY_URL"]
+val flywayUser = dotenv["FLYWAY_USER"]
+val flywayPassword = dotenv["FLYWAY_PASSWORD"]
+
+flyway {
+    url = flywayUrl
+    user = flywayUser
+    password = flywayPassword
 }
 
 kotlin {
@@ -30,9 +51,13 @@ application {
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
-
 repositories {
     mavenCentral()
+}
+buildscript {
+    dependencies {
+        classpath("io.github.cdimascio:java-dotenv:5.2.2")
+    }
 }
 
 dependencies {
@@ -74,4 +99,10 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+tasks {
+    build {
+        dependsOn("detekt")
+    }
 }

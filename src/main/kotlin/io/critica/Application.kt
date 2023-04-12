@@ -2,8 +2,10 @@ package io.critica
 
 import com.codahale.metrics.Slf4jReporter
 import io.critica.config.AppConfig
-import io.critica.di.*
+import io.critica.di.DatabaseFactory
+import io.critica.di.appModule
 import io.critica.presentation.controller.LobbyController
+import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -33,6 +35,11 @@ import org.slf4j.event.Level
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
+private const val maxRange: Int = 10
+private const val maxAgeSeconds: Int = 24 * 60 * 60
+private const val duration: Long = 10L
+private const val wsDuration: Long = 15L
+
 fun main() {
     embeddedServer(Netty, port = 8080, host = "localhost", module = Application::main)
         .start(wait = true)
@@ -45,35 +52,51 @@ fun Application.main() {
     }
 
     val config: AppConfig by inject()
+    val dotenv = dotenv()
+    val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
+
+    if (runMigrations) { DatabaseFactory.init(dbConfig = config.dbConfig) }
 //    configureSecurity(config.jwtConfig)
-    install(CachingHeaders) {
-        options { call, outgoingContent ->
-            when (outgoingContent.contentType?.withoutParameters()) {
-                ContentType.Text.CSS -> io.ktor.http.content.CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
-                else -> null
+    configCache()
+    configHttp()
+    configMonitoring()
+    configRouting()
+}
+
+private fun Application.configRouting() {
+    val lobbyController: LobbyController by inject()
+    routing {
+        webSocket("/ws") { // websocketSession
+            for (frame in incoming) {
+                if (frame is Frame.Text) {
+                    val text = frame.readText()
+                    outgoing.send(Frame.Text("YOU SAID: $text"))
+                    if (text.equals("bye", ignoreCase = true)) {
+                        close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
+                    }
+                }
             }
         }
+        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {
+            version = "4.15.5"
+        }
+        openAPI(path = "openapi", swaggerFile = "openapi/documentation.yaml") {
+            codegen = StaticHtmlCodegen()
+        }
+
+        static("/static") {
+            resources("static")
+        }
+
+        get("/") { call.respondRedirect("/static/index.html") }
+
+        route("api") {
+            this@routing.lobbyRoutes(lobbyController)
+        }
     }
-    install(CORS) {
-        allowMethod(HttpMethod.Options)
-        allowMethod(HttpMethod.Put)
-        allowMethod(HttpMethod.Delete)
-        allowMethod(HttpMethod.Patch)
-        allowHeader(HttpHeaders.Authorization)
-        allowHeader("MyCustomHeader")
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
-    }
-    routing {
-        openAPI(path = "openapi")
-    }
-    routing {
-        swaggerUI(path = "openapi")
-    }
-    install(PartialContent) {
-        // Maximum number of ranges that will be accepted from a HTTP request.
-        // If the HTTP request specifies more ranges, they will all be merged into a single range.
-        maxRangeCount = 10
-    }
+}
+
+private fun Application.configMonitoring() {
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
@@ -81,11 +104,11 @@ fun Application.main() {
     }
     install(DropwizardMetrics) {
         Slf4jReporter.forRegistry(registry)
-            .outputTo(this@main.log)
+            .outputTo(this@configMonitoring.log)
             .convertRatesTo(TimeUnit.SECONDS)
             .convertDurationsTo(TimeUnit.MILLISECONDS)
             .build()
-            .start(10, TimeUnit.SECONDS)
+            .start(duration, TimeUnit.SECONDS)
     }
     install(CallId) {
         header(HttpHeaders.XRequestId)
@@ -93,6 +116,25 @@ fun Application.main() {
             callId.isNotEmpty()
         }
     }
+}
+
+private fun Application.configHttp() {
+    install(CORS) {
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Put)
+        allowMethod(HttpMethod.Delete)
+        allowMethod(HttpMethod.Patch)
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader("MyCustomHeader")
+        anyHost()
+    }
+
+    install(PartialContent) {
+        // Maximum number of ranges that will be accepted from a HTTP request.
+        // If the HTTP request specifies more ranges, they will all be merged into a single range.
+        maxRangeCount = maxRange
+    }
+
     install(ContentNegotiation) {
         json(
             Json {
@@ -109,43 +151,23 @@ fun Application.main() {
         }
     }
 
-    DatabaseFactory.init(dbConfig = config.dbConfig)
     install(WebSockets) {
-        pingPeriod = Duration.ofSeconds(15)
-        timeout = Duration.ofSeconds(15)
+        pingPeriod = Duration.ofSeconds(wsDuration)
+        timeout = Duration.ofSeconds(wsDuration)
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
-    routing {
-        webSocket("/ws") { // websocketSession
-            for (frame in incoming) {
-                if (frame is Frame.Text) {
-                    val text = frame.readText()
-                    outgoing.send(Frame.Text("YOU SAID: $text"))
-                    if (text.equals("bye", ignoreCase = true)) {
-                        close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
-                    }
-                }
+}
+
+private fun Application.configCache() {
+    install(CachingHeaders) {
+        options { call, outgoingContent ->
+            when (outgoingContent.contentType?.withoutParameters()) {
+                ContentType.Text.CSS -> io.ktor.http.content.CachingOptions(
+                    CacheControl.MaxAge(maxAgeSeconds = maxAgeSeconds)
+                )
+                else -> null
             }
-        }
-    }
-    val lobbyController: LobbyController by inject()
-    routing {
-        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {
-            version = "4.15.5"
-        }
-        openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml") {
-            codegen = StaticHtmlCodegen()
-        }
-
-        static("/static") {
-            resources("static")
-        }
-
-        get("/") { call.respondRedirect("/static/index.html") }
-
-        route("api") {
-            this@routing.lobbyRoutes(lobbyController)
         }
     }
 }
