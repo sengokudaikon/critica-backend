@@ -1,4 +1,4 @@
-package io.critica.plugins
+package io.critica.di
 
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.http.content.*

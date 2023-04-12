@@ -1,4 +1,4 @@
-package io.critica.plugins
+package io.critica.di
 
 import io.ktor.server.plugins.callloging.*
 import org.slf4j.event.*

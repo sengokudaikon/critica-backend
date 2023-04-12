@@ -1,4 +1,4 @@
-package io.critica.plugins
+package io.critica.di
 
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
