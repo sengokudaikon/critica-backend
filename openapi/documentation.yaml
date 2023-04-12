@@ -175,7 +175,7 @@ paths:
       operationId: addPlayer
       tags:
         - Lobby
-        - User
+        - Player
       parameters:
         - name: id
           in: path
@@ -215,7 +215,7 @@ paths:
       operationId: removePlayer
       tags:
         - Lobby
-        - User
+        - Player
       parameters:
         - name: id
           in: path
@@ -255,7 +255,7 @@ paths:
       operationId: removePlayer
       tags:
         - Lobby
-        - User
+        - Player
       parameters:
         - name: id
           in: path
@@ -296,7 +296,6 @@ paths:
       tags:
         - Lobby
         - Player
-        - User
       parameters:
         - name: id
           in: path
