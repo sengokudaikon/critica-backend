@@ -1,6 +1,7 @@
 package io.critica.config
 
 import com.typesafe.config.ConfigFactory
+import io.github.cdimascio.dotenv.Dotenv
 
 data class AppConfig(
     val dbConfig: DbConfig,
@@ -10,12 +11,12 @@ data class AppConfig(
     companion object {
         fun load(): AppConfig {
             val config = ConfigFactory.load("application.conf")
-
+            val dotenv = Dotenv.load()
             return AppConfig(
                 dbConfig = DbConfig(
-                    url = config.getString("database.url"),
-                    user = config.getString("database.user"),
-                    password = config.getString("database.password"),
+                    url = dotenv["DB_URL"],
+                    user = dotenv["DB_USER"],
+                    password = dotenv["DB_PASSWORD"],
                 ),
 //                jwtConfig = JwtConfig(
 //                    secret = config.getString("jwt.secret"),
