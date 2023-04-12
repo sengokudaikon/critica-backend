@@ -70,6 +70,8 @@ dependencies {
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.0")
+    implementation("io.ktor:ktor-server-host-common-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
