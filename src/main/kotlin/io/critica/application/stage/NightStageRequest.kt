@@ -7,5 +7,4 @@ class NightStageRequest(
     val detectiveCheck: Int?,
     val donCheck: Int?,
     val playerRemoved: Int?
-) {
-}
+)

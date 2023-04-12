@@ -4,11 +4,11 @@ import io.critica.persistence.repository.EventRepository
 import io.critica.persistence.repository.GameRepository
 import io.critica.persistence.repository.PlayerRepository
 
-class EventUseCase(
-    private val gameRepository: GameRepository,
-    private val playerRepository: PlayerRepository,
-    private val eventRepository: EventRepository,
-) {
+class EventUseCase
+//    private val gameRepository: GameRepository,
+//    private val playerRepository: PlayerRepository,
+//    private val eventRepository: EventRepository,
+
 //    suspend fun day(request: DayStageRequest): DayStageResponse {
 //        val game = gameRepository.get(request.gameId)
 //        val dayNumber = getDayNumber(request.gameId) + 1
@@ -33,7 +33,10 @@ class EventUseCase(
 //            }
 //        }
 //
-//        gameRepository.addDayEvent(game, Json.decodeFromString(request.dayEvent.candidates!!), Json.decodeFromString(request.dayEvent.votes!!))
+//        gameRepository.addDayEvent(
+//        game,
+//        Json.decodeFromString(request.dayEvent.candidates!!),
+//        Json.decodeFromString(request.dayEvent.votes!!))
 //        return request.dayEvent.toResponse()
 //    }
 //
@@ -71,4 +74,3 @@ class EventUseCase(
 //                donCheck.toPlayerResponse()
 //            )
 //    }
-}

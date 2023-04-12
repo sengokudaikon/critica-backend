@@ -7,6 +7,7 @@ import io.critica.usecase.game.GameUseCase
 import io.critica.usecase.lobby.LobbyUseCase
 import io.critica.presentation.controller.LobbyController
 import io.critica.usecase.game.EventUseCase
+import io.critica.usecase.lobby.LobbyCrud
 import io.github.cdimascio.dotenv.dotenv
 import org.koin.dsl.module
 
@@ -17,11 +18,12 @@ val appModule = module {
     single { GameRepository() }
     single { UserRepository() }
     single { EventRepository() }
-    single { EventUseCase(get(), get(), get()) }
+    single { EventUseCase() }
     single { GameUseCase(get(), get(), get()) }
     single { LobbyUseCase(get(), get(), get(), get()) }
-    single { LobbyController(get()) }
-    single { GameController(get(), get()) }
+    single { LobbyCrud(get()) }
+    single { LobbyController(get(), get()) }
+    single { GameController(get()) }
 }
 
 val dotenv = dotenv {

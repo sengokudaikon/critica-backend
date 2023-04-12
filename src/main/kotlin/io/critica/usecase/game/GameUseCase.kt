@@ -13,6 +13,7 @@ import io.critica.persistence.repository.LobbyRepository
 import io.critica.persistence.repository.PlayerRepository
 import io.ktor.server.plugins.*
 
+private const val MAX_PLAYERS: Int = 10
 class GameUseCase(
     private val repository: GameRepository,
     private val lobbyRepository: LobbyRepository,
@@ -61,9 +62,10 @@ class GameUseCase(
         if (game.status == GameStatus.WAITING) throw GameException.NotWaiting("Game is not in status 'waiting'")
         if (game.status == GameStatus.FINISHED) throw GameException.AlreadyFinished("Game is in status 'finished'")
         if (game.status == GameStatus.STARTED) throw GameException.AlreadyStarted("Game is in status 'started'")
-        if (game.players.count().toInt() == 10) throw GameException.TooManyPlayers("Too many players in game")
+        if (game.players.count().toInt() == MAX_PLAYERS) throw GameException.TooManyPlayers("Too many players in game")
 
-        val player = playerRepository.getPlayerByPlayerIdAndGameId(playerId, gameId)?: throw PlayerException.NotFound("Player not found")
+        val player = playerRepository.getPlayerByPlayerIdAndGameId(playerId, gameId)
+            ?: throw PlayerException.NotFound("Player not found")
         val result = game.players.plus(player)
 
         if (result.contains(player)) {
@@ -82,7 +84,7 @@ class GameUseCase(
         if (game.status == GameStatus.WAITING) throw GameException.NotWaiting("Game is not in status 'waiting'")
         if (game.status == GameStatus.FINISHED) throw GameException.AlreadyFinished("Game is in status 'finished'")
         if (game.status == GameStatus.STARTED) throw GameException.AlreadyStarted("Game is in status 'started'")
-        if (game.players.count().toInt() == 10) throw GameException.TooManyPlayers("Too many players in game")
+        if (game.players.count().toInt() == MAX_PLAYERS) throw GameException.TooManyPlayers("Too many players in game")
 
         val player = playerRepository.getPlayerByNameAndGameId(playerName, gameId)
 

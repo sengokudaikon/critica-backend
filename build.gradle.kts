@@ -23,6 +23,7 @@ detekt {
     buildUponDefaultConfig = true
     parallel = true
     autoCorrect = true
+    config = files("${rootDir}/detekt.yaml")
 }
 
 val dotenv = Dotenv.configure().ignoreIfMissing().load()

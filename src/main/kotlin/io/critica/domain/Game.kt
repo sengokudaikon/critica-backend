@@ -31,12 +31,6 @@ class Game(id: EntityID<Int>): IntEntity(id) {
 
     fun toResponse(): GameResponse {
         val stage = this.getCurrentStage()
-        val stageResponse = when (stage) {
-            is DayEvent -> stage.toResponse()
-            is NightEvent -> stage.toResponse()
-            else -> { null }
-        }
-
         val playersEliminated = if (!this.playersEliminated.empty()) {
             this.playersEliminated.map { it.toResponse()}
         } else { listOf() }
@@ -44,7 +38,11 @@ class Game(id: EntityID<Int>): IntEntity(id) {
         return GameResponse(
             id = this.id.value,
             date = this.date,
-            currentStage = stageResponse,
+            currentStage = when (stage) {
+                is DayEvent -> stage.toResponse()
+                is NightEvent -> stage.toResponse()
+                else -> { null }
+            },
             players = this.players.map { it.toResponse() },
             nominates = when (stage) {
                 is DayEvent -> stage.candidates.map { it.toResponse() }

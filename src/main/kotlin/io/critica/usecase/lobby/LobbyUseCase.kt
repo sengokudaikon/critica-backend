@@ -2,8 +2,6 @@ package io.critica.usecase.lobby
 
 import io.critica.application.game.CreateGameRequest
 import io.critica.application.game.GameResponse
-import io.critica.application.lobby.request.CreateLobby
-import io.critica.application.lobby.request.DeleteLobby
 import io.critica.application.lobby.request.GetLobby
 import io.critica.application.lobby.response.LobbyResponse
 import io.critica.application.player.PlayerResponse
@@ -23,14 +21,6 @@ class LobbyUseCase(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
 ) {
-    suspend fun create(request: CreateLobby): LobbyResponse {
-        return repository.create(request).toResponse()
-    }
-
-    suspend fun get(request: GetLobby): LobbyResponse {
-        return repository.get(request).toResponse()
-    }
-
     suspend fun addGame(id: Int, time: LocalTime): LobbyResponse {
         val lobby = repository.get(GetLobby(id))
         val date = DateTime(lobby.date).withTime(time)
@@ -100,14 +90,6 @@ class LobbyUseCase(
         }
 
         return lobby.toResponse()
-    }
-
-    suspend fun list(): List<LobbyResponse> {
-        return repository.list().map { it.toResponse() }
-    }
-
-    suspend fun delete(request: DeleteLobby) {
-        return repository.delete(request)
     }
 
     suspend fun getPlayers(id: Int): List<PlayerResponse> {

@@ -5,5 +5,4 @@ data class PlayerRequest(
     val name: String,
     val role: String,
     val status: String
-) {
-}
+)

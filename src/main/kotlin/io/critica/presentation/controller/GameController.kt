@@ -4,6 +4,7 @@ import io.critica.application.game.CreateGameRequest
 import io.critica.domain.Role
 import io.critica.usecase.game.EventUseCase
 import io.critica.usecase.game.GameUseCase
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -11,23 +12,36 @@ import io.ktor.server.routing.*
 import org.joda.time.DateTime
 
 class GameController(
-    private val eventUseCase: EventUseCase,
     private val gameUseCase: GameUseCase,
 ) {
+    fun Route.crud() {
+        get("list") {
+            val games = gameUseCase.list()
+            call.respond(games)
+        }
+
+        post("create") {
+            val date = call.receive<String>()
+            val dateTime = DateTime.parse(date)
+            val game = gameUseCase.create(CreateGameRequest(dateTime))
+            call.respond(game)
+        }
+
+        get("get/{id}") {
+            val id = call.parameters["id"]?.toInt()
+            if (id == null) {
+                call.respondText("Invalid ID")
+                return@get
+            }
+
+            val game = gameUseCase.get(id)
+            call.respond(game)
+        }
+    }
+
     fun Routing.gameRoutes() {
             route("api/game") {
-                get("list") {
-                    val games = gameUseCase.list()
-                    call.respond(games)
-                }
-
-                post("create") {
-                    val date = call.receive<String>()
-                    val dateTime = DateTime.parse(date)
-                    val game = gameUseCase.create(CreateGameRequest(dateTime))
-                    call.respond(game)
-                }
-
+                crud()
                 post("start/{id}") {
                     val gameId = call.parameters["id"]?.toInt()
                     if (gameId == null) {
@@ -45,7 +59,7 @@ class GameController(
                         gameUseCase.addPlayerByName(gameId, playerName)
                     }
 
-                    call.respond(204)
+                    call.respondNullable(HttpStatusCode.NoContent)
                 }
 
                 put("{id}/addPlayer/{playerId}") {
@@ -63,7 +77,7 @@ class GameController(
 
                     gameUseCase.addPlayerById(gameId, playerId)
 
-                    call.respond(204)
+                    call.respondNullable(HttpStatusCode.NoContent)
                 }
 
                 put ("{id}/removePlayer") {
@@ -75,18 +89,7 @@ class GameController(
                     val playerId = call.receiveParameters()["playerId"]?.toInt()
                     playerId?.let { it1 -> gameUseCase.removePlayerById(gameId, it1) }
 
-                    call.respond(204)
-                }
-
-                get("get/{id}") {
-                    val id = call.parameters["id"]?.toInt()
-                    if (id == null) {
-                        call.respondText("Invalid ID")
-                        return@get
-                    }
-
-                    val game = gameUseCase.get(id)
-                    call.respond(game)
+                    call.respondNullable(HttpStatusCode.NoContent)
                 }
 
                 post("finish/{id}") {
