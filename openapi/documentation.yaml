@@ -383,9 +383,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Player'
-        maxPlayers:
-          type: integer
-          default: 10
     LobbyList:
         type: object
         properties:
@@ -399,6 +396,34 @@ components:
         id:
           type:
             integer
+        date:
+          type: string
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+        currentStage:
+          type: object
+          $ref: '#/components/schemas/Stage'
+          nullable: true
+        nominates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+        mafiaShot:
+          type: integer
+        detectiveCheck:
+          type: integer
+        donCheck:
+          type: integer
+        playersEliminated:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
     GameList:
         type: object
         properties:
