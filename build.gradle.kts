@@ -7,6 +7,9 @@ val exposed_version: String by project
 val postgres_version: String by project
 val koin_version: String by project
 
+group = "io.critica"
+version = "0.0.1"
+
 plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
@@ -43,8 +46,33 @@ kotlin {
     }
 }
 
-group = "io.critica"
-version = "0.0.1"
+ktor {
+    fatJar {
+        archiveFileName.set("critica.jar")
+    }
+
+    docker {
+        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+        localImageName.set("sample-docker-image")
+        imageTag.set("0.0.1")
+        portMappings.set(listOf(
+            io.ktor.plugin.features.DockerPortMapping(
+                80,
+                8080,
+                io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+            )
+        ))
+
+        externalRegistry.set(
+            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
+                appName = provider { "critica-backend" },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+            )
+        )
+    }
+}
+
 application {
     mainClass.set("io.critica.ApplicationKt")
 
