@@ -10,6 +10,8 @@ paths:
       summary: Create Lobby
       description: Create Lobby
       operationId: createLobby
+      tags:
+        - Lobby
       requestBody:
         content:
           application/json:
@@ -39,6 +41,8 @@ paths:
       summary: Get Lobby
       description: Get Lobby
       operationId: getLobby
+      tags:
+        - Lobby
       parameters:
         - name: id
           in: path
@@ -70,6 +74,8 @@ paths:
       summary: List Lobbies
       description: List Lobbies
       operationId: listLobbies
+      tags:
+        - Lobby
       responses:
         '200':
           description: OK
@@ -94,6 +100,8 @@ paths:
       summary: Delete Lobby
       description: Delete Lobby
       operationId: deleteLobby
+      tags:
+        - Lobby
       parameters:
         - name: id
           in: path
@@ -185,9 +193,11 @@ components:
       type: object
       properties:
         message:
-          type: "Server error occurred"
+          type: string
+          example: "Server error occurred"
     Unauthorized:
         type: object
         properties:
             message:
-            type: "You're not logged in"
+              type: string
+              example: "You're not logged in"
