@@ -2,9 +2,10 @@ package io.critica.persistence.db
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 
-object PlayerTable : IntIdTable() {
-    val userId = reference("userId", UserTable)
-    val gameId = reference("gameId", GameTable)
+object Players : IntIdTable() {
+    val userId = reference("userId", Users)
+    val lobbyId = reference("lobbyId", Lobbies)
+    val gameId = reference("gameId", Games).nullable()
     val name = varchar("name", 255)
     val status = varchar("status", 255)
     val role = varchar("role", 255)

@@ -1,6 +1,7 @@
 package io.critica.domain
 
 import io.critica.domain.events.DayEvent
+import io.critica.domain.events.Event
 import io.critica.domain.events.NightEvent
 import io.critica.persistence.db.DayEvents
 import io.critica.persistence.db.Games
@@ -19,7 +20,7 @@ class Game(id: EntityID<Int>): IntEntity(id) {
     val nightEvents by NightEvent referrersOn NightEvents.game
     var winner by Games.winner
 
-    fun getCurrentStage(): Any {
+    fun getCurrentStage(): Event {
         return if (dayEvents.count() > nightEvents.count()) {
             dayEvents.last()
         } else nightEvents.last()

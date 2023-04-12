@@ -2,10 +2,11 @@ package io.critica.persistence.db
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 
-object UserTokenTable : IntIdTable("user_tokens") {
-    val userId = reference("userId", UserTable)
+object UserTokens : IntIdTable("user_tokens") {
+    val userId = reference("userId", Users)
     val token = varchar("token", length = 200)
-    val expiration = long("expiration")
+    val expiresAt = long("expiresAt")
+    val createdAt = long("createdAt")
 
     init {
         index(true, userId, token)

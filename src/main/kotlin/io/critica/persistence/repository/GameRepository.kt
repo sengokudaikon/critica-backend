@@ -11,7 +11,7 @@ class GameRepository {
     suspend fun create(request: CreateGameRequest): Game {
         val game = suspendedTransactionAsync {
             Game.new {
-                date = request.date
+                date = request.date.toString()
                 status = request.status
                 winner = null
             }
