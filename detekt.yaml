@@ -1,0 +1,15 @@
+style:
+  WildcardImport:
+    active: false
+  ThrowsCount:
+    active: true
+    max: 10
+  MagicNumber:
+    active: true
+    ignoreNumbers:
+      - '255'
+      - '0'
+complexity:
+  ComplexMethod:
+    active: true
+    threshold: 20

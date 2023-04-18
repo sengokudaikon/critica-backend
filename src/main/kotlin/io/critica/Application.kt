@@ -4,6 +4,7 @@ import com.codahale.metrics.Slf4jReporter
 import io.critica.config.AppConfig
 import io.critica.di.DatabaseFactory
 import io.critica.di.appModule
+import io.critica.presentation.controller.GameController
 import io.critica.presentation.controller.LobbyController
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
@@ -35,10 +36,10 @@ import org.slf4j.event.Level
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
-private const val maxRange: Int = 10
-private const val maxAgeSeconds: Int = 24 * 60 * 60
-private const val duration: Long = 10L
-private const val wsDuration: Long = 15L
+private const val MAX_RANGE: Int = 10
+private const val MAX_AGE_SECONDS: Int = 24 * 60 * 60
+private const val DURATION: Long = 10L
+private const val WS_DURATION: Long = 15L
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "localhost", module = Application::main)
@@ -65,6 +66,7 @@ fun Application.main() {
 
 private fun Application.configRouting() {
     val lobbyController: LobbyController by inject()
+    val gameController: GameController by inject()
     routing {
         webSocket("/ws") { // websocketSession
             for (frame in incoming) {
@@ -92,6 +94,7 @@ private fun Application.configRouting() {
 
         route("api") {
             this@routing.lobbyRoutes(lobbyController)
+            this@routing.gameRoutes(gameController)
         }
     }
 }
@@ -108,7 +111,7 @@ private fun Application.configMonitoring() {
             .convertRatesTo(TimeUnit.SECONDS)
             .convertDurationsTo(TimeUnit.MILLISECONDS)
             .build()
-            .start(duration, TimeUnit.SECONDS)
+            .start(DURATION, TimeUnit.SECONDS)
     }
     install(CallId) {
         header(HttpHeaders.XRequestId)
@@ -132,7 +135,7 @@ private fun Application.configHttp() {
     install(PartialContent) {
         // Maximum number of ranges that will be accepted from a HTTP request.
         // If the HTTP request specifies more ranges, they will all be merged into a single range.
-        maxRangeCount = maxRange
+        maxRangeCount = MAX_RANGE
     }
 
     install(ContentNegotiation) {
@@ -152,8 +155,8 @@ private fun Application.configHttp() {
     }
 
     install(WebSockets) {
-        pingPeriod = Duration.ofSeconds(wsDuration)
-        timeout = Duration.ofSeconds(wsDuration)
+        pingPeriod = Duration.ofSeconds(WS_DURATION)
+        timeout = Duration.ofSeconds(WS_DURATION)
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
@@ -164,7 +167,7 @@ private fun Application.configCache() {
         options { call, outgoingContent ->
             when (outgoingContent.contentType?.withoutParameters()) {
                 ContentType.Text.CSS -> io.ktor.http.content.CachingOptions(
-                    CacheControl.MaxAge(maxAgeSeconds = maxAgeSeconds)
+                    CacheControl.MaxAge(maxAgeSeconds = MAX_AGE_SECONDS)
                 )
                 else -> null
             }
@@ -175,5 +178,11 @@ private fun Application.configCache() {
 fun Routing.lobbyRoutes(controller: LobbyController) {
     with(controller) {
         lobbyRoutes()
+    }
+}
+
+fun Routing.gameRoutes(controller: GameController) {
+    with(controller) {
+        gameRoutes()
     }
 }

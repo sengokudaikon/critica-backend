@@ -3,7 +3,10 @@ package io.critica.persistence.repository
 import io.critica.application.lobby.request.CreateLobby
 import io.critica.application.lobby.request.DeleteLobby
 import io.critica.application.lobby.request.GetLobby
+import io.critica.domain.Game
 import io.critica.domain.Lobby
+import io.critica.persistence.exception.GameException
+import io.critica.persistence.exception.LobbyException
 //import io.critica.domain.User
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 
@@ -19,7 +22,11 @@ class LobbyRepository {
     }
 
     suspend fun get(request: GetLobby): Lobby {
-        return suspendedTransactionAsync { Lobby.findById(request.id)!!}.await()
+        return suspendedTransactionAsync {
+            val lobby = Lobby.findById(request.id) ?: throw LobbyException.NotFound("Lobby not found")
+
+            lobby
+        }.await()
     }
 
     suspend fun list(): List<Lobby> {
@@ -27,6 +34,18 @@ class LobbyRepository {
     }
 
     suspend fun delete(request: DeleteLobby) {
-        return suspendedTransactionAsync { Lobby.findById(request.id)!!.delete() }.await()
+        return suspendedTransactionAsync {
+            val lobby = Lobby.findById(request.id)?: throw LobbyException.NotFound("Lobby not found")
+            lobby.delete()
+        }.await()
+    }
+
+    suspend fun getByGameId(gameId: Int): Lobby {
+        return suspendedTransactionAsync {
+            val game = Game.findById(gameId)?: throw GameException.NotFound("Game not found")
+            val lobby = game.lobby
+
+            lobby
+        }.await()
     }
 }
