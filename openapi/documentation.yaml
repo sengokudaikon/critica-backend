@@ -4,6 +4,7 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:8080
+  - url: https://seahorse-app-qs7ri.ondigitalocean.app/
 paths:
   /api/lobby/create:
     post:
@@ -450,6 +451,32 @@ components:
             type: array
             items:
                 $ref: '#/components/schemas/Player'
+    Stage:
+        type: object
+        properties:
+            dayNumber:
+              type: integer
+            candidates:
+              $ref: '#/components/schemas/PlayerList'
+            votes:
+              type: array
+              items:
+                  $ref: '#/components/schemas/Vote'
+            mafiaShot:
+              $ref: '#/components/schemas/Player'
+            detectiveCheck:
+              $ref: '#/components/schemas/Player'
+            donCheck:
+              $ref: '#/components/schemas/Player'
+    Vote:
+        type: object
+        properties:
+            dayNumber:
+              type: integer
+            target:
+              $ref: '#/components/schemas/Player'
+            player:
+              $ref: '#/components/schemas/Player'
     Login:
       type: object
       properties:
