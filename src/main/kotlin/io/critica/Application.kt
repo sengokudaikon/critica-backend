@@ -92,6 +92,9 @@ private fun Application.configRouting() {
 
         get("/") { call.respondRedirect("/static/index.html") }
 
+        get("/health") {
+            call.respond(HttpStatusCode.OK, "Healthy")
+        }
         route("api") {
             this@routing.lobbyRoutes(lobbyController)
             this@routing.gameRoutes(gameController)
