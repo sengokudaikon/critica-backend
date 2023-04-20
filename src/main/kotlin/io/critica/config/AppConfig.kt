@@ -10,7 +10,7 @@ data class AppConfig(
 ) {
     companion object {
         fun load(): AppConfig {
-            val config = ConfigFactory.load("application.conf")
+            //val config = ConfigFactory.load("application.conf")
             val dotenv = Dotenv.load()
             return AppConfig(
                 dbConfig = DbConfig(

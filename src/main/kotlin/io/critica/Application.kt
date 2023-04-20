@@ -164,7 +164,7 @@ private fun Application.configHttp() {
 
 private fun Application.configCache() {
     install(CachingHeaders) {
-        options { call, outgoingContent ->
+        options { _, outgoingContent ->
             when (outgoingContent.contentType?.withoutParameters()) {
                 ContentType.Text.CSS -> io.ktor.http.content.CachingOptions(
                     CacheControl.MaxAge(maxAgeSeconds = MAX_AGE_SECONDS)
