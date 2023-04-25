@@ -3,14 +3,16 @@ package io.critica
 import com.codahale.metrics.Slf4jReporter
 import com.github.dimitark.ktor.routing.ktorRoutingAnnotationConfig
 import io.critica.config.AppConfig
-import io.critica.di.DatabaseFactory
-import io.critica.di.MainModule
+import io.critica.infrastructure.DatabaseFactory
+import io.critica.infrastructure.Security
 import io.critica.persistence.exception.GameException
 import io.critica.persistence.exception.LobbyException
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
 import io.ktor.server.metrics.dropwizard.*
@@ -33,7 +35,6 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import kotlinx.serialization.json.Json
-import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
@@ -52,7 +53,7 @@ fun main() {
 
 fun Application.main() {
     install(Koin) {
-        modules(MainModule().module)
+        modules()
     }
     ktorRoutingAnnotationConfig()
     val config: AppConfig by inject()
@@ -60,7 +61,21 @@ fun Application.main() {
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
     if (runMigrations) { DatabaseFactory.init(dbConfig = config.dbConfig()) }
-//    configureSecurity(config.jwtConfig)
+    val security: Security by inject()
+    install(Authentication) {
+        jwt {
+            verifier(security.configureSecurity())
+            realm = "critica.io"
+            validate { credential ->
+                val userId = credential.payload.subject
+                if (userId != null) {
+                    JWTPrincipal(credential.payload)
+                } else {
+                    null
+                }
+            }
+        }
+    }
     configCache()
     configHttp()
     configMonitoring()

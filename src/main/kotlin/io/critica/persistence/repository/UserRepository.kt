@@ -3,7 +3,6 @@ package io.critica.persistence.repository
 import io.critica.domain.User
 import io.critica.domain.UserRole
 import io.critica.persistence.db.Users
-import io.critica.persistence.exception.UserException
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
 import java.util.*
@@ -14,9 +13,13 @@ class UserRepository {
         return suspendedTransactionAsync { User.find { Users.playerName eq playerName }.first() }.await()
     }
 
-    suspend fun findById(id: UUID): User {
+    suspend fun findByEmail(email: String): User {
+        return suspendedTransactionAsync { User.find { Users.email eq email }.first() }.await()
+    }
+
+    suspend fun findById(id: UUID): User? {
         return suspendedTransactionAsync {
-            val user = User.findById(id)?: throw UserException.NotFound("User not found")
+            val user = User.findById(id)
             user
         }.await()
     }

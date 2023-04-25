@@ -5,7 +5,7 @@ style:
     active: true
     max: 10
   MagicNumber:
-    active: true
+    active: false
     ignoreNumbers:
       - '255'
       - '0'

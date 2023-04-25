@@ -124,17 +124,18 @@ dependencies {
     implementation("io.insert-koin:koin-test:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     implementation("io.insert-koin:koin-annotations:1.1.1")
-
     implementation("io.arrow-kt:arrow-core:1.2.0-RC")
     implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0-RC")
-    ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
-    ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
-    ksp("com.github.dimitark.ktor-annotations:processor:0.0.3")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.72")
     implementation("com.github.dimitark.ktor-annotations:annotations:0.0.3")
     implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.0")
     implementation("io.ktor:ktor-server-host-common-jvm:2.2.4")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
+
+    ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
+    ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
+    ksp("com.github.dimitark.ktor-annotations:processor:0.0.3")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

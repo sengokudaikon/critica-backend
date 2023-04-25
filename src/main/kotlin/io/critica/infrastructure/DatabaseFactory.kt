@@ -1,4 +1,4 @@
-package io.critica.di
+package io.critica.infrastructure
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -23,6 +23,9 @@ object DatabaseFactory {
             this.password = dbConfig.password
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+            maximumPoolSize = 3
+            idleTimeout = 10000
+            connectionTimeout = 10000
             validate()
         }
 

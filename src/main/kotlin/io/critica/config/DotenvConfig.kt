@@ -1,4 +1,4 @@
-package io.critica.di
+package io.critica.config
 
 import io.github.cdimascio.dotenv.dotenv
 import org.koin.core.annotation.Single
