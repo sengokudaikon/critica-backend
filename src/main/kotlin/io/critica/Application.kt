@@ -1,12 +1,11 @@
 package io.critica
 
-import com.codahale.metrics.Slf4jReporter
 import com.github.dimitark.ktor.routing.ktorRoutingAnnotationConfig
 import io.critica.config.AppConfig
+import io.critica.di.MainModule
 import io.critica.infrastructure.DatabaseFactory
 import io.critica.infrastructure.Security
-import io.critica.persistence.exception.GameException
-import io.critica.persistence.exception.LobbyException
+import io.critica.infrastructure.handleErrors
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -15,9 +14,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
-import io.ktor.server.metrics.dropwizard.*
 import io.ktor.server.netty.*
-import io.ktor.server.plugins.*
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.callid.*
 import io.ktor.server.plugins.callloging.*
@@ -25,7 +22,6 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.partialcontent.*
-import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
@@ -35,11 +31,11 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import kotlinx.serialization.json.Json
+import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 private const val MAX_RANGE: Int = 10
 private const val MAX_AGE_SECONDS: Int = 24 * 60 * 60
@@ -47,23 +43,22 @@ private const val DURATION: Long = 10L
 private const val WS_DURATION: Long = 15L
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::main)
+    embeddedServer(Netty, port = 8080, host = "localhost", module = Application::main)
         .start(wait = true)
 }
 
 fun Application.main() {
     install(Koin) {
-        modules()
+        modules(MainModule().module)
     }
-    ktorRoutingAnnotationConfig()
-    val config: AppConfig by inject()
     val dotenv = dotenv()
+    val config: AppConfig by inject()
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
     if (runMigrations) { DatabaseFactory.init(dbConfig = config.dbConfig()) }
     val security: Security by inject()
     install(Authentication) {
-        jwt {
+        jwt("jwt-auth-provider") {
             verifier(security.configureSecurity())
             realm = "critica.io"
             validate { credential ->
@@ -79,6 +74,7 @@ fun Application.main() {
     configCache()
     configHttp()
     configMonitoring()
+    ktorRoutingAnnotationConfig()
     configRouting()
 }
 
@@ -117,18 +113,19 @@ private fun Application.configRouting() {
 
 private fun Application.configMonitoring() {
     install(CallLogging) {
-        level = Level.INFO
+        level = Level.WARN
         filter { call -> call.request.path().startsWith("/") }
         callIdMdc("call-id")
     }
-    install(DropwizardMetrics) {
-        Slf4jReporter.forRegistry(registry)
-            .outputTo(this@configMonitoring.log)
-            .convertRatesTo(TimeUnit.SECONDS)
-            .convertDurationsTo(TimeUnit.MILLISECONDS)
-            .build()
-            .start(DURATION, TimeUnit.SECONDS)
-    }
+//    install(DropwizardMetrics) {
+//        Slf4jReporter.forRegistry(registry)
+//            .withLoggingLevel(Slf4jReporter.LoggingLevel.INFO)
+//            .outputTo(this@configMonitoring.log)
+//            .convertRatesTo(TimeUnit.SECONDS)
+//            .convertDurationsTo(TimeUnit.MILLISECONDS)
+//            .build()
+//            .start(DURATION, TimeUnit.SECONDS)
+//    }
     install(CallId) {
         header(HttpHeaders.XRequestId)
         verify { callId: String ->
@@ -162,27 +159,7 @@ private fun Application.configHttp() {
             }
         )
     }
-
-    install(StatusPages) {
-        exception<InternalError> { call, cause ->
-            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
-        }
-        exception<IllegalArgumentException> { call, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
-        }
-        exception<BadRequestException> { call, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
-        }
-        exception<NotFoundException> { call, cause ->
-            call.respondText(text = "404: $cause", status = HttpStatusCode.NotFound)
-        }
-        exception<GameException> { call, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
-        }
-        exception<LobbyException> { call, cause ->
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
-        }
-    }
+    handleErrors()
 
     install(WebSockets) {
         pingPeriod = Duration.ofSeconds(WS_DURATION)

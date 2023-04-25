@@ -4,8 +4,10 @@ import io.critica.domain.User
 import io.critica.domain.UserToken
 import io.critica.persistence.db.UserTokens
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
+import org.koin.core.annotation.Single
 import java.util.UUID
 
+@Single
 class UserTokenRepository {
     suspend fun findByUserId(userId: UUID): UserToken {
         return suspendedTransactionAsync {

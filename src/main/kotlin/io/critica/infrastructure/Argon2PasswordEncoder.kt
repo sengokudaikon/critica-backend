@@ -2,9 +2,11 @@ package io.critica.infrastructure
 
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator
 import org.bouncycastle.crypto.params.Argon2Parameters
+import org.koin.core.annotation.Single
 import java.security.SecureRandom
 import java.util.*
 
+@Single
 class Argon2PasswordEncoder {
     companion object {
         private const val SALT_LENGTH = 16

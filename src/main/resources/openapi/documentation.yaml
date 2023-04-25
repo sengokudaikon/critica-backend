@@ -4,7 +4,7 @@ info:
   description: "critica_backend API"
   version: "1.0.0"
 servers:
-- url: "https://localhost:8080"
+- url: "http://localhost:8080"
 - url: "https://seahorse-app-qs7ri.ondigitalocean.app"
 paths:
   /:

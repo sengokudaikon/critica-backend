@@ -19,7 +19,7 @@ class AuthController(
     private val authUseCase: AuthUseCase,
     private val security: Security
 ) {
-    @Post("api/auth/register")
+    @Post("/api/auth/register")
     suspend fun register(call: ApplicationCall) {
         val request = call.receive<CreateAccount>()
         authUseCase.register(request).fold(
@@ -39,7 +39,7 @@ class AuthController(
         )
     }
 
-    @Post("api/auth/signIn")
+    @Post("/api/auth/signIn")
     suspend fun signIn(call: ApplicationCall) {
         val request = call.receive<SignIn>()
         authUseCase.signIn(request).fold(
@@ -59,7 +59,7 @@ class AuthController(
         )
     }
 
-    @Post("api/auth/refresh")
+    @Post("/api/auth/refresh")
     suspend fun refresh(call: ApplicationCall) {
         val request = call.receive<RefreshToken>()
         security.verifyRefreshToken(UUID.fromString(request.id), request.refreshToken)
@@ -74,7 +74,7 @@ class AuthController(
         )
     }
 
-    @Post("api/auth/signout")
+    @Post("/api/auth/signout")
     suspend fun signOut(call: ApplicationCall) {
         val request = call.receive<SignOut>()
         security.verifyRefreshToken(UUID.fromString(request.id), request.refreshToken)
