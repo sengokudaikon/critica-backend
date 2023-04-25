@@ -9,7 +9,6 @@ COPY settings.gradle.kts ./
 COPY gradle.properties ./
 COPY detekt.yaml ./
 COPY .env.local ./.env
-COPY openapi ./openapi
 
 # Download and cache the project dependencies
 RUN ./gradlew build --no-daemon

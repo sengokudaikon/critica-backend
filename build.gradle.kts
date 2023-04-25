@@ -132,6 +132,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.0")
     implementation("io.ktor:ktor-server-host-common-jvm:2.2.4")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
+    implementation("org.hibernate.validator:hibernate-validator:8.0.0.Final")
+    annotationProcessor("org.hibernate.validator:hibernate-validator-annotation-processor:8.0.0.Final")
 
     ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
     ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
