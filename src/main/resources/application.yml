@@ -5,9 +5,9 @@ ktor:
   application:
     modules: [com.critica.ApplicationKt.module]
   database:
-    url: db-postgresql-ams3-critica-do-user-7276549-0.b.db.ondigitalocean.com:25060/critica_db
-    username: doadmin
-    password: AVNS_rncUe4QF-nJGbERNe48
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jwt:
     secret: secret

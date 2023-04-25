@@ -8,12 +8,13 @@ import io.critica.persistence.db.DayEvents
 import io.critica.persistence.db.Games
 import io.critica.persistence.db.NightEvents
 import io.critica.persistence.db.Players
-import org.jetbrains.exposed.dao.EntityClass
-import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import java.util.*
 
-class Game(id: EntityID<Int>): IntEntity(id) {
-    companion object : EntityClass<Int, Game>(Games)
+class Game(id: EntityID<UUID>): UUIDEntity(id) {
+    companion object : UUIDEntityClass<Game>(Games)
     var date by Games.date
     var lobby by Lobby referencedOn Games.lobbyId
     var status by Games.status
@@ -36,7 +37,7 @@ class Game(id: EntityID<Int>): IntEntity(id) {
         } else { listOf() }
 
         return GameResponse(
-            id = this.id.value,
+            id = this.id.value.toString(),
             date = this.date,
             currentStage = when (stage) {
                 is DayEvent -> stage.toResponse()

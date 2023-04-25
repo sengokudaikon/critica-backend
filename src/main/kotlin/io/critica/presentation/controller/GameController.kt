@@ -1,109 +1,117 @@
 package io.critica.presentation.controller
 
+import com.github.dimitark.ktorannotations.annotations.Get
+import com.github.dimitark.ktorannotations.annotations.Post
+import com.github.dimitark.ktorannotations.annotations.Put
+import com.github.dimitark.ktorannotations.annotations.RouteController
 import io.critica.application.game.CreateGameRequest
-import io.critica.domain.Role
-import io.critica.usecase.game.EventUseCase
+import io.critica.domain.PlayerRole
 import io.critica.usecase.game.GameUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import org.joda.time.DateTime
+import org.koin.core.annotation.Single
+import java.util.*
 
+@RouteController
+@Single
 class GameController(
     private val gameUseCase: GameUseCase,
 ) {
-    fun Route.crud() {
-        get("list") {
-            val games = gameUseCase.list()
-            call.respond(games)
-        }
-
-        post("create") {
-            val date = call.receive<String>()
-            val dateTime = DateTime.parse(date)
-            val game = gameUseCase.create(CreateGameRequest(dateTime))
-            call.respond(game)
-        }
-
-        get("get/{id}") {
-            val id = call.parameters["id"]?.toInt()
-            if (id == null) {
-                call.respondText("Invalid ID")
-                return@get
-            }
-
-            val game = gameUseCase.get(id)
-            call.respond(game)
-        }
+    @Get("game/list")
+    suspend fun listGames(call: ApplicationCall) {
+        val games = gameUseCase.list()
+        call.respond(games)
     }
 
-    fun Routing.gameRoutes() {
-            route("api/game") {
-                crud()
-                post("start/{id}") {
-                    val gameId = call.parameters["id"]?.toInt()
-                    if (gameId == null) {
-                        call.respondText("Invalid ID")
-                        return@post
-                    }
-                    val game = gameUseCase.start(gameId)
-                    call.respond(game)
-                }
+    @Post("game/create")
+    suspend fun createGame(call: ApplicationCall) {
+        val date = call.receive<String>()
+        val dateTime = DateTime.parse(date)
+        val game = gameUseCase.create(CreateGameRequest(dateTime))
+        call.respond(game)
+    }
 
-                put ("{id}/addPlayer") {
-                    val gameId = call.receiveParameters()["id"]?.toInt()
-                    val playerName = call.receiveParameters()["playerName"].toString()
-                    if (gameId != null) {
-                        gameUseCase.addPlayerByName(gameId, playerName)
-                    }
-
-                    call.respondNullable(HttpStatusCode.NoContent)
-                }
-
-                put("{id}/addPlayer/{playerId}") {
-                    val gameId = call.receiveParameters()["id"]?.toInt()
-                    if (gameId == null) {
-                        call.respondText("Invalid ID")
-                        return@put
-                    }
-
-                    val playerId = call.receiveParameters()["playerId"]?.toInt()
-                    if (playerId == null) {
-                        call.respondText("Invalid ID")
-                        return@put
-                    }
-
-                    gameUseCase.addPlayerById(gameId, playerId)
-
-                    call.respondNullable(HttpStatusCode.NoContent)
-                }
-
-                put ("{id}/removePlayer") {
-                    val gameId = call.receiveParameters()["id"]?.toInt()
-                    if (gameId == null) {
-                        call.respondText("Invalid ID")
-                        return@put
-                    }
-                    val playerId = call.receiveParameters()["playerId"]?.toInt()
-                    playerId?.let { it1 -> gameUseCase.removePlayerById(gameId, it1) }
-
-                    call.respondNullable(HttpStatusCode.NoContent)
-                }
-
-                post("finish/{id}") {
-                    val gameId = call.parameters["id"]?.toInt()
-
-                    if (gameId == null) {
-                        call.respondText("Invalid ID")
-                        return@post
-                    }
-
-                    val winner = call.receive<String>()
-                    val game = gameUseCase.finish(gameId, Role.valueOf(winner))
-                    call.respond(game)
-                }
-            }
+    @Get("game/{id}")
+    suspend fun getGame(call: ApplicationCall) {
+        val id = call.parameters["id"]
+        if (id == null) {
+            call.respondText("Invalid ID")
+            return
         }
+
+        val game = gameUseCase.get(UUID.fromString(id))
+        call.respond(game)
+    }
+
+
+    @Post("game/{id}/start")
+    suspend fun startGame(call: ApplicationCall){
+        val gameId = call.parameters["id"]
+        if (gameId == null) {
+            call.respondText("Invalid ID")
+            return
+        }
+        val game = gameUseCase.start(UUID.fromString(gameId))
+        call.respond(game)
+    }
+
+    @Put("game/{id}/addPlayer")
+    suspend fun addPlayer(call: ApplicationCall) {
+        val gameId = call.receiveParameters()["id"]
+        val playerName = call.receiveParameters()["playerName"].toString()
+        if (gameId != null) {
+            gameUseCase.addPlayerByName(UUID.fromString(gameId), playerName)
+        }
+
+        call.respondNullable(HttpStatusCode.NoContent)
+    }
+
+    @Put("game/{id}/addPlayer/{playerId}")
+    suspend fun addPlayerById(call: ApplicationCall) {
+        val gameId = call.receiveParameters()["id"]
+        if (gameId == null) {
+            call.respondText("Invalid ID")
+            return
+        }
+
+        val playerId = call.receiveParameters()["playerId"]
+        if (playerId == null) {
+            call.respondText("Invalid ID")
+            return
+        }
+
+        gameUseCase.addPlayerById(UUID.fromString(gameId), UUID.fromString(playerId))
+
+        call.respondNullable(HttpStatusCode.NoContent)
+    }
+
+    @Put("game/{id}/removePlayer")
+    suspend fun removePlayer(call: ApplicationCall) {
+        val gameId = call.receiveParameters()["id"]
+        if (gameId == null) {
+            call.respondText("Invalid ID")
+            return
+        }
+        val playerId = call.receiveParameters()["playerId"]
+        gameUseCase.removePlayerById(UUID.fromString(gameId), UUID.fromString(playerId))
+
+        call.respondNullable(HttpStatusCode.NoContent)
+    }
+
+    @Post("game/{id}/finish")
+    suspend fun finishGame(call: ApplicationCall) {
+        val gameId = call.parameters["id"]
+
+        if (gameId == null) {
+            call.respondText("Invalid ID")
+            return
+        }
+
+        val winner = call.receive<String>()
+        val game = gameUseCase.finish(UUID.fromString(gameId), PlayerRole.valueOf(winner))
+        call.respond(game)
+    }
 }

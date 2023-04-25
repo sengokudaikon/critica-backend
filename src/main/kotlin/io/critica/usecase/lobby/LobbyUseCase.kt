@@ -1,12 +1,13 @@
 package io.critica.usecase.lobby
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import io.critica.application.game.CreateGameRequest
 import io.critica.application.game.GameResponse
-import io.critica.application.lobby.request.GetLobby
 import io.critica.application.lobby.response.LobbyResponse
 import io.critica.application.player.PlayerResponse
 import io.critica.domain.GameStatus
-import io.critica.persistence.exception.GameException
 import io.critica.persistence.exception.LobbyException
 import io.critica.persistence.repository.GameRepository
 import io.critica.persistence.repository.LobbyRepository
@@ -14,92 +15,110 @@ import io.critica.persistence.repository.PlayerRepository
 import io.critica.persistence.repository.UserRepository
 import org.joda.time.DateTime
 import org.joda.time.LocalTime
+import org.koin.core.annotation.Single
+import java.util.*
 
+@Single
 class LobbyUseCase(
     private val repository: LobbyRepository,
     private val userRepository: UserRepository,
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
 ) {
-    suspend fun addGame(id: Int, time: LocalTime): LobbyResponse {
-        val lobby = repository.get(GetLobby(id))
-        val date = DateTime(lobby.date).withTime(time)
-        val game = gameRepository.create(CreateGameRequest(date))
+    suspend fun addGame(id: UUID, time: LocalTime): Either<Exception, LobbyResponse> {
+        return try {
+            val lobby = repository.get(id)
+            val date = DateTime(lobby.date).withTime(time)
+            val game = gameRepository.create(CreateGameRequest(date))
 
-        if (lobby.games.contains(game)) throw LobbyException.AlreadyCreated("Game is already in lobby")
-        if (game.status != GameStatus.WAITING) throw GameException.NotWaiting("Game is not in status 'waiting'")
-        if (game.status == GameStatus.FINISHED) throw GameException.AlreadyFinished("Game is in status 'finished'")
-        if (game.status == GameStatus.STARTED) throw GameException.AlreadyStarted("Game is in status 'started'")
-        if (!game.players.empty()) throw GameException.TooManyPlayers("There shouldn't be any players in game")
+            require(lobby.games.contains(game)) {"Game is already in lobby"}
+            require(game.status != GameStatus.WAITING) {  "Game is not in status 'waiting'"}
+            require(game.status == GameStatus.FINISHED) {  "Game is in status 'finished'" }
+            require(game.status == GameStatus.STARTED) { "Game is in status 'started'" }
+            require(!game.players.empty()) { "There shouldn't be any players in game" }
 
-        lobby.games.plus(game)
-        return lobby.toResponse()
+            lobby.games.plus(game)
+            return lobby.toResponse().right()
+        } catch (e: Exception) {
+            e.left()
+        }
     }
 
-    suspend fun removeGame(id: Int, gameId: Int): LobbyResponse {
-        val lobby = repository.get(GetLobby(id))
-        val game = gameRepository.get(gameId)
+    suspend fun removeGame(id: UUID, gameId: UUID): Either<Exception, LobbyResponse> {
+        return try {
+            val lobby = repository.get(id)
+            val game = gameRepository.get(gameId)
 
-        if (!lobby.games.contains(game)) throw LobbyException.NotFound("Game is not in lobby")
-        if (game.status != GameStatus.WAITING) throw GameException.NotWaiting("Game is not in status 'waiting'")
-        if (game.status == GameStatus.FINISHED) throw GameException.AlreadyFinished("Game is in status 'finished'")
-        if (game.status == GameStatus.STARTED) throw GameException.AlreadyStarted("Game is in status 'started'")
-        if (!game.players.empty()) throw GameException.TooManyPlayers("There are players in the game")
+            require(lobby.games.contains(game)) { "Game is not in lobby" }
+            require(game.status == GameStatus.WAITING) { "Game is not in status 'waiting'" }
+            require(game.status != GameStatus.FINISHED) { "Game is in status 'finished'" }
+            require(game.status != GameStatus.STARTED) { "Game is in status 'started'" }
+            require(game.players.empty()) { "There are players in the game" }
 
-        lobby.games.minus(game)
+            lobby.games.minus(game)
+            require(!lobby.games.contains(game)) { "Game is still in lobby" }
 
-        if (lobby.games.contains(game)) throw LobbyException.AlreadyCreated("Game is still in lobby")
-
-        return lobby.toResponse()
+            lobby.toResponse().right()
+        } catch (e: Exception) {
+            e.left()
+        }
     }
 
-    suspend fun addPlayer(id: Int, playerName: String): LobbyResponse {
-        val lobby = repository.get(GetLobby(id))
+    suspend fun addPlayer(id: UUID, playerName: String): Either<Exception, LobbyResponse> {
+        val lobby = repository.get(id)
+
         val user = userRepository.findByUsername(playerName)
-
         val result = playerRepository.create(user)
         lobby.players.plus(result)
-
-        if (!lobby.players.contains(result)) throw LobbyException.AlreadyCreated("Player not in lobby")
-        return lobby.toResponse()
+        return if (!lobby.players.contains(result)) {
+            LobbyException.AlreadyCreated("Player not in lobby").left()
+        } else lobby.toResponse().right()
     }
 
-    suspend fun addPlayerById(id: Int, playerId: Int): LobbyResponse {
-        val lobby = repository.get(GetLobby(id))
+    suspend fun addTemporaryPlayer(id: UUID, playerName: String): Either<Exception, LobbyResponse> {
+        val lobby = repository.get(id)
+        val result = playerRepository.createTemporaryPlayer(playerName, id, null)
+        lobby.players.plus(result)
+        return if (!lobby.players.contains(result)) LobbyException.AlreadyCreated("Player not in lobby").left()
+        else lobby.toResponse().right()
+    }
+
+    suspend fun addPlayerById(id: UUID, playerId: UUID): Either<Exception, LobbyResponse> {
+        val lobby = repository.get(id)
         val user = userRepository.findById(playerId)
 
         val result = playerRepository.create(user)
         lobby.players.plus(result)
-        if (!lobby.players.contains(result)) throw LobbyException.AlreadyCreated("Player not in lobby")
-        return lobby.toResponse()
+        return if (!lobby.players.contains(result)) LobbyException.AlreadyCreated("Player not in lobby").left()
+        else lobby.toResponse().right()
     }
 
-    suspend fun removePlayer(id: Int, playerName: String) {
-        val lobby = repository.get(GetLobby(id))
+    suspend fun removePlayer(id: UUID, playerName: String): Either<Exception, LobbyResponse> {
+        val lobby = repository.get(id)
         val player = lobby.players.find { it.name == playerName }
-        if (player != null) {
+        return if (player != null) {
             lobby.players.minus(player)
-        }
+            lobby.toResponse().right()
+        } else LobbyException.NotFound("Player not found").left()
     }
 
-    suspend fun removePlayerById(id: Int, playerId: Int): LobbyResponse {
-        val lobby = repository.get(GetLobby(id))
+    suspend fun removePlayerById(id: UUID, playerId: UUID): Either<Exception, LobbyResponse> {
+        val lobby = repository.get(id)
         val player = lobby.players.find { it.id.value == playerId }
-        if (player != null) {
+        return if (player != null) {
             lobby.players.minus(player)
-        }
-
-        return lobby.toResponse()
+            lobby.toResponse().right()
+        } else LobbyException.NotFound("Player not found").left()
     }
 
-    suspend fun getPlayers(id: Int): List<PlayerResponse> {
-        val players = repository.get(GetLobby(id)).players
+    suspend fun getPlayers(id: UUID): List<PlayerResponse> {
+        val players = repository.get(id).players
 
         return players.map { it.toResponse() }
     }
 
-    suspend fun getGames(id: Int): List<GameResponse> {
-        val games = repository.get(GetLobby(id)).games
+    suspend fun getGames(id: UUID): List<GameResponse> {
+        val games = repository.get(id).games
         return games.map { it.toResponse() }
     }
 }

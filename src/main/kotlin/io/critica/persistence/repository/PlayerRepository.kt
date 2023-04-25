@@ -1,28 +1,38 @@
 package io.critica.persistence.repository
 
 import io.critica.domain.Game
+import io.critica.domain.Lobby
 import io.critica.domain.Player
 import io.critica.domain.User
 import io.critica.persistence.db.Players
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
+import org.koin.core.annotation.Single
+import java.util.*
 
+@Single
 class PlayerRepository {
-    suspend fun getPlayerByUserIdAndGameId(userId: Int, gameId: Int): Player? {
+    suspend fun getPlayerByUserIdAndGameId(userId: UUID, gameId: UUID): Player? {
         return suspendedTransactionAsync {
             Player.find { Players.gameId eq gameId and (Players.userId eq userId) }.firstOrNull()
         }.await()
     }
 
-    suspend fun getPlayerByPlayerIdAndGameId(playerId: Int, gameId: Int): Player? {
+    suspend fun getPlayerByPlayerIdAndGameId(playerId: UUID, gameId: UUID): Player? {
         return suspendedTransactionAsync {
             Player.find { Players.gameId eq gameId and (Players.id eq playerId) }.firstOrNull()
         }.await()
     }
 
-    suspend fun getPlayerByNameAndGameId(playerName: String, gameId: Int): Player? {
+    suspend fun getPlayerByNameAndGameId(playerName: String, gameId: UUID): Player? {
         return suspendedTransactionAsync {
             Player.find { Players.gameId eq gameId and (Players.name eq playerName) }.firstOrNull()
+        }.await()
+    }
+
+    suspend fun getPlayerByPartialNameAndGameId(playerName: String, gameId: UUID): Player? {
+        return suspendedTransactionAsync {
+            Player.find { Players.gameId eq gameId and (Players.name like "%$playerName%") }.firstOrNull()
         }.await()
     }
 
@@ -32,11 +42,12 @@ class PlayerRepository {
         }.await()
     }
 
-    suspend fun createTemporaryPlayer(gameId: Int, playerName: String): Player {
+    suspend fun createTemporaryPlayer(playerName: String, lobbyId: UUID, gameId: UUID?): Player {
         return suspendedTransactionAsync {
             Player.new {
-                this.game = Game[gameId]
                 this.name = playerName
+                this.lobby = Lobby[lobbyId]
+                this.game = gameId?.let { Game[it] }
             }
         }.await()
     }
@@ -49,7 +60,7 @@ class PlayerRepository {
         }.await()
     }
 
-    suspend fun get(playerId: Int): Player {
+    suspend fun get(playerId: UUID): Player {
         return suspendedTransactionAsync { Player[playerId] }.await()
     }
 }

@@ -9,9 +9,11 @@ import io.critica.domain.events.NightEvent
 import io.critica.persistence.db.DayEvents
 import io.critica.persistence.db.Players
 import io.critica.persistence.exception.PlayerException
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
+import org.koin.core.annotation.Single
+import java.util.*
 
+@Single
 class EventRepository {
     suspend fun startDay(game: Game, day: Int): DayEvent {
         return suspendedTransactionAsync {
@@ -31,7 +33,7 @@ class EventRepository {
         }.await()
     }
 
-    suspend fun addCandidate(game: Game, candidateId: Int): DayEvent {
+    suspend fun addCandidate(game: Game, candidateId: UUID): DayEvent {
         return suspendedTransactionAsync {
             val dayEvent = DayEvent.find { DayEvents.game eq game.id }.first()
 
@@ -58,7 +60,8 @@ class EventRepository {
     suspend fun addShot(game: Game, shot: Int): NightEvent {
         return suspendedTransactionAsync {
             val nightEvent = NightEvent.find { DayEvents.game eq game.id }.first()
-            nightEvent.mafiaShot = shot.let { EntityID(it, Players) }
+            val player = Player.find { Players.seat eq shot }
+            nightEvent.mafiaShot = player.first().id
             nightEvent
         }.await()
     }
@@ -66,7 +69,8 @@ class EventRepository {
     suspend fun addCheck(game: Game, check: Int): NightEvent {
         return suspendedTransactionAsync {
             val nightEvent = NightEvent.find { DayEvents.game eq game.id }.first()
-            nightEvent.detectiveCheck = check.let { EntityID(it, Players) }
+            val player = Player.find { Players.seat eq check }
+            nightEvent.detectiveCheck = player.first().id
             nightEvent
         }.await()
     }
@@ -74,7 +78,8 @@ class EventRepository {
     suspend fun addDonCheck(game: Game, check: Int): NightEvent {
         return suspendedTransactionAsync {
             val nightEvent = NightEvent.find { DayEvents.game eq game.id }.first()
-            nightEvent.donCheck = check.let { EntityID(it, Players) }
+            val player = Player.find { Players.seat eq check }
+            nightEvent.donCheck = player.first().id
             nightEvent
         }.await()
     }
@@ -83,9 +88,9 @@ class EventRepository {
         return suspendedTransactionAsync {
             val dayEvent = DayEvent.find { DayEvents.game eq game.id }.first()
             dayEvent.votes.plus(DayVote.new {
-                this.player = Player.findById(voter)?: throw PlayerException.NotFound("Player not found")
+                this.player = Player.find { Players.seat eq voter }.first()
                 this.day = dayEvent
-                this.target = Player.findById(target)?: throw PlayerException.NotFound("Player not found")
+                this.target = Player.find { Players.seat eq target }.first()
             })
             dayEvent
         }.await()

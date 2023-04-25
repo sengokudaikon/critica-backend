@@ -14,7 +14,7 @@ interface Event {
             is DayEvent -> {
                 val stageResponse = this.toResponse()
                 response = GameResponse(
-                    id = game.id.value,
+                    id = game.id.value.toString(),
                     date = game.date,
                     players,
                     stageResponse,
@@ -26,7 +26,7 @@ interface Event {
             is NightEvent -> {
                 val stageResponse = this.toResponse()
                 response = GameResponse(
-                    id = game.id.value,
+                    id = game.id.value.toString(),
                     date = game.date,
                     players,
                     stageResponse,

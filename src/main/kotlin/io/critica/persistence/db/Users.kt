@@ -1,11 +1,14 @@
 package io.critica.persistence.db
 
-import org.jetbrains.exposed.dao.id.IntIdTable
+import io.critica.domain.UserRole
+import org.jetbrains.exposed.dao.id.IdTable
+import java.util.*
 
-object Users : IntIdTable() {
+object Users : IdTable<UUID>(name = "users") {
+    override val id = uuid("id").entityId()
     val email = varchar("email", 255).uniqueIndex()
     val hashedPassword = varchar("hashed_password", 255)
     val playerName = varchar("player_name", 255)
-    val isAdmin = bool("is_admin").default(false)
+    val role = enumeration("role", UserRole::class)
     val tokenId = reference("token_id", UserTokens)
 }

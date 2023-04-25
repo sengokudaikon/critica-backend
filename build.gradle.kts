@@ -36,7 +36,9 @@ flyway {
     user = flywayUser
     password = flywayPassword
 }
-
+sourceSets.main {
+    java.srcDirs("build/generated/ksp/main/kotlin")
+}
 kotlin {
     sourceSets.main {
         kotlin.srcDir("build/generated/ksp/main/kotlin")
@@ -82,6 +84,7 @@ application {
 }
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 buildscript {
     dependencies {
@@ -112,8 +115,6 @@ dependencies {
     implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.fasterxml.jackson:jackson-base:2.14.2")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.14.2")
     implementation("de.nycode:bcrypt:2.3.0")
     implementation("org.testng:testng:7.7.0")
     implementation("org.flywaydb:flyway-core:9.16.0")
@@ -122,10 +123,19 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-test:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+    implementation("io.insert-koin:koin-annotations:1.1.1")
+
+    implementation("io.arrow-kt:arrow-core:1.2.0-RC")
+    implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0-RC")
+    ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
+    ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
+    ksp("com.github.dimitark.ktor-annotations:processor:0.0.3")
+    implementation("com.github.dimitark.ktor-annotations:annotations:0.0.3")
     implementation("io.swagger.codegen.v3:swagger-codegen-generators:1.0.38")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.0")
     implementation("io.ktor:ktor-server-host-common-jvm:2.2.4")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
+
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

@@ -1,11 +1,12 @@
 package io.critica
 
 import com.codahale.metrics.Slf4jReporter
+import com.github.dimitark.ktor.routing.ktorRoutingAnnotationConfig
 import io.critica.config.AppConfig
 import io.critica.di.DatabaseFactory
-import io.critica.di.appModule
-import io.critica.presentation.controller.GameController
-import io.critica.presentation.controller.LobbyController
+import io.critica.di.MainModule
+import io.critica.persistence.exception.GameException
+import io.critica.persistence.exception.LobbyException
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -14,6 +15,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
 import io.ktor.server.metrics.dropwizard.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.*
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.callid.*
 import io.ktor.server.plugins.callloging.*
@@ -24,12 +26,14 @@ import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.request.*
+import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import kotlinx.serialization.json.Json
+import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
@@ -44,19 +48,18 @@ private const val WS_DURATION: Long = 15L
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::main)
         .start(wait = true)
-
 }
 
 fun Application.main() {
     install(Koin) {
-        modules(appModule)
+        modules(MainModule().module)
     }
-
+    ktorRoutingAnnotationConfig()
     val config: AppConfig by inject()
     val dotenv = dotenv()
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
-    if (runMigrations) { DatabaseFactory.init(dbConfig = config.dbConfig) }
+    if (runMigrations) { DatabaseFactory.init(dbConfig = config.dbConfig()) }
 //    configureSecurity(config.jwtConfig)
     configCache()
     configHttp()
@@ -65,8 +68,7 @@ fun Application.main() {
 }
 
 private fun Application.configRouting() {
-    val lobbyController: LobbyController by inject()
-    val gameController: GameController by inject()
+    install(Resources)
     routing {
         webSocket("/ws") { // websocketSession
             for (frame in incoming) {
@@ -94,10 +96,6 @@ private fun Application.configRouting() {
 
         get("/health") {
             call.respond(HttpStatusCode.OK, "Healthy")
-        }
-        route("api") {
-            this@routing.lobbyRoutes(lobbyController)
-            this@routing.gameRoutes(gameController)
         }
     }
 }
@@ -131,7 +129,6 @@ private fun Application.configHttp() {
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Patch)
         allowHeader(HttpHeaders.Authorization)
-        allowHeader("MyCustomHeader")
         anyHost()
     }
 
@@ -155,6 +152,21 @@ private fun Application.configHttp() {
         exception<InternalError> { call, cause ->
             call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
+        exception<IllegalArgumentException> { call, cause ->
+            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+        }
+        exception<BadRequestException> { call, cause ->
+            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+        }
+        exception<NotFoundException> { call, cause ->
+            call.respondText(text = "404: $cause", status = HttpStatusCode.NotFound)
+        }
+        exception<GameException> { call, cause ->
+            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+        }
+        exception<LobbyException> { call, cause ->
+            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+        }
     }
 
     install(WebSockets) {
@@ -175,17 +187,5 @@ private fun Application.configCache() {
                 else -> null
             }
         }
-    }
-}
-
-fun Routing.lobbyRoutes(controller: LobbyController) {
-    with(controller) {
-        lobbyRoutes()
-    }
-}
-
-fun Routing.gameRoutes(controller: GameController) {
-    with(controller) {
-        gameRoutes()
     }
 }

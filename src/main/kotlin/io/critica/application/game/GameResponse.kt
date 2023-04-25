@@ -1,12 +1,11 @@
 package io.critica.application.game
 
 import io.critica.application.player.PlayerResponse
-import io.critica.application.vote.PlayerVoteResponse
 import io.critica.application.stage.StageResponse
 import io.critica.application.vote.DayVoteResponse
 
 data class GameResponse(
-    val id: Int,
+    val id: String,
     val date: String,
     val players: List<PlayerResponse>,
     val currentStage: StageResponse? = null,

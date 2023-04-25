@@ -1,18 +1,19 @@
 package io.critica.domain
 
 import io.critica.persistence.db.Users
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import java.util.*
 
 class User(
-    id: EntityID<Int>,
+    id: EntityID<UUID>,
 
-): IntEntity(id) {
-    companion object : IntEntityClass<User>(Users)
+): UUIDEntity(id) {
+    companion object : UUIDEntityClass<User>(Users)
 
     var username by Users.playerName
     var email by Users.email
     var password by Users.hashedPassword
-    var isAdmin by Users.isAdmin
+    var role by Users.role
 }

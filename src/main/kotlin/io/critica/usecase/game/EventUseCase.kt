@@ -1,9 +1,8 @@
 package io.critica.usecase.game
 
-import io.critica.persistence.repository.EventRepository
-import io.critica.persistence.repository.GameRepository
-import io.critica.persistence.repository.PlayerRepository
+import org.koin.core.annotation.Single
 
+@Single
 class EventUseCase
 //    private val gameRepository: GameRepository,
 //    private val playerRepository: PlayerRepository,

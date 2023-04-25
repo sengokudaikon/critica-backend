@@ -3,10 +3,13 @@ package io.critica.persistence.repository
 import io.critica.application.game.CreateGameRequest
 import io.critica.domain.Game
 import io.critica.domain.GameStatus
-import io.critica.domain.Role
+import io.critica.domain.PlayerRole
 import io.ktor.server.plugins.*
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
+import org.koin.core.annotation.Single
+import java.util.UUID
 
+@Single
 class GameRepository {
     suspend fun create(request: CreateGameRequest): Game {
         val game = suspendedTransactionAsync {
@@ -20,7 +23,7 @@ class GameRepository {
         return game.await()
     }
 
-    suspend fun get(id: Int): Game {
+    suspend fun get(id: UUID): Game {
         return suspendedTransactionAsync {
             Game.findById(id) ?: throw NotFoundException()
         }.await()
@@ -31,7 +34,7 @@ class GameRepository {
         }.await()
     }
 
-    suspend fun update(game: Game, status: GameStatus, winner: Role? = null): Game {
+    suspend fun update(game: Game, status: GameStatus, winner: PlayerRole? = null): Game {
         return suspendedTransactionAsync {
             game.apply {
                 this.status = status

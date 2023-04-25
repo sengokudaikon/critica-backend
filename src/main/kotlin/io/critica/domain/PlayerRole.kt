@@ -1,6 +1,6 @@
 package io.critica.domain
 
-enum class Role {
+enum class PlayerRole {
     CITIZEN,
     MAFIOSO,
     DON,
@@ -13,7 +13,7 @@ enum class Role {
         }
     }
 
-    fun toRole(string: String): Role {
+    fun toRole(string: String): PlayerRole {
         return when (string) {
             "citizen" -> CITIZEN
             "mafia" -> MAFIOSO
