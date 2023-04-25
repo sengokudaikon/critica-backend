@@ -1,2 +1,2 @@
 ALTER TABLE lobbies
-    ADD COLUMN creator INTEGER REFERENCES users(id) ON DELETE CASCADE;
+    ADD COLUMN creator uuid REFERENCES users(id) ON DELETE CASCADE;
