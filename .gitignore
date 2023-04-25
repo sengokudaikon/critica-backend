@@ -5,6 +5,8 @@ build/
 !**/src/test/**/build/
 *.local
 .env
+firebase-acc.json
+firebase.json
 ### STS ###
 .apt_generated
 .classpath
