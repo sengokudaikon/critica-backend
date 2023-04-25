@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS user_tokens;
 CREATE TABLE IF NOT EXISTS user_tokens (
                                            id uuid PRIMARY KEY,
                                            user_id uuid REFERENCES users(id) ON DELETE CASCADE,
