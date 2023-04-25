@@ -3,8 +3,8 @@ package io.critica.usecase.user
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import io.critica.application.user.request.CreateAccount
-import io.critica.application.user.request.SignIn
+import io.critica.application.user.command.CreateAccount
+import io.critica.application.user.command.SignIn
 import io.critica.infrastructure.Argon2PasswordEncoder
 import io.critica.domain.User
 import io.critica.persistence.repository.UserRepository

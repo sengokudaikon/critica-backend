@@ -1,4 +1,4 @@
-package io.critica.application.lobby.request
+package io.critica.application.lobby.command
 
 data class AddPlayerToLobby(
     val id: Int,

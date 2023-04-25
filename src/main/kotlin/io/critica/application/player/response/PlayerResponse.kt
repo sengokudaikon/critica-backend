@@ -1,4 +1,4 @@
-package io.critica.application.player
+package io.critica.application.player.response
 
 import io.critica.domain.PlayerRole
 import io.critica.domain.PlayerStatus

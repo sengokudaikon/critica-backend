@@ -1,6 +1,6 @@
 package io.critica.domain
 
-import io.critica.application.game.GameResponse
+import io.critica.application.game.response.GameResponse
 import io.critica.domain.events.DayEvent
 import io.critica.domain.events.Event
 import io.critica.domain.events.NightEvent

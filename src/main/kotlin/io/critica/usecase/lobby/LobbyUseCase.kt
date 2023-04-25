@@ -3,10 +3,10 @@ package io.critica.usecase.lobby
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import io.critica.application.game.CreateGameRequest
-import io.critica.application.game.GameResponse
+import io.critica.application.game.command.CreateGame
+import io.critica.application.game.response.GameResponse
 import io.critica.application.lobby.response.LobbyResponse
-import io.critica.application.player.PlayerResponse
+import io.critica.application.player.response.PlayerResponse
 import io.critica.domain.GameStatus
 import io.critica.persistence.exception.LobbyException
 import io.critica.persistence.repository.GameRepository
@@ -29,7 +29,7 @@ class LobbyUseCase(
         return try {
             val lobby = repository.get(id)
             val date = DateTime(lobby.date).withTime(time)
-            val game = gameRepository.create(CreateGameRequest(date))
+            val game = gameRepository.create(CreateGame(date))
 
             require(lobby.games.contains(game)) {"Game is already in lobby"}
             require(game.status != GameStatus.WAITING) {  "Game is not in status 'waiting'"}

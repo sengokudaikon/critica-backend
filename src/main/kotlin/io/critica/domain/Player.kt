@@ -1,6 +1,6 @@
 package io.critica.domain
 
-import io.critica.application.player.PlayerResponse
+import io.critica.application.player.response.PlayerResponse
 import io.critica.persistence.db.Players
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass

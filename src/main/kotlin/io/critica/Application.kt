@@ -43,7 +43,7 @@ private const val DURATION: Long = 10L
 private const val WS_DURATION: Long = 15L
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "localhost", module = Application::main)
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::main)
         .start(wait = true)
 }
 
@@ -145,8 +145,8 @@ private fun Application.configHttp() {
     }
 
     install(PartialContent) {
-        // Maximum number of ranges that will be accepted from a HTTP request.
-        // If the HTTP request specifies more ranges, they will all be merged into a single range.
+        // Maximum number of ranges that will be accepted from a HTTP query.
+        // If the HTTP query specifies more ranges, they will all be merged into a single range.
         maxRangeCount = MAX_RANGE
     }
 

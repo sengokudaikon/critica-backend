@@ -1,6 +1,6 @@
 package io.critica.persistence.repository
 
-import io.critica.application.lobby.request.CreateLobby
+import io.critica.application.lobby.command.CreateLobby
 import io.critica.domain.Game
 import io.critica.domain.Lobby
 import io.critica.persistence.exception.GameException
@@ -16,7 +16,7 @@ class LobbyRepository {
         return suspendedTransactionAsync {
             Lobby.new {
                 this.date = request.date
-//                this.creator = User.findById(request.creator)!!
+//                this.creator = User.findById(query.creator)!!
                 this.name = request.name
             }
         }.await()

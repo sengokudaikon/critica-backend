@@ -1,6 +1,6 @@
 package io.critica.usecase.lobby
 
-import io.critica.application.lobby.request.CreateLobby
+import io.critica.application.lobby.command.CreateLobby
 import io.critica.application.lobby.response.LobbyResponse
 import io.critica.persistence.repository.LobbyRepository
 import org.koin.core.annotation.Single

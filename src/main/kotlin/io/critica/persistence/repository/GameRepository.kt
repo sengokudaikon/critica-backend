@@ -1,6 +1,6 @@
 package io.critica.persistence.repository
 
-import io.critica.application.game.CreateGameRequest
+import io.critica.application.game.command.CreateGame
 import io.critica.domain.Game
 import io.critica.domain.GameStatus
 import io.critica.domain.PlayerRole
@@ -11,7 +11,7 @@ import java.util.UUID
 
 @Single
 class GameRepository {
-    suspend fun create(request: CreateGameRequest): Game {
+    suspend fun create(request: CreateGame): Game {
         val game = suspendedTransactionAsync {
             Game.new {
                 date = request.date.toString()

@@ -8,9 +8,9 @@ class EventUseCase
 //    private val playerRepository: PlayerRepository,
 //    private val eventRepository: EventRepository,
 
-//    suspend fun day(request: DayStageRequest): DayStageResponse {
-//        val game = gameRepository.get(request.gameId)
-//        val dayNumber = getDayNumber(request.gameId) + 1
+//    suspend fun day(query: DayStageRequest): DayStageResponse {
+//        val game = gameRepository.get(query.gameId)
+//        val dayNumber = getDayNumber(query.gameId) + 1
 //        if (dayNumber % 2 != 0) {
 //            throw BadRequestException("Cannot add day event to a night game")
 //        }
@@ -18,14 +18,14 @@ class EventUseCase
 //            throw BadRequestException("Cannot add more than 5 day events to a game")
 //        }
 //
-//        val candidates = Json.decodeFromString<List<Int>>(request.dayEvent.candidates!!)
+//        val candidates = Json.decodeFromString<List<Int>>(query.dayEvent.candidates!!)
 //        for (candidate in candidates) {
 //            if (playerDao.getPlayerById(candidate) == null) {
 //                throw BadRequestException("Candidate not found")
 //            }
 //        }
 //
-//        val votes = Json.decodeFromString<Map<Int, Int>>(request.dayEvent.votes!!)
+//        val votes = Json.decodeFromString<Map<Int, Int>>(query.dayEvent.votes!!)
 //        for (vote in votes.keys) {
 //            if (!candidates.contains(vote)) {
 //                throw BadRequestException("Vote not found")
@@ -34,14 +34,14 @@ class EventUseCase
 //
 //        gameRepository.addDayEvent(
 //        game,
-//        Json.decodeFromString(request.dayEvent.candidates!!),
-//        Json.decodeFromString(request.dayEvent.votes!!))
-//        return request.dayEvent.toResponse()
+//        Json.decodeFromString(query.dayEvent.candidates!!),
+//        Json.decodeFromString(query.dayEvent.votes!!))
+//        return query.dayEvent.toResponse()
 //    }
 //
-//    suspend fun night(request: NightStageRequest): NightStageResponse {
-//        val game = gameRepository.get(request.gameId)
-//        val dayNumber = GameController.getDayNumber(request.gameId) + 1
+//    suspend fun night(query: NightStageRequest): NightStageResponse {
+//        val game = gameRepository.get(query.gameId)
+//        val dayNumber = GameController.getDayNumber(query.gameId) + 1
 //        if (dayNumber % 2 == 0) {
 //            throw BadRequestException("Cannot add night event to a day game")
 //        }
@@ -52,7 +52,7 @@ class EventUseCase
 //            throw BadRequestException("Cannot add more than 5 night events to a game")
 //        }
 //
-//        val night = gameRepository.addNightEvent(game, request.mafiaShot, request.detectiveCheck, request.donCheck)
+//        val night = gameRepository.addNightEvent(game, query.mafiaShot, query.detectiveCheck, query.donCheck)
 //        return night.toResponse()
 //    }
 

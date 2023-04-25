@@ -1,6 +1,6 @@
 package io.critica.domain.events
 
-import io.critica.application.player.PlayerResponse
+import io.critica.application.player.response.PlayerResponse
 import io.critica.domain.Player
 import io.critica.domain.PlayerRole
 import io.critica.domain.PlayerStatus

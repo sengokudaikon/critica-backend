@@ -1,7 +1,7 @@
 package io.critica.domain.events
 
-import io.critica.application.game.GameResponse
-import io.critica.application.player.PlayerResponse
+import io.critica.application.game.response.GameResponse
+import io.critica.application.player.response.PlayerResponse
 import io.critica.domain.Game
 
 interface Event {

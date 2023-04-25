@@ -1,6 +1,6 @@
-package io.critica.application.game
+package io.critica.application.game.response
 
-import io.critica.application.player.PlayerResponse
+import io.critica.application.player.response.PlayerResponse
 import io.critica.application.stage.StageResponse
 import io.critica.application.vote.DayVoteResponse
 

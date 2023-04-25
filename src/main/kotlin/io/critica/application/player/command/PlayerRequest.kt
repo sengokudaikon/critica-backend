@@ -1,4 +1,4 @@
-package io.critica.application.player
+package io.critica.application.player.command
 
 data class PlayerRequest(
     val userId: Int,

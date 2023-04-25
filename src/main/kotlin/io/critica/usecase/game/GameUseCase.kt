@@ -3,8 +3,8 @@ package io.critica.usecase.game
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import io.critica.application.game.CreateGameRequest
-import io.critica.application.game.GameResponse
+import io.critica.application.game.command.CreateGame
+import io.critica.application.game.response.GameResponse
 import io.critica.domain.Game
 import io.critica.domain.GameStatus
 import io.critica.domain.Player
@@ -24,7 +24,7 @@ class GameUseCase(
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository
 ) {
-    suspend fun create(request: CreateGameRequest): GameResponse {
+    suspend fun create(request: CreateGame): GameResponse {
         val game = repository.create(request)
         return GameResponse(game.id.value.toString(), game.date, emptyList(), null)
     }
