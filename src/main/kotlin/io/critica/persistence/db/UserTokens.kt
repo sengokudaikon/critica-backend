@@ -9,8 +9,4 @@ object UserTokens : IdTable<UUID>("user_tokens") {
     val token = varchar("token", length = 200)
     val expiresAt = long("expiresAt")
     val createdAt = long("createdAt")
-
-    init {
-        index(true, userId, token)
-    }
 }

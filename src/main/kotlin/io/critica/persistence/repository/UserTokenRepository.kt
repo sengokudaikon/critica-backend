@@ -23,10 +23,12 @@ class UserTokenRepository {
 
     suspend fun saveToken(userId: UUID, token: String) {
         suspendedTransactionAsync {
-            UserToken.new {
-                this.userId = User[userId]
+            val user = User.findById(userId) ?: throw Exception("User not found")
+            val userToken = UserToken.new(UUID.randomUUID()) {
+                this.userId = user
                 this.token = token
             }
+            userToken
         }.await()
     }
 }

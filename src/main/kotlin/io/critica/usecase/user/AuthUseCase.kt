@@ -17,11 +17,13 @@ class AuthUseCase(
 ) {
     suspend fun register(request: CreateAccount): Either<Exception, User> {
         return try {
-            userRepository.create(
+            val user = userRepository.create(
                 request.username,
                 request.email,
                 passwordEncoder.encode(request.password)
-            ).right()
+            )
+
+            user.right()
         } catch (e: Exception) {
             e.left()
         }
@@ -39,7 +41,7 @@ class AuthUseCase(
                 userRepository.findByUsername(request.username!!)
             }
 
-            if (passwordEncoder.verify(request.password, user.password)) {
+            if (user != null && passwordEncoder.verify(request.password, user.password)) {
                 user.right()
             } else {
                 Exception("Invalid username or password").left()
@@ -47,5 +49,12 @@ class AuthUseCase(
         } catch (e: Exception) {
             e.left()
         }
+    }
+
+    suspend fun checkIfExists(username: String, email: String): Boolean {
+        val userByMail = userRepository.findByEmail(email)
+        val usernameExists = userRepository.findByUsername(username)
+
+        return userByMail != null || usernameExists != null
     }
 }

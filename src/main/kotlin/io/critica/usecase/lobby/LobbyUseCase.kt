@@ -67,7 +67,7 @@ class LobbyUseCase(
     suspend fun addPlayer(id: UUID, playerName: String): Either<Exception, LobbyResponse> {
         val lobby = repository.get(id)
 
-        val user = userRepository.findByUsername(playerName)
+        val user = userRepository.findByUsername(playerName) ?: return LobbyException.NotFound("User not found").left()
         val result = playerRepository.create(user)
         lobby.players.plus(result)
         return if (!lobby.players.contains(result)) {

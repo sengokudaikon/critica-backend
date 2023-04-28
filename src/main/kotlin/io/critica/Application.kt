@@ -43,7 +43,7 @@ private const val DURATION: Long = 10L
 private const val WS_DURATION: Long = 15L
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::main)
+    embeddedServer(Netty, port = 8080, host = "localhost", module = Application::main)
         .start(wait = true)
 }
 
@@ -55,7 +55,7 @@ fun Application.main() {
     val config: AppConfig by inject()
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
-    if (runMigrations) { DatabaseFactory.init(dbConfig = config.dbConfig()) }
+    DatabaseFactory.init(runMigrations = runMigrations, dbConfig = config.dbConfig())
     val security: Security by inject()
     install(Authentication) {
         jwt("jwt-auth-provider") {

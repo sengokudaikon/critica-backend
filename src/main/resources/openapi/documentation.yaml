@@ -27,7 +27,7 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            text/plain:
               schema:
                 type: "string"
               examples:
@@ -81,17 +81,20 @@ paths:
       description: ""
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/RefreshToken"
         required: true
       responses:
         "200":
           description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "string"
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    accessToken:
+                      type: string
   /api/auth/register:
     post:
       tags:
@@ -100,23 +103,18 @@ paths:
       description: ""
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/CreateAccount"
         required: true
       responses:
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
         "201":
           description: "Created"
-          content:
-            '*/*':
-              schema:
-                type: "string"
+          content: 
+            application/json:
+              schema: 
+                type: string
+                example: "OK"
   /api/auth/signIn:
     post:
       tags:
@@ -125,23 +123,22 @@ paths:
       description: ""
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/SignIn"
         required: true
       responses:
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
-                type: "string"
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
   /api/auth/signout:
     post:
       tags:
@@ -152,7 +149,7 @@ paths:
       description: ""
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/SignOut"
         required: true
@@ -160,9 +157,9 @@ paths:
         "204":
           description: "No Content"
           content:
-            '*/*':
+            application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/NoContent"
   /api/game/{id}:
     get:
       tags:
@@ -180,15 +177,27 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-            text/plain:
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/addPlayer:
     put:
       tags:
@@ -203,39 +212,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "200":
           description: "OK"
           content:
-            text/plain:
+            application/json:
               schema:
                 type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
-        "204":
-          description: "No Content"
+        "400":
+          description: "Bad Request"
           content:
-            text/plain:
+            application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/addPlayer/{playerId}:
     put:
       tags:
@@ -255,41 +255,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "200":
           description: "OK"
           content:
-            text/plain:
+            application/json:
               schema:
                 type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
-                Example#2:
-                  value: "Invalid ID"
-        "204":
-          description: "No Content"
+        "400":
+          description: "Bad Request"
           content:
-            text/plain:
+            application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/finish:
     post:
       tags:
@@ -305,42 +294,36 @@ paths:
           type: "string"
       requestBody:
         content:
-          text/plain:
+          application/json:
             schema:
               type: "string"
         required: true
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "string"
                 format: "uuid"
-            text/plain:
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/removePlayer:
     put:
       tags:
@@ -355,39 +338,33 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "200":
           description: "OK"
           content:
-            text/plain:
+            application/json:
               schema:
                 type: "string"
               examples:
                 Example#1:
                   value: "Invalid ID"
-        "204":
-          description: "No Content"
+        "400":
+          description: "Bad Request"
           content:
-            text/plain:
+            application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/start:
     post:
       tags:
@@ -402,36 +379,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "object"
-            text/plain:
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/create:
     post:
       tags:
@@ -441,35 +412,35 @@ paths:
       description: ""
       requestBody:
         content:
-          text/plain:
+          application/json:
             schema:
               type: "string"
         required: true
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/game/list:
     get:
       tags:
@@ -481,11 +452,29 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Game"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}:
     get:
       tags:
@@ -500,21 +489,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "400":
-          description: "Bad Request"
-          content:
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addGame:
     put:
       tags:
@@ -529,42 +527,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addPlayer:
     put:
       tags:
@@ -579,42 +565,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addPlayer/{playerId}:
     put:
       tags:
@@ -634,42 +608,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addTemporaryPlayer:
     put:
       tags:
@@ -684,42 +646,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/delete:
     put:
       tags:
@@ -734,39 +684,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
         "204":
           description: "No Content"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "object"
         "400":
           description: "Bad Request"
           content:
-            text/plain:
+            application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/games:
     get:
       tags:
@@ -781,23 +722,32 @@ paths:
         schema:
           type: "string"
       responses:
-        "400":
-          description: "Bad Request"
-          content:
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/GameResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/players:
     get:
       tags:
@@ -812,23 +762,32 @@ paths:
         schema:
           type: "string"
       responses:
-        "400":
-          description: "Bad Request"
-          content:
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/PlayerResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/removeGame/{gameId}:
     put:
       tags:
@@ -848,44 +807,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
-                Example#2:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/removePlayer:
     put:
       tags:
@@ -900,42 +845,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/removePlayer/{playerId}:
     put:
       tags:
@@ -955,42 +888,30 @@ paths:
         schema:
           type: "string"
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/create:
     post:
       tags:
@@ -1000,46 +921,35 @@ paths:
       description: ""
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/CreateLobby"
         required: true
       responses:
-        "403":
-          description: "Forbidden"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
-        "401":
-          description: "Unauthorized"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-        "400":
-          description: "Bad Request"
-          content:
-            '*/*':
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Name must not be empty."
-                Example#2:
-                  value: "Date must be in the future or now."
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
   /api/lobby/list:
     get:
       tags:
@@ -1051,7 +961,7 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "array"
                 items:
@@ -1205,3 +1115,97 @@ components:
           type: "string"
         name:
           type: "string"
+    Created:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 201
+        message:
+          type: "string"
+          description: "A description of the successful creation."
+          example: "OK"
+      required:
+        - "status"
+        - "message"
+    NoContent:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 204
+      required:
+        - "status"
+    BadRequest:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 400
+        message:
+          type: "string"
+          description: "A description of the bad request error."
+          example: "Invalid ID"
+      required:
+        - "status"
+        - "message"
+
+    NotFound:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 404
+        message:
+          type: "string"
+          description: "A description of the not found error."
+      required:
+        - "status"
+        - "message"
+
+    InternalServerError:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 500
+        message:
+          type: "string"
+          description: "A description of the internal server error."
+      required:
+        - "status"
+        - "message"
+    Forbidden:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 403
+        message:
+          type: "string"
+          description: "A description of the forbidden error."
+          example: "You do not have the required role to access this resource."
+      required:
+        - "status"
+        - "message"
+
+      Unauthorized:
+        type: "object"
+        properties:
+          status:
+            type: "integer"
+            format: "int32"
+            example: 401
+          message:
+            type: "string"
+            description: "A description of the unauthorized error."
+            example: "You must be authenticated to access this resource."
+        required:
+          - "status"
+          - "message"

@@ -13,6 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object DatabaseFactory {
     fun init(
         dbConfig: DbConfig,
+        runMigrations: Boolean,
         drop: Boolean = false,
         test: Boolean = false
     ) {
@@ -43,27 +44,29 @@ object DatabaseFactory {
             }
         }
 
-        val flyway = if (!test) {
-            Flyway.configure()
-                .baselineOnMigrate(true)
-                .dataSource(ds)
-                .load()
-        } else null
+        if (runMigrations) {
+            val flyway = if (!test) {
+                Flyway.configure()
+                    .baselineOnMigrate(true)
+                    .dataSource(ds)
+                    .load()
+            } else null
 
-        // If database is empty, first create missing tables and columns, then baseline
-        // Else apply migrations before renamed tables and columns are created as new instead of being renamed
-        if (flyway?.info()?.current() != null) {
-            flyway.migrate()
-        }
-
-        transaction {
-            tables.forEach { table ->
-                SchemaUtils.createMissingTablesAndColumns(table)
+            // If database is empty, first create missing tables and columns, then baseline
+            // Else apply migrations before renamed tables and columns are created as new instead of being renamed
+            if (flyway?.info()?.current() != null) {
+                flyway.migrate()
             }
-        }
 
-        if (flyway?.info()?.current() == null) {
-            flyway?.migrate()
+            transaction {
+                tables.forEach { table ->
+                    SchemaUtils.createMissingTablesAndColumns(table)
+                }
+            }
+
+            if (flyway?.info()?.current() == null) {
+                flyway?.migrate()
+            }
         }
     }
 }
