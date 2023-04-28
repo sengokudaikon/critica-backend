@@ -18,6 +18,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.joda.time.DateTime
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
@@ -26,6 +27,7 @@ import java.util.*
 
 @RouteController
 @Single
+@Tag(name = "Game")
 class GameController(
     private val gameUseCase: GameUseCase
 ): KoinComponent {

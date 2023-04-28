@@ -5,6 +5,8 @@ import io.critica.domain.Lobby
 import io.critica.domain.Player
 import io.critica.domain.User
 import io.critica.persistence.db.Players
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
@@ -62,5 +64,11 @@ class PlayerRepository {
 
     suspend fun get(playerId: UUID): Player {
         return suspendedTransactionAsync { Player[playerId] }.await()
+    }
+
+    suspend fun getPlayersInGame(gameId: UUID): Flow<Player> {
+        return suspendedTransactionAsync {
+            Player.find { Players.gameId eq gameId }.asFlow()
+        }.await()
     }
 }

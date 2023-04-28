@@ -13,9 +13,12 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import io.swagger.v3.oas.annotations.tags.Tag
 import java.util.*
 
 @RouteController
+@Tag(name = "Auth")
+@Tag(name = "User")
 class AuthController(
     private val authUseCase: AuthUseCase,
     private val security: Security,
