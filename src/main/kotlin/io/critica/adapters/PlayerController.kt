@@ -42,7 +42,7 @@ class PlayerController(
     @Get("/api/player")
     suspend fun getCurrentPlayer(call: ApplicationCall)
     {
-        val player = useCase.getPlayerProfile(UUID.fromString(call.principal<UserIdPrincipal>()!!.name))
+        val player = useCase.getPlayerByUser(UUID.fromString(call.principal<UserIdPrincipal>()!!.name))
         call.respond(player)
     }
 }

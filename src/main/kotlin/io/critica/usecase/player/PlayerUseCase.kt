@@ -21,5 +21,10 @@ class PlayerUseCase(
 
         return playerRepository.get(id)
     }
+
+    suspend fun getPlayerByUser(userId: UUID): Player {
+        return playerRepository.getPlayerByUserId(userId)
+    }
+
     suspend fun getPlayersInGame(gameId: UUID) = playerRepository.getPlayersInGame(gameId)
 }

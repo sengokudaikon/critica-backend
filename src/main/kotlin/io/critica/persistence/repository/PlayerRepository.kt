@@ -71,4 +71,10 @@ class PlayerRepository {
             Player.find { Players.gameId eq gameId }.asFlow()
         }.await()
     }
+
+    suspend fun getPlayerByUserId(userId: UUID): Player {
+        return suspendedTransactionAsync {
+            Player.find { Players.userId eq userId }.first()
+        }.await()
+    }
 }

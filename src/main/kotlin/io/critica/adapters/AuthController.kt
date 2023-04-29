@@ -27,35 +27,37 @@ class AuthController(
     @Post("/api/auth/register")
     suspend fun register(call: ApplicationCall) {
         val request = call.receive<CreateAccount>()
-        validate(request)
+        try {
+            validate(request)
+        } catch (
+            e: Exception
+        ) {
+            call.respond(HttpStatusCode.BadRequest, e.message ?: "Error during registration")
+            return
+        }
         val userExists = authUseCase.checkIfExists(request.username, request.email)
         if (userExists) {
             call.respond(HttpStatusCode.BadRequest, "User already exists")
             return
         }
         val either = authUseCase.register(request)
-        val user = either.fold(
+        return either.fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Error during registration") },
-            { user -> user })
-
-        if (user is User) {
-            val accessToken = security.generateAccessToken(user.id.value)
-            val refreshToken = security.generateRefreshToken(user.id.value)
-
-            call.respond(
+            { user -> call.respond(
                 HttpStatusCode.Created,
-                message = mapOf(
-                    "accessToken" to accessToken,
-                    "refreshToken" to refreshToken
-                )
-            )
-        }
+                message = "User created successfully"
+            ) })
     }
 
     @Post("/api/auth/signIn")
     suspend fun signIn(call: ApplicationCall) {
         val request = call.receive<SignIn>()
         validate(request)
+        val userExists = authUseCase.checkIfExists(request.username, request.email)
+        if (!userExists) {
+            call.respond(HttpStatusCode.BadRequest, "User doesn't exist")
+            return
+        }
         authUseCase.signIn(request).fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Invalid credentials") },
             { user ->

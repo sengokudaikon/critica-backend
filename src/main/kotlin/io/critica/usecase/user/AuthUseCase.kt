@@ -51,9 +51,9 @@ class AuthUseCase(
         }
     }
 
-    suspend fun checkIfExists(username: String, email: String): Boolean {
-        val userByMail = userRepository.findByEmail(email)
-        val usernameExists = userRepository.findByUsername(username)
+    suspend fun checkIfExists(username: String?, email: String?): Boolean {
+        val userByMail = email?.let { userRepository.findByEmail(it) }
+        val usernameExists = username?.let { userRepository.findByUsername(it) }
 
         return userByMail != null || usernameExists != null
     }

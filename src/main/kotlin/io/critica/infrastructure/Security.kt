@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import io.critica.infrastructure.AES256Util.decrypt
 import io.critica.infrastructure.AES256Util.encrypt
-import io.critica.infrastructure.AES256Util.generateSecretKey
 import io.critica.persistence.repository.UserTokenRepository
 import org.joda.time.LocalDateTime
 import org.koin.core.annotation.Single
@@ -34,6 +33,14 @@ class Security(
             .withIssuedAt(now.toDate())
             .withExpiresAt(expiry.toDate())
             .sign(algorithm)
+    }
+
+    @Suppress("MagicNumber")
+    private fun generateSecretKey(): String {
+        val random = SecureRandom()
+        val bytes = ByteArray(32) // 256 bits
+        random.nextBytes(bytes)
+        return Base64.getEncoder().encodeToString(bytes)
     }
 
     suspend fun generateRefreshToken(userId: UUID): String {
