@@ -966,6 +966,131 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/LobbyResponse"
+  /api/player:
+    get:
+      tags:
+        - "Player"
+      security:
+        - BearerAuth: [ ]
+      description: "Get current player"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
+  /api/player/{id}:
+    get:
+      tags:
+        - "Player"
+      description: "Get player by id"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  example: 123e4567-e89b-12d3-a456-426614174000
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
+  /api/player/{name}:
+    get:
+      tags:
+        - "Player"
+      description: ""
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+          "404":
+            description: "Not Found"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotFound"
+          "500":
+            description: "Internal Server Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/InternalServerError"
 components:
   securitySchemes:
     bearerAuth:

@@ -8,6 +8,7 @@ import io.critica.application.user.command.SignIn
 import io.critica.application.user.command.SignOut
 import io.critica.domain.User
 import io.critica.infrastructure.Security
+import io.critica.infrastructure.validation.validate
 import io.critica.usecase.user.AuthUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -26,6 +27,7 @@ class AuthController(
     @Post("/api/auth/register")
     suspend fun register(call: ApplicationCall) {
         val request = call.receive<CreateAccount>()
+        validate(request)
         val userExists = authUseCase.checkIfExists(request.username, request.email)
         if (userExists) {
             call.respond(HttpStatusCode.BadRequest, "User already exists")
@@ -53,6 +55,7 @@ class AuthController(
     @Post("/api/auth/signIn")
     suspend fun signIn(call: ApplicationCall) {
         val request = call.receive<SignIn>()
+        validate(request)
         authUseCase.signIn(request).fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Invalid credentials") },
             { user ->

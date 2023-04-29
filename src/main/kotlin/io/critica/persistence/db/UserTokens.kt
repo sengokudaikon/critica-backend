@@ -1,12 +1,13 @@
 package io.critica.persistence.db
 
 import org.jetbrains.exposed.dao.id.IdTable
+import org.joda.time.DateTime
 import java.util.*
 
 object UserTokens : IdTable<UUID>("user_tokens") {
     override val id = uuid("id").entityId()
-    val userId = reference("userId", Users)
-    val token = varchar("token", length = 200)
-    val expiresAt = long("expiresAt")
-    val createdAt = long("createdAt")
+    val userId = reference("user_id", Users)
+    val token = varchar("token", length = 255)
+    val expiresAt = long("expires_at").default(DateTime.now().plusDays(7).millis)
+    val createdAt = long("created_at").default(DateTime.now().millis)
 }

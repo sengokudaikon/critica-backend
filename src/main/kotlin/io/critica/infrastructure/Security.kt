@@ -3,6 +3,9 @@ package io.critica.infrastructure
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import io.critica.infrastructure.AES256Util.decrypt
+import io.critica.infrastructure.AES256Util.encrypt
+import io.critica.infrastructure.AES256Util.generateSecretKey
 import io.critica.persistence.repository.UserTokenRepository
 import org.joda.time.LocalDateTime
 import org.koin.core.annotation.Single
@@ -16,7 +19,7 @@ class Security(
     private val jwtSecret = generateSecretKey()
     private val algorithm = Algorithm.HMAC256(jwtSecret)
 
-    private val accessTokenValiditySeconds = 3600*8 // 8 hours
+    private val accessTokenValiditySeconds = 3600 // 1 hour
     private val refreshTokenValiditySeconds = 604800 // 7 days
 
     fun generateAccessToken(userId: UUID): String {
@@ -46,16 +49,8 @@ class Security(
             .withExpiresAt(expiry.toDate())
             .sign(algorithm)
 
-        tokenRepository.saveToken(userId, token)
+        tokenRepository.saveToken(userId, encrypt(token))
         return token
-    }
-
-    @Suppress("MagicNumber")
-    private fun generateSecretKey(): String {
-        val random = SecureRandom()
-        val bytes = ByteArray(32) // 256 bits
-        random.nextBytes(bytes)
-        return Base64.getEncoder().encodeToString(bytes)
     }
 
     fun configureSecurity(): JWTVerifier {
@@ -64,7 +59,7 @@ class Security(
 
     suspend fun verifyRefreshToken(userId: UUID, refreshToken: String): Boolean {
         val token = tokenRepository.findByUserId(userId)
-        token.let { return it.token == refreshToken }
+        token.let { return decrypt(it.token) == refreshToken }
     }
 
     suspend fun invalidateRefreshToken(userId: UUID) {
