@@ -1,13 +1,6 @@
 import io.github.cdimascio.dotenv.Dotenv
 
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
-val exposed_version: String by project
-val postgres_version: String by project
-val koin_version: String by project
-
-group = "io.critica"
+group = "net.critika"
 version = "0.0.1"
 
 plugins {
@@ -17,6 +10,7 @@ plugins {
     id("com.google.devtools.ksp") version "1.8.20-1.0.10"
     id("org.flywaydb.flyway") version "7.15.0"
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
+    id("jacoco")
 }
 
 detekt {
@@ -51,7 +45,7 @@ kotlin {
 
 ktor {
     fatJar {
-        archiveFileName.set("critica.jar")
+        archiveFileName.set("critika.jar")
     }
 
     docker {
@@ -77,7 +71,7 @@ ktor {
 }
 
 application {
-    mainClass.set("io.critica.ApplicationKt")
+    mainClass.set("net.critika.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -94,35 +88,34 @@ buildscript {
 
 dependencies {
     implementation("com.google.devtools.ksp:symbol-processing-api:1.8.20-1.0.10")
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-resources:$ktor_version")
-    implementation("io.ktor:ktor-server-caching-headers-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-openapi:$ktor_version")
-    implementation("io.ktor:ktor-server-swagger:$ktor_version")
-    implementation("io.ktor:ktor-server-partial-content-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-metrics-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-call-id-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("org.postgresql:postgresql:$postgres_version")
-    implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20")
+    implementation("io.ktor:ktor-server-core-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-resources:2.2.4")
+    implementation("io.ktor:ktor-server-caching-headers-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-cors-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-openapi:2.2.4")
+    implementation("io.ktor:ktor-server-swagger:2.2.4")
+    implementation("io.ktor:ktor-server-partial-content-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-call-logging-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-metrics-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-call-id-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:2.2.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:2.2.4")
+    implementation("org.jetbrains.exposed:exposed-core:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.40.1")
+    implementation("org.postgresql:postgresql:42.5.4")
+    implementation("io.ktor:ktor-server-websockets-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-netty-jvm:2.2.4")
+    implementation("ch.qos.logback:logback-classic:1.4.6")
     implementation("de.nycode:bcrypt:2.3.0")
     implementation("org.testng:testng:7.7.0")
     implementation("org.flywaydb:flyway-core:9.16.0")
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
-    implementation("io.insert-koin:koin-core:$koin_version")
-    implementation("io.insert-koin:koin-test:$koin_version")
-    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+    implementation("io.insert-koin:koin-ktor:3.3.1")
+    implementation("io.insert-koin:koin-core:3.3.3")
+    implementation("io.insert-koin:koin-test:3.3.3")
+    implementation("io.insert-koin:koin-logger-slf4j:3.3.1")
     implementation("io.insert-koin:koin-annotations:1.1.1")
     implementation("io.arrow-kt:arrow-core:1.2.0-RC")
     implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0-RC")
@@ -133,18 +126,61 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common-jvm:2.2.4")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.2.4")
     implementation("net.bytebuddy:byte-buddy:1.14.2")
-    annotationProcessor("org.hibernate.validator:hibernate-validator-annotation-processor:8.0.0.Final")
+    implementation("com.sun.mail:jakarta.mail:2.0.1")
+    implementation("io.ktor:ktor-server-jvm:2.2.4")
+    implementation("io.ktor:ktor-server-auth-jwt-jvm:2.2.4")
+    implementation("app.softwork:kotlinx-uuid-core:0.0.18")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
 
+
+    //annotations
+    annotationProcessor("org.hibernate.validator:hibernate-validator-annotation-processor:8.0.0.Final")
     ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
     ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
     ksp("com.github.dimitark.ktor-annotations:processor:0.0.3")
 
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    //test
+    testImplementation("org.testcontainers:testcontainers:1.17.6")
+    testImplementation("org.testcontainers:postgresql:1.17.6")
+    testImplementation("io.ktor:ktor-server-test-host-jvm:2.2.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    testImplementation("io.ktor:ktor-server-tests-jvm:2.2.4")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.8.20-RC")
+    testImplementation("com.github.npetzall.testcontainers.junit:junit-parent:1.10.1.0.0")
+    testImplementation("org.testcontainers:junit-jupiter:1.17.6")
+    testImplementation("com.tngtech.archunit:archunit-junit5:1.0.0")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.0")
+    testImplementation("io.rest-assured:rest-assured:5.3.0")
+    testImplementation("io.rest-assured:kotlin-extensions:5.3.0")
+    testImplementation("io.qameta.allure:allure-junit5:2.21.0")
+    testImplementation("io.kotest:kotest-runner-junit5:5.6.1")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:5.6.1")
+    testImplementation("io.kotest.extensions:kotest-assertions-ktor:2.0.0")
+    testImplementation("io.kotest.extensions:kotest-extensions-koin:1.1.0")
 }
 
 tasks {
     build {
         dependsOn("detekt")
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
+//    finalizedBy("jacocoTestReport") // This ensures the test report is generated after the test task is executed
+}
+
+//tasks.jacocoTestReport {
+//    reports {
+//        xml.required
+//        html.required
+//    }
+//}
+
+
+jacoco {
+    toolVersion = "0.8.7"
 }

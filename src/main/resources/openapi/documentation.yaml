@@ -71,13 +71,143 @@ paths:
               required: true
               schema:
                 type: "string"
+  /api/admin/users/{userId}/promote:
+    post:
+      tags:
+        - "Admin"
+        - "User"
+      description: ""
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "User promoted to admin"
+  /api/admin/users/{userId}/reject:
+    post:
+      tags:
+        - "Admin"
+        - "User"
+      description: ""
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "User promotion rejected"
+  /api/admin/users/requesting-promotion:
+    get:
+      tags:
+        - "Admin"
+      description: ""
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/User"
   /api/auth/refresh:
     post:
       tags:
         - "Auth"
         - "User"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       requestBody:
         content:
@@ -133,19 +263,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  accessToken:
-                    type: string
-                  refreshToken:
-                    type: string
+                $ref: "#/components/schemas/UserAuthToken"
   /api/auth/signout:
     post:
       tags:
         - "Auth"
         - "User"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       requestBody:
         content:
@@ -160,12 +285,683 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NoContent"
+  /api/game/{id}/bestMove/{seat}:
+    put:
+      tags:
+        - "Game"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{dayId}/nominate/{candidate}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "dayId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "candidate"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{dayId}/remove/{candidate}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "dayId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "candidate"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{dayId}/vote:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "dayId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{nightId}/detective/{seat}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "nightId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{nightId}/don/{seat}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "nightId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{nightId}/shot/{seat}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "nightId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/addBonus/{seat}:
+    put:
+      tags:
+        - "Game"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/game/{id}/addFoul/{seat}:
+    put:
+      tags:
+        - "Game"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/game/{id}/addOPW/{seat}:
+    put:
+      tags:
+        - "Game"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "seat"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{stageId}/finish:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "stageId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{stageId}/next:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "stageId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/stage/{stageId}/prev:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "stageId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
   /api/game/{id}:
     get:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -203,7 +999,7 @@ paths:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -241,7 +1037,7 @@ paths:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -284,7 +1080,7 @@ paths:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -329,7 +1125,7 @@ paths:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -365,12 +1161,171 @@ paths:
               application/json:
                 schema:
                   $ref: "#/components/schemas/InternalServerError"
+  /api/game/{id}/startDay/{day}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "day"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/startNight/{night}:
+    put:
+      tags:
+        - "Game"
+        - "Stage"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "night"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/host:
+    post:
+      tags:
+        - "Game"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            pattern: uuid
+        - name: "hostId"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DateQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Date must be in the future"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/start:
     post:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -408,7 +1363,7 @@ paths:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       requestBody:
         content:
@@ -446,7 +1401,7 @@ paths:
       tags:
         - "Game"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       responses:
         "200":
@@ -480,7 +1435,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -518,7 +1473,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -556,7 +1511,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -594,7 +1549,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -637,7 +1592,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -675,7 +1630,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -713,7 +1668,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -753,7 +1708,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -793,7 +1748,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -836,7 +1791,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -874,7 +1829,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       parameters:
         - name: "id"
@@ -917,7 +1872,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: ""
       requestBody:
         content:
@@ -955,7 +1910,7 @@ paths:
       tags:
         - "Lobby"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: []
       description: ""
       responses:
         "200":
@@ -971,7 +1926,7 @@ paths:
       tags:
         - "Player"
       security:
-        - BearerAuth: [ ]
+        - AccessToken: [ ]
       description: "Get current player"
       responses:
         "200":
@@ -1091,13 +2046,354 @@ paths:
               application/json:
                 schema:
                   $ref: "#/components/schemas/InternalServerError"
+
+  /api/player/enterGame/{id}:
+    get:
+      tags:
+        - "Player"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/player/enterLobby/{id}:
+    get:
+      tags:
+        - "Player"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/player/leaveGame:
+    get:
+      tags:
+        - "Player"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/player/leaveLobby/{id}:
+    get:
+      tags:
+        - "Player"
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings:
+    get:
+      tags:
+        - "User"
+      description: ""
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings/change-language:
+    post:
+      tags:
+        - "User"
+      description: ""
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: "string"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings/change-password:
+    post:
+      tags:
+        - "User"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserPasswordQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings/change-public-visibility:
+    post:
+      tags:
+        - "User"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "boolean"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings/change-push-notifications:
+    post:
+      tags:
+        - "User"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "boolean"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings/change-username:
+    post:
+      tags:
+        - "User"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserNameQuery"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /api/user/settings/request-promotion:
+    post:
+      tags:
+        - "User"
+      description: ""
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/user/settings/verify-email:
+    post:
+      tags:
+        - "User"
+      description: ""
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: "string"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
 components:
   securitySchemes:
-    bearerAuth:
+    AccessToken:
       type: http
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    UserAuthToken:
+      description: "User user token response"
+      type: object
+      properties:
+        token:
+          type: string
+          example: "JWT_TOKEN"
+        refresh_token:
+          type: string
+          example: "JWT_TOKEN"
     RefreshToken:
       type: "object"
       properties:
