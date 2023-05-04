@@ -171,10 +171,6 @@ tasks.shadowJar {
     setProperty("zip64", true)
 }
 
-tasks.buildFatJar {
-    setProperty("zip64", true)
-}
-
 tasks.test {
     useJUnitPlatform()
 //    finalizedBy("jacocoTestReport") // This ensures the test report is generated after the test task is executed
