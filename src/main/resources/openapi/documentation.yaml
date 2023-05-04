@@ -87,15 +87,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -120,15 +120,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -147,15 +147,15 @@ paths:
       description: ""
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -268,15 +268,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -309,15 +309,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -350,15 +350,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -386,15 +386,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -427,15 +427,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -468,15 +468,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -509,15 +509,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -544,15 +544,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -579,15 +579,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-            $ref: "#/components/schemas/Forbidden"
+            $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -614,15 +614,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -650,15 +650,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -686,15 +686,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -722,15 +722,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -758,15 +758,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/GameResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/{id}/addPlayer:
     put:
       tags:
@@ -788,15 +788,15 @@ paths:
               schema:
                 type: "string"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/{id}/addPlayer/{playerId}:
     put:
       tags:
@@ -823,15 +823,15 @@ paths:
               schema:
                 type: "string"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/{id}/finish:
     post:
       tags:
@@ -860,15 +860,15 @@ paths:
                 type: "string"
                 format: "uuid"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/{id}/removePlayer:
     put:
       tags:
@@ -893,15 +893,15 @@ paths:
                 Example#1:
                   value: "Invalid ID"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/{id}/startDay/{day}:
     put:
       tags:
@@ -923,15 +923,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -959,15 +959,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -995,15 +995,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1031,15 +1031,15 @@ paths:
               schema:
                 type: "object"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/create:
     post:
       tags:
@@ -1061,15 +1061,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/GameResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/game/list:
     get:
       tags:
@@ -1085,17 +1085,17 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/Game"
+                  $ref: "#/components/schemas/GameResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}:
     get:
       tags:
@@ -1117,15 +1117,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/addGame:
     put:
       tags:
@@ -1147,15 +1147,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/addPlayer:
     put:
       tags:
@@ -1177,15 +1177,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/addPlayer/{playerId}:
     put:
       tags:
@@ -1212,15 +1212,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/addTemporaryPlayer:
     put:
       tags:
@@ -1242,15 +1242,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/delete:
     put:
       tags:
@@ -1272,15 +1272,15 @@ paths:
               schema:
                 type: "object"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/games:
     get:
       tags:
@@ -1304,15 +1304,15 @@ paths:
                 items:
                   $ref: "#/components/schemas/GameResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/players:
     get:
       tags:
@@ -1336,15 +1336,15 @@ paths:
                 items:
                   $ref: "#/components/schemas/PlayerResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/removeGame/{gameId}:
     put:
       tags:
@@ -1371,15 +1371,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/removePlayer:
     put:
       tags:
@@ -1401,15 +1401,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/{id}/removePlayer/{playerId}:
     put:
       tags:
@@ -1436,15 +1436,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/create:
     post:
       tags:
@@ -1466,15 +1466,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/lobby/list:
     get:
       tags:
@@ -1506,15 +1506,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/player/{id}:
     get:
       tags:
@@ -1548,15 +1548,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
   /api/player/{name}:
     get:
       tags:
@@ -1587,15 +1587,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
 
   /api/player/enterGame/{id}:
     get:
@@ -1612,15 +1612,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1642,15 +1642,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1665,16 +1665,6 @@ paths:
       security:
         - AccessToken: [ ]
       responses:
-        "400":
-          $ref: "#/components/schemas/BadRequest"
-        "401":
-          $ref: "#/components/schemas/Unauthorized"
-        "403":
-          $ref: "#/components/schemas/Forbidden"
-        "404":
-          $ref: "#/components/schemas/NotFound"
-        "500":
-          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1696,15 +1686,15 @@ paths:
             type: "string"
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1720,15 +1710,15 @@ paths:
       description: ""
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1750,15 +1740,15 @@ paths:
         required: true
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1774,15 +1764,15 @@ paths:
       description: ""
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1804,15 +1794,15 @@ paths:
         required: true
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1834,15 +1824,15 @@ paths:
         required: true
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1858,15 +1848,15 @@ paths:
       description: ""
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1882,15 +1872,15 @@ paths:
       description: ""
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1912,15 +1902,15 @@ paths:
         required: true
       responses:
         "400":
-          $ref: "#/components/schemas/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          $ref: "#/components/schemas/Unauthorized"
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/schemas/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
-          $ref: "#/components/schemas/NotFound"
+          $ref: "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2134,7 +2124,7 @@ components:
           example: 204
       required:
         - "status"
-    BadRequest:
+    Error:
       type: "object"
       properties:
         status:
@@ -2143,62 +2133,29 @@ components:
           example: 400
         message:
           type: "string"
-          description: "A description of the bad request error."
+          description: "A description of the error."
           example: "Invalid ID"
       required:
         - "status"
         - "message"
+  responses: 
+    BadRequest:
+      description: "Malformed data or otherwise invalid request"
+      schema:
+        $ref: "#/components/schemas/Error"
     NotFound:
-      type: "object"
-      properties:
-        status:
-          type: "integer"
-          format: "int32"
-          example: 404
-        message:
-          type: "string"
-          description: "A description of the not found error."
-      required:
-        - "status"
-        - "message"
+      description: "The requested component was not found"
+      schema:
+        $ref: "#/components/schemas/Error"
     InternalServerError:
-      type: "object"
-      properties:
-        status:
-          type: "integer"
-          format: "int32"
-          example: 500
-        message:
-          type: "string"
-          description: "A description of the internal server error."
-      required:
-        - "status"
-        - "message"
+      description: "An internal server error occurred"
+      schema:
+        $ref: "#/components/schemas/Error"
     Forbidden:
-      type: "object"
-      properties:
-        status:
-          type: "integer"
-          format: "int32"
-          example: 403
-        message:
-          type: "string"
-          description: "A description of the forbidden error."
-          example: "You do not have the required role to access this resource."
-      required:
-        - "status"
-        - "message"
+      description: "The user does not have the required permissions to access this resource"
+      schema:
+        $ref: "#/components/schemas/Error"
     Unauthorized:
-      type: "object"
-      properties:
-        status:
-          type: "integer"
-          format: "int32"
-          example: 401
-        message:
-          type: "string"
-          description: "A description of the unauthorized error."
-          example: "You must be authenticated to access this resource."
-      required:
-        - "status"
-        - "message"
+      description: "The user is not authenticated"
+      schema:
+        $ref: "#/components/schemas/Error"
