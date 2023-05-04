@@ -10,6 +10,7 @@ import net.critika.domain.user.repository.UserSettingsRepository
 import net.critika.domain.user.repository.UserVerificationCodeRepository
 import net.critika.infrastructure.Argon2PasswordEncoder
 import net.critika.infrastructure.EmailSender
+import net.critika.persistence.exception.UserException
 import org.koin.core.annotation.Single
 import java.util.*
 
@@ -33,7 +34,7 @@ class UserSettingsUseCase(
         if (user != null && !passwordEncoder.verify(newPassword, user.password)) {
             userRepository.updatePassword(userId, passwordEncoder.encode(newPassword))
         } else {
-            throw Exception("Incorrect old password")
+            throw UserException.NotFound("Incorrect old password")
         }
     }
 
@@ -49,7 +50,7 @@ class UserSettingsUseCase(
                 throw e
             }
         } else {
-            throw Exception("User not found")
+            throw UserException.NotFound("User not found")
         }
     }
 
@@ -59,7 +60,7 @@ class UserSettingsUseCase(
             userSettingsRepository.updateEmailVerificationStatus(userId, true)
             verificationCodeRepository.deleteVerificationCode(userId)
         } else {
-            throw Exception("Invalid verification code")
+            throw UserException.NotFound("Invalid verification code")
         }
     }
 
@@ -78,7 +79,7 @@ class UserSettingsUseCase(
             userSettingsRepository.updateEmailVerificationStatus(userId, false)
             requestEmailVerification(userId)
         } else {
-            throw Exception("User not found")
+            throw UserException.NotFound("User not found")
         }
     }
 
@@ -87,7 +88,7 @@ class UserSettingsUseCase(
         if (user != null) {
             userSettingsRepository.updatePromotion(userId, true)
         } else {
-            throw Exception("User not found")
+            throw UserException.NotFound("User not found")
         }
     }
 
@@ -96,7 +97,7 @@ class UserSettingsUseCase(
         if (user != null) {
             userSettingsRepository.updateLanguage(userId, language)
         } else {
-            throw Exception("User not found")
+            throw UserException.NotFound("User not found")
         }
     }
 
@@ -105,7 +106,7 @@ class UserSettingsUseCase(
         if (user != null) {
             userSettingsRepository.updatePushNotifications(userId, pushNotifications)
         } else {
-            throw Exception("User not found")
+            throw UserException.NotFound("User not found")
         }
     }
 
@@ -114,14 +115,14 @@ class UserSettingsUseCase(
         if (user != null) {
             userSettingsRepository.updatePublicVisibility(userId, publicVisibility)
         } else {
-            throw Exception("User not found")
+            throw UserException.NotFound("User not found")
         }
     }
 
     suspend fun getUserSettings(userId: UUID): Either<Exception, UserSettings> {
         val user = userRepository.findById(userId)
         return if (user == null) {
-            Exception("User not found").left()
+            UserException.NotFound("User not found").left()
         } else {
             val settings = userSettingsRepository.getUserSettingsByUserId(userId)
             return UserSettings(

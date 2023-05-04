@@ -40,7 +40,6 @@ import java.time.Duration
 
 private const val MAX_RANGE: Int = 10
 private const val MAX_AGE_SECONDS: Int = 24 * 60 * 60
-private const val DURATION: Long = 10L
 private const val WS_DURATION: Long = 15L
 
 fun main() {

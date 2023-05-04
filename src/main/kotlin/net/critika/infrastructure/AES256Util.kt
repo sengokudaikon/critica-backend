@@ -20,7 +20,8 @@ object AES256Util {
 
     private fun generateSecretKey(): SecretKeySpec {
         val dotenv = Dotenv.load()
-        val base64SecretKey = dotenv["JWT_SECRET"] ?: throw Exception("JWT_SECRET environment variable is not set")
+        val base64SecretKey = dotenv["JWT_SECRET"]
+            ?: throw SecurityException("JWT_SECRET environment variable is not set")
         val keyBytes = Base64.getDecoder().decode(base64SecretKey)
         return SecretKeySpec(keyBytes, ALGORITHM)
     }

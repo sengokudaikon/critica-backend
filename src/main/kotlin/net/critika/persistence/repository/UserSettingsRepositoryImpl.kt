@@ -6,6 +6,7 @@ import net.critika.domain.Language
 import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserSetting
 import net.critika.domain.user.repository.UserSettingsRepository
+import net.critika.persistence.exception.UserException
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.joda.time.DateTime
 import org.koin.core.annotation.Single
@@ -74,20 +75,20 @@ class UserSettingsRepositoryImpl : UserSettingsRepository {
             userSettings.emailVerified.right()
         }.await()
 
-        return Either.Left(Exception("User not found"))
+        return Either.Left(UserException.NotFound("User not found"))
     }
 
     override suspend fun getUserSettingsByUserId(userId: UUID): UserSetting {
         return suspendedTransactionAsync {
-            val user = User.findById(userId) ?: throw Exception("User not found")
-            user.settings.singleOrNull() ?: throw Exception("User settings not found")
+            val user = User.findById(userId) ?: throw UserException.NotFound("User not found")
+            user.settings.singleOrNull() ?: throw UserException.NotFound("User settings not found")
         }.await()
     }
 
     override suspend fun createUserSettings(userId: UUID, language: String?): UserSetting {
         return suspendedTransactionAsync {
             val userSetting = UserSetting.new {
-                this.userId = User.findById(userId) ?: throw Exception("User not found")
+                this.userId = User.findById(userId) ?: throw UserException.NotFound("User not found")
                 this.emailVerified = false
                 this.publicVisibility = false
                 this.pushNotifications = false

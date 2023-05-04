@@ -9,6 +9,7 @@ import net.critika.domain.events.model.DayStage
 import net.critika.domain.events.model.NightEvent
 import java.util.*
 
+@Suppress("TooManyFunctions")
 interface EventRepository {
     suspend fun startDay(game: Game, day: Int): GameResponse
     suspend fun startNight(game: Game, night: Int): GameResponse

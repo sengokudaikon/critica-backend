@@ -13,6 +13,8 @@ complexity:
   TooManyFunctions:
     active: true
     thresholdInClasses: 20
+    thresholdInFiles: 20
+    thresholdInObjects: 20
   ComplexMethod:
     active: true
     threshold: 20

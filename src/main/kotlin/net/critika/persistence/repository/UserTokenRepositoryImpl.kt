@@ -44,7 +44,8 @@ class UserTokenRepositoryImpl : UserTokenRepository {
     suspend fun expireToken(userId: UUID, token: String) {
         suspendedTransactionAsync {
             val user = User.findById(userId) ?: throw UserException.NotFound("User not found")
-            val userToken = UserToken.find { UserTokens.token eq token }.firstOrNull() ?: throw UserException.NotFound("Token not found")
+            val userToken = UserToken.find { UserTokens.token eq token }
+                .firstOrNull() ?: throw UserException.NotFound("Token not found")
             user.tokens.minus(userToken)
             userToken.delete()
         }.await()

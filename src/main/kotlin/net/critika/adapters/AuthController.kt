@@ -39,12 +39,10 @@ class AuthController(
             e: Exception,
         ) {
             call.respond(HttpStatusCode.BadRequest, e.message ?: "Error during registration")
-            return
         }
         val userExists = authUseCase.checkIfExists(request.username, request.email)
         if (userExists) {
             call.respond(HttpStatusCode.BadRequest, "User already exists")
-            return
         }
         val either = authUseCase.register(request)
         return either.fold(

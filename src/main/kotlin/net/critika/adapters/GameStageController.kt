@@ -157,7 +157,11 @@ class GameStageController(
             validate(gameId)
             val nightId = call.receive<StageQuery>()
             val candidate = call.receiveParameters()["candidate"]?.toInt() ?: 0
-            val game = stageUseCase.removeCandidate(UUID.fromString(gameId.gameId), UUID.fromString(nightId.id), candidate)
+            val game = stageUseCase.removeCandidate(
+                UUID.fromString(gameId.gameId),
+                UUID.fromString(nightId.id),
+                candidate,
+            )
             call.respond(game)
         }
     }
@@ -172,7 +176,12 @@ class GameStageController(
             val candidate = call.receiveParameters()["candidate"]?.toInt() ?: 0
             val vote = call.receiveParameters()["vote"]?.toInt() ?: 0
             val game =
-                stageUseCase.voteOnCandidate(UUID.fromString(gameId.gameId), UUID.fromString(nightId.id), candidate, vote)
+                stageUseCase.voteOnCandidate(
+                    UUID.fromString(gameId.gameId),
+                    UUID.fromString(nightId.id),
+                    candidate,
+                    vote,
+                )
             call.respond(game)
         }
     }

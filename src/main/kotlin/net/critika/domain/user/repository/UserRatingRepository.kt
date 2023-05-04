@@ -5,6 +5,7 @@ import net.critika.domain.user.model.RoleStatistic
 import net.critika.domain.user.model.UserRating
 import java.util.*
 
+@Suppress("TooManyFunctions")
 interface UserRatingRepository {
     suspend fun createUserRating(userId: UUID): UserRating
     suspend fun findUserRatingById(id: UUID): UserRating?

@@ -129,6 +129,7 @@ class GameUseCase(
         }
     }
 
+    @Suppress("NestedBlockDepth")
     suspend fun finish(gameId: UUID, winningTeam: PlayerRole): Map<PlayerRole, MutableList<Player>> {
         val game = repository.get(gameId)
         repository.update(game, GameStatus.FINISHED, winningTeam)
@@ -151,7 +152,10 @@ class GameUseCase(
                     userRating.bonusPoints += it.bonusPoints
                 }
 
-                if ((PlayerStatus.valueOf(it.status) == PlayerStatus.REMOVED) || (PlayerStatus.valueOf(it.status) == PlayerStatus.OPW)) {
+                if (
+                    (PlayerStatus.valueOf(it.status) == PlayerStatus.REMOVED) ||
+                    (PlayerStatus.valueOf(it.status) == PlayerStatus.OPW)
+                ) {
                     userRating.malusPoints += 50
                     userRating.totalPoints -= 50
                 }

@@ -98,7 +98,12 @@ class EventRepositoryImpl : EventRepository {
         }.await()
     }
 
-    override suspend fun createNewDayEvent(game: Game, currentDay: Int, newStage: DayStage, candidates: Set<Player>): DayEvent {
+    override suspend fun createNewDayEvent(
+        game: Game,
+        currentDay: Int,
+        newStage: DayStage,
+        candidates: Set<Player>,
+    ): DayEvent {
         return suspendedTransactionAsync {
             val dayEvent = DayEvent.new {
                 this.game = game.id

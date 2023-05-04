@@ -7,6 +7,7 @@ import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.repository.UserRatingRepository
 import net.critika.persistence.db.RoleStatistics
 import net.critika.persistence.db.UserRatings
+import net.critika.persistence.exception.UserException
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.`java-time`.day
@@ -22,7 +23,7 @@ import java.util.*
 class UserRatingRepositoryImpl : UserRatingRepository {
     override suspend fun createUserRating(userId: UUID): UserRating = suspendedTransactionAsync {
         UserRating.new {
-            this.userId = User.findById(userId) ?: throw Exception("User not found")
+            this.userId = User.findById(userId) ?: throw UserException.NotFound("User not found")
             totalPoints = 0
             bonusPoints = 0
             malusPoints = 0
@@ -47,23 +48,28 @@ class UserRatingRepositoryImpl : UserRatingRepository {
         UserRating.findById(id)?.delete()
     }.await()
 
-    override suspend fun createRoleStatistic(userRatingId: UUID, role: PlayerRole): RoleStatistic = suspendedTransactionAsync {
-        RoleStatistic.new {
-            this.userRatingId = UserRating.findById(userRatingId) ?: throw Exception("UserRating not found")
-            this.role = role
-            gamesWon = 0
-            gamesTotal = 0
-            bonusPoints = 0
-        }
-    }.await()
+    override suspend fun createRoleStatistic(userRatingId: UUID, role: PlayerRole): RoleStatistic {
+        return suspendedTransactionAsync {
+            RoleStatistic.new {
+                this.userRatingId = UserRating.findById(userRatingId)
+                    ?: throw UserException.NotFound("UserRating not found")
+                this.role = role
+                gamesWon = 0
+                gamesTotal = 0
+                bonusPoints = 0
+            }
+        }.await()
+    }
 
     override suspend fun findRoleStatisticById(id: UUID): RoleStatistic? = suspendedTransactionAsync {
         RoleStatistic.findById(id)
     }.await()
 
-    override suspend fun findRoleStatisticsByUserRatingId(userRatingId: UUID): List<RoleStatistic> = suspendedTransactionAsync {
-        RoleStatistic.find { RoleStatistics.userRatingId eq userRatingId }.toList()
-    }.await()
+    override suspend fun findRoleStatisticsByUserRatingId(userRatingId: UUID): List<RoleStatistic> {
+        return suspendedTransactionAsync {
+            RoleStatistic.find { RoleStatistics.userRatingId eq userRatingId }.toList()
+        }.await()
+    }
 
     override suspend fun updateRoleStatistic(roleStatistic: RoleStatistic) = suspendedTransactionAsync {
         roleStatistic.flush()
@@ -126,7 +132,15 @@ class UserRatingRepositoryImpl : UserRatingRepository {
     override suspend fun findUserRatingsByWeek(week: Int): List<UserRating> {
         return suspendedTransactionAsync {
             UserRatings.select(
-                UserRatings.createdAt.day() inList listOf(week * 7 - 6, week * 7 - 5, week * 7 - 4, week * 7 - 3, week * 7 - 2, week * 7 - 1, week * 7),
+                UserRatings.createdAt.day() inList listOf(
+                    week * 7 - 6,
+                    week * 7 - 5,
+                    week * 7 - 4,
+                    week * 7 - 3,
+                    week * 7 - 2,
+                    week * 7 - 1,
+                    week * 7,
+                ),
             ).map {
                 UserRating.findById(it[UserRatings.id].value)!!
             }.toList()

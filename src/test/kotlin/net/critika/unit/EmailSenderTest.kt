@@ -9,6 +9,7 @@ import javax.mail.MessagingException
 class EmailSenderTest {
 
     @Test
+    @Suppress("PrintStackTrace")
     fun sendTestEmail() {
         val to = "cryogen.sxu@gmail.com"
         val subject = "Test email from JUnit"

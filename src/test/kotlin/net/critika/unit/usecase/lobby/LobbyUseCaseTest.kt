@@ -36,14 +36,6 @@ class LobbyUseCaseTest {
     private lateinit var playerRepository: PlayerRepository
     private lateinit var lobbyUseCase: LobbyUseCase
 
-    // Mock data for Lobby, Game, User, and Player
-    private val lobbyId = UUID.randomUUID()
-    private val gameId = UUID.randomUUID()
-    private val playerId = UUID.randomUUID()
-    private val playerName = "TestPlayer"
-    private val userId = UUID.randomUUID()
-    private val username = "TestUser"
-
     private lateinit var mockLobby: Lobby
     private lateinit var mockGame: Game
     private lateinit var mockUser: User
