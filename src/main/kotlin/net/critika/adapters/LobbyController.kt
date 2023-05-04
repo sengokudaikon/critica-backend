@@ -22,10 +22,10 @@ import net.critika.infrastructure.authorize
 import net.critika.infrastructure.getUserId
 import net.critika.usecase.lobby.LobbyCrudUseCase
 import net.critika.usecase.lobby.LobbyUseCase
-import org.joda.time.LocalTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 
 @RouteController

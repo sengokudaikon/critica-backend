@@ -2,7 +2,7 @@ package net.critika.domain
 
 enum class PlayerRole {
     CITIZEN,
-    MAFIOSO,
+    MAFIA,
     DON,
     DETECTIVE,
     ;
@@ -10,14 +10,14 @@ enum class PlayerRole {
     fun toTeam(): PlayerRole {
         return when (this) {
             CITIZEN, DETECTIVE -> CITIZEN
-            MAFIOSO, DON -> MAFIOSO
+            MAFIA, DON -> MAFIA
         }
     }
 
     fun opw(): PlayerRole {
         return when (this) {
-            CITIZEN, DETECTIVE -> MAFIOSO
-            MAFIOSO, DON -> CITIZEN
+            CITIZEN, DETECTIVE -> MAFIA
+            MAFIA, DON -> CITIZEN
         }
     }
 }

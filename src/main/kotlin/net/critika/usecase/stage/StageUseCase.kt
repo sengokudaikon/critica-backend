@@ -85,7 +85,7 @@ class StageUseCase(
             // if 2 of the max 3 elements contain player id that has role == mafia or don, then add bonus points
             val bestMovePlayers = bestMove.map { Player.find { Players.seat eq it }.first() }
             val mafia = bestMovePlayers
-                .filter { it.role == PlayerRole.MAFIOSO.toString() || it.role == PlayerRole.DON.toString() }
+                .filter { it.role == PlayerRole.MAFIA.toString() || it.role == PlayerRole.DON.toString() }
             if (mafia.size == 2) {
                 shotPlayer.bonusPoints += 25
             } else if (mafia.size == 3) {

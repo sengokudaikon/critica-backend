@@ -13,8 +13,8 @@ import net.critika.persistence.repository.GameRepository
 import net.critika.persistence.repository.LobbyRepository
 import net.critika.persistence.repository.PlayerRepository
 import net.critika.persistence.repository.UserRepositoryImpl
-import org.joda.time.LocalTime
 import org.koin.core.annotation.Single
+import java.time.LocalTime
 import java.util.*
 
 @Single
@@ -27,7 +27,7 @@ class LobbyUseCase(
     suspend fun addGame(id: UUID, time: LocalTime, host: String?): Either<Exception, LobbyResponse> {
         return try {
             val lobby = repository.get(id)
-            val date = lobby.date.withHour(time.hourOfDay)
+            val date = lobby.date.withHour(time.hour)
             val game = gameRepository.create(CreateGame(date, host))
 
             require(!lobby.games.contains(game)) { "Game is already in lobby" }

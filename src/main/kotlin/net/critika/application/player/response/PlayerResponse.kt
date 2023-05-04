@@ -11,7 +11,7 @@ data class PlayerResponse(
     @Contextual val id: UUID,
     val seat: Int,
     val name: String,
-    val role: PlayerRole?,
+    var role: PlayerRole?,
     val status: PlayerStatus,
     val inGame: Boolean,
     val bestMove: Int,
