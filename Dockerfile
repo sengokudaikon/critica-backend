@@ -23,4 +23,4 @@ RUN ./gradlew buildFatJar --no-daemon
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "build/libs/critica.jar"]
+CMD ["java", "-jar", "build/libs/critika.jar"]
