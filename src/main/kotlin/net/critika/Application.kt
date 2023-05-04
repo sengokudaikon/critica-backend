@@ -1,5 +1,6 @@
 package net.critika
 
+import com.codahale.metrics.Slf4jReporter
 import com.github.dimitark.ktor.routing.ktorRoutingAnnotationConfig
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
@@ -10,6 +11,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
+import io.ktor.server.metrics.dropwizard.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.callid.*
@@ -37,6 +39,7 @@ import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 private const val MAX_RANGE: Int = 10
 private const val MAX_AGE_SECONDS: Int = 24 * 60 * 60
@@ -114,19 +117,19 @@ private fun Application.configRouting() {
 
 private fun Application.configMonitoring() {
     install(CallLogging) {
-        level = Level.WARN
+        level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
         callIdMdc("call-id")
     }
-//    install(DropwizardMetrics) {
-//        Slf4jReporter.forRegistry(registry)
-//            .withLoggingLevel(Slf4jReporter.LoggingLevel.INFO)
-//            .outputTo(this@configMonitoring.log)
-//            .convertRatesTo(TimeUnit.SECONDS)
-//            .convertDurationsTo(TimeUnit.MILLISECONDS)
-//            .build()
-//            .start(DURATION, TimeUnit.SECONDS)
-//    }
+    install(DropwizardMetrics) {
+        Slf4jReporter.forRegistry(registry)
+            .withLoggingLevel(Slf4jReporter.LoggingLevel.INFO)
+            .outputTo(this@configMonitoring.log)
+            .convertRatesTo(TimeUnit.SECONDS)
+            .convertDurationsTo(TimeUnit.MILLISECONDS)
+            .build()
+            .start(1000, TimeUnit.SECONDS)
+    }
     install(CallId) {
         header(HttpHeaders.XRequestId)
         verify { callId: String ->

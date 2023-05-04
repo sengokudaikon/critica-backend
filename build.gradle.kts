@@ -131,10 +131,8 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt-jvm:2.2.4")
     implementation("app.softwork:kotlinx-uuid-core:0.0.18")
     implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
-    implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 
     // annotations
-    annotationProcessor("org.hibernate.validator:hibernate-validator-annotation-processor:8.0.0.Final")
     ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
     ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
     ksp("com.github.dimitark.ktor-annotations:processor:0.0.3")
@@ -152,7 +150,6 @@ dependencies {
     testImplementation("com.github.npetzall.testcontainers.junit:junit-parent:1.10.1.0.0")
     testImplementation("org.testcontainers:junit-jupiter:1.17.6")
     testImplementation("com.tngtech.archunit:archunit-junit5:1.0.0")
-    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.0")
     testImplementation("io.rest-assured:rest-assured:5.3.0")
     testImplementation("io.rest-assured:kotlin-extensions:5.3.0")
     testImplementation("io.qameta.allure:allure-junit5:2.21.0")
