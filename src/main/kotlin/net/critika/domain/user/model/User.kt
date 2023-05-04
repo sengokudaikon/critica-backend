@@ -1,5 +1,6 @@
 package net.critika.domain.user.model
 
+import net.critika.application.user.response.UserResponse
 import net.critika.domain.Player
 import net.critika.persistence.db.UserSettings
 import net.critika.persistence.db.UserTokens
@@ -10,11 +11,19 @@ import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
 class User(
-    id: EntityID<UUID>,
+    id: EntityID<UUID>
 
 ) : UUIDEntity(id) {
     fun toPlayer(): Player? {
         return Player.findById(this.id)
+    }
+
+    fun toResponse(): UserResponse {
+        return UserResponse(
+            id = this.id.value.toString(),
+            name = this.username,
+            email = this.email
+        )
     }
 
     companion object : UUIDEntityClass<User>(Users)

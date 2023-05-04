@@ -84,33 +84,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -132,33 +116,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -174,26 +142,16 @@ paths:
         - "Admin"
       description: ""
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -201,7 +159,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: "#/components/schemas/UserResponse"
   /api/auth/refresh:
     post:
       tags:
@@ -302,33 +260,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -357,33 +299,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -412,33 +338,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -462,33 +372,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -517,33 +411,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -572,33 +450,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -627,33 +489,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -676,33 +522,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -725,33 +555,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+            $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -774,33 +588,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -824,33 +622,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -874,33 +656,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -924,33 +690,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -978,23 +728,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/GameResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/addPlayer:
     put:
       tags:
@@ -1016,23 +758,15 @@ paths:
               schema:
                 type: "string"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/addPlayer/{playerId}:
     put:
       tags:
@@ -1059,23 +793,15 @@ paths:
               schema:
                 type: "string"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/finish:
     post:
       tags:
@@ -1104,23 +830,15 @@ paths:
                 type: "string"
                 format: "uuid"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/removePlayer:
     put:
       tags:
@@ -1145,23 +863,15 @@ paths:
                 Example#1:
                   value: "Invalid ID"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/{id}/startDay/{day}:
     put:
       tags:
@@ -1179,33 +889,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1229,33 +923,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
         "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1279,42 +957,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DateQuery"
-        required: true
       responses:
-        "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
-        "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Date must be in the future"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1342,23 +995,15 @@ paths:
               schema:
                 type: "object"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/create:
     post:
       tags:
@@ -1380,23 +1025,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/GameResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/game/list:
     get:
       tags:
@@ -1414,23 +1051,15 @@ paths:
                 items:
                   $ref: "#/components/schemas/Game"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}:
     get:
       tags:
@@ -1452,23 +1081,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addGame:
     put:
       tags:
@@ -1490,23 +1111,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addPlayer:
     put:
       tags:
@@ -1528,23 +1141,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addPlayer/{playerId}:
     put:
       tags:
@@ -1571,23 +1176,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/addTemporaryPlayer:
     put:
       tags:
@@ -1609,23 +1206,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/delete:
     put:
       tags:
@@ -1647,23 +1236,15 @@ paths:
               schema:
                 type: "object"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/games:
     get:
       tags:
@@ -1687,23 +1268,15 @@ paths:
                 items:
                   $ref: "#/components/schemas/GameResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/players:
     get:
       tags:
@@ -1727,23 +1300,15 @@ paths:
                 items:
                   $ref: "#/components/schemas/PlayerResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/removeGame/{gameId}:
     put:
       tags:
@@ -1770,23 +1335,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/removePlayer:
     put:
       tags:
@@ -1808,23 +1365,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/{id}/removePlayer/{playerId}:
     put:
       tags:
@@ -1851,23 +1400,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/create:
     post:
       tags:
@@ -1889,23 +1430,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/lobby/list:
     get:
       tags:
@@ -1937,23 +1470,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/player/{id}:
     get:
       tags:
@@ -1985,23 +1510,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
   /api/player/{name}:
     get:
       tags:
@@ -2030,23 +1547,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
         "400":
-          description: "Bad Request"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequest"
-          "404":
-            description: "Not Found"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/NotFound"
-          "500":
-            description: "Internal Server Error"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/InternalServerError"
+          $ref: "#/components/schemas/BadRequest"
+        "401":
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
 
   /api/player/enterGame/{id}:
     get:
@@ -2059,22 +1568,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2092,22 +1596,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2119,22 +1618,17 @@ paths:
       tags:
         - "Player"
       description: ""
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2152,22 +1646,17 @@ paths:
           required: true
           schema:
             type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2180,15 +1669,16 @@ paths:
         - "User"
       description: ""
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2207,15 +1697,16 @@ paths:
               type: "string"
         required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2227,22 +1718,17 @@ paths:
       tags:
         - "User"
       description: ""
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserPasswordQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2261,15 +1747,16 @@ paths:
               type: "boolean"
         required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2288,15 +1775,16 @@ paths:
               type: "boolean"
         required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2308,22 +1796,17 @@ paths:
       tags:
         - "User"
       description: ""
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserNameQuery"
-        required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2336,15 +1819,16 @@ paths:
         - "User"
       description: ""
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2363,15 +1847,16 @@ paths:
               type: "string"
         required: true
       responses:
+        "400":
+          $ref: "#/components/schemas/BadRequest"
         "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
+          $ref: "#/components/schemas/Unauthorized"
+        "403":
+          $ref: "#/components/schemas/Forbidden"
+        "404":
+          $ref: "#/components/schemas/NotFound"
+        "500":
+          $ref: "#/components/schemas/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2385,6 +1870,19 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    UserResponse:
+      description: "User response"
+      type: object
+      properties:
+        id:
+          type: string
+          example: "5f8b0a7b9d6b2b0017a9e6b1"
+        email:
+          type: string
+          example: "test@mail.ru"
+        name:
+          type: string
+          example: "John Doe"
     UserAuthToken:
       description: "User user token response"
       type: object
@@ -2586,7 +2084,6 @@ components:
       required:
         - "status"
         - "message"
-
     NotFound:
       type: "object"
       properties:
@@ -2600,7 +2097,6 @@ components:
       required:
         - "status"
         - "message"
-
     InternalServerError:
       type: "object"
       properties:
@@ -2628,18 +2124,17 @@ components:
       required:
         - "status"
         - "message"
-
-      Unauthorized:
-        type: "object"
-        properties:
-          status:
-            type: "integer"
-            format: "int32"
-            example: 401
-          message:
-            type: "string"
-            description: "A description of the unauthorized error."
-            example: "You must be authenticated to access this resource."
-        required:
-          - "status"
-          - "message"
+    Unauthorized:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+          example: 401
+        message:
+          type: "string"
+          description: "A description of the unauthorized error."
+          example: "You must be authenticated to access this resource."
+      required:
+        - "status"
+        - "message"
