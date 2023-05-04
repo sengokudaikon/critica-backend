@@ -11,7 +11,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
 class User(
-    id: EntityID<UUID>
+    id: EntityID<UUID>,
 
 ) : UUIDEntity(id) {
     fun toPlayer(): Player? {
@@ -22,7 +22,7 @@ class User(
         return UserResponse(
             id = this.id.value.toString(),
             name = this.username,
-            email = this.email
+            email = this.email,
         )
     }
 

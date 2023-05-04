@@ -10,7 +10,7 @@ import java.util.*
 @Single
 class AdminUseCase(
     private val userSettingsRepository: UserSettingsRepositoryImpl,
-    private val userRepository: UserRepositoryImpl
+    private val userRepository: UserRepositoryImpl,
 ) {
     suspend fun findUsersRequestingPromotion(): List<UserResponse> {
         return userSettingsRepository.findUsersRequestingPromotion().map { it.toResponse() }

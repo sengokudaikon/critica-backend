@@ -49,7 +49,6 @@ kotlin {
         kotlin.srcDir("build/generated/ksp/test/kotlin")
     }
 }
-
 ktor {
     fatJar {
         archiveFileName.set("critika.jar")
@@ -64,17 +63,17 @@ ktor {
                 io.ktor.plugin.features.DockerPortMapping(
                     80,
                     8080,
-                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
-                )
-            )
+                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP,
+                ),
+            ),
         )
 
         externalRegistry.set(
             io.ktor.plugin.features.DockerImageRegistry.dockerHub(
                 appName = provider { "critica-backend" },
                 username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
-                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
-            )
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
+            ),
         )
     }
 }
@@ -177,6 +176,13 @@ tasks {
     build {
         dependsOn("detekt")
     }
+}
+tasks.shadowJar {
+    setProperty("zip64", true)
+}
+
+tasks.buildFatJar {
+    setProperty("zip64", true)
 }
 
 tasks.test {
