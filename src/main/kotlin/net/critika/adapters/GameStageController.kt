@@ -3,6 +3,10 @@ package net.critika.adapters
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.Put
 import com.github.dimitark.ktorannotations.annotations.RouteController
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import net.critika.application.game.query.GameQuery
 import net.critika.application.stage.StageQuery
 import net.critika.domain.user.model.UserRole
@@ -10,17 +14,13 @@ import net.critika.infrastructure.AuthPrincipality
 import net.critika.infrastructure.authorize
 import net.critika.infrastructure.validation.validate
 import net.critika.usecase.stage.StageUseCase
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 import java.util.*
 
 @RouteController
 class GameStageController(
     private val stageUseCase: StageUseCase,
-    private val authPrincipality: AuthPrincipality
-){
+    private val authPrincipality: AuthPrincipality,
+) {
     @ProtectedRoute("jwt-user-provider")
     @Put("/api/game/{id}/bestMove/{seat}")
     suspend fun bestMove(call: ApplicationCall) {
@@ -39,15 +39,14 @@ class GameStageController(
 
     @ProtectedRoute("jwt-user-provider")
     @Put("/api/game/{id}/addFoul/{seat}")
-    suspend fun addFoul(call: ApplicationCall)
-    {
+    suspend fun addFoul(call: ApplicationCall) {
         call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
-        val gameId = call.receive<GameQuery>()
-        validate(gameId)
-        val seat = call.receiveParameters()["seat"]?.toInt() ?: 0
-        stageUseCase.addFoul(UUID.fromString(gameId.gameId), seat)
-        call.respond(HttpStatusCode.OK)
-    }
+            val gameId = call.receive<GameQuery>()
+            validate(gameId)
+            val seat = call.receiveParameters()["seat"]?.toInt() ?: 0
+            stageUseCase.addFoul(UUID.fromString(gameId.gameId), seat)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
     @ProtectedRoute("jwt-user-provider")

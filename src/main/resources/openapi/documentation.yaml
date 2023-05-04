@@ -6,6 +6,7 @@ info:
 servers:
   - url: "http://localhost:8080"
   - url: "https://seahorse-app-qs7ri.ondigitalocean.app"
+  - url: "https://critika.net"
 paths:
   /:
     get:

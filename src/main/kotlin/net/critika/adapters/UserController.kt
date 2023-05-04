@@ -4,23 +4,22 @@ import com.github.dimitark.ktorannotations.annotations.Get
 import com.github.dimitark.ktorannotations.annotations.Post
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.RouteController
-import net.critika.application.user.query.UserEmailQuery
-import net.critika.application.user.query.UserNameQuery
-import net.critika.application.user.query.UserPasswordQuery
-import net.critika.infrastructure.AuthPrincipality
-import net.critika.infrastructure.getUserId
-import net.critika.infrastructure.validation.validate
-import net.critika.usecase.user.UserSettingsUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
+import net.critika.application.user.query.UserEmailQuery
+import net.critika.application.user.query.UserNameQuery
+import net.critika.application.user.query.UserPasswordQuery
+import net.critika.infrastructure.getUserId
+import net.critika.infrastructure.validation.validate
+import net.critika.usecase.user.UserSettingsUseCase
 
 @RouteController
 @Tag(name = "User")
-class UserController (
-    private val userSettingsUseCase: UserSettingsUseCase
+class UserController(
+    private val userSettingsUseCase: UserSettingsUseCase,
 ) {
     @ProtectedRoute("jwt-user-provider")
     @Post("/api/user/settings/change-username")
@@ -99,8 +98,8 @@ class UserController (
     suspend fun getUserSettings(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
         return userSettingsUseCase.getUserSettings(userId).fold(
-            {call.respond(HttpStatusCode.BadRequest, it.localizedMessage)},
-            {call.respond(HttpStatusCode.OK, it)}
+            { call.respond(HttpStatusCode.BadRequest, it.localizedMessage) },
+            { call.respond(HttpStatusCode.OK, it) },
         )
     }
 }

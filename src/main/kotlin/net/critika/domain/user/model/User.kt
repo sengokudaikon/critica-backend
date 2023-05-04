@@ -7,27 +7,17 @@ import net.critika.persistence.db.Users
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.ResultRow
 import java.util.*
 
 class User(
     id: EntityID<UUID>,
 
-): UUIDEntity(id) {
+) : UUIDEntity(id) {
     fun toPlayer(): Player? {
         return Player.findById(this.id)
     }
 
-    companion object : UUIDEntityClass<User>(Users) {
-        fun fromResultRow(row: ResultRow): User {
-            return User(row[Users.id]).apply {
-                username = row[Users.playerName]
-                email = row[Users.email]
-                password = row[Users.hashedPassword]
-                role = row[Users.role]
-            }
-        }
-    }
+    companion object : UUIDEntityClass<User>(Users)
 
     var username by Users.playerName
     var email by Users.email

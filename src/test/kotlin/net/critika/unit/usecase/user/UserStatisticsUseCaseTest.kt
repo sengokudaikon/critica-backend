@@ -5,7 +5,6 @@ import net.critika.domain.PlayerRole
 import net.critika.domain.user.model.RoleStatistic
 import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.repository.UserRatingRepository
-import net.critika.unit.Helpers
 import net.critika.unit.Helpers.getMockUser
 import net.critika.unit.Helpers.getMockUserRating
 import net.critika.usecase.user.UserStatisticsUseCase
@@ -13,7 +12,6 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -64,12 +62,12 @@ class UserStatisticsUseCaseTest {
         val roleStatisticId = UUID.randomUUID()
         val userRatingId = UUID.randomUUID()
         val roleStatistic = mock<RoleStatistic> {
-            on {id} doReturn mock<EntityID<UUID>>()
-            on {it.userRatingId} doReturn mock<UserRating>()
-            on {role} doReturn PlayerRole.CITIZEN
-            on {gamesWon} doReturn 0
-            on {gamesTotal} doReturn 0
-            on {bonusPoints} doReturn 0
+            on { id } doReturn mock<EntityID<UUID>>()
+            on { it.userRatingId } doReturn mock<UserRating>()
+            on { role } doReturn PlayerRole.CITIZEN
+            on { gamesWon } doReturn 0
+            on { gamesTotal } doReturn 0
+            on { bonusPoints } doReturn 0
         }
 
         whenever(userRatingRepository.findRoleStatisticById(any())).thenReturn(roleStatistic)
@@ -108,12 +106,12 @@ class UserStatisticsUseCaseTest {
         val userRatingId = UUID.randomUUID()
         val userRating = getMockUserRating()
         val roleStatistic = mock<RoleStatistic> {
-            on {id} doReturn mock<EntityID<UUID>>()
-            on {it.userRatingId} doReturn userRating
-            on {role} doReturn PlayerRole.CITIZEN
-            on {gamesWon} doReturn 0
-            on {gamesTotal} doReturn 0
-            on {bonusPoints} doReturn 0
+            on { id } doReturn mock<EntityID<UUID>>()
+            on { it.userRatingId } doReturn userRating
+            on { role } doReturn PlayerRole.CITIZEN
+            on { gamesWon } doReturn 0
+            on { gamesTotal } doReturn 0
+            on { bonusPoints } doReturn 0
         }
 
         whenever(userRatingRepository.createRoleStatistic(any(), any())).thenReturn(roleStatistic)
@@ -128,20 +126,20 @@ class UserStatisticsUseCaseTest {
         val userRatingId = UUID.randomUUID()
         val userRating = getMockUserRating()
         val roleStatistic1 = mock<RoleStatistic> {
-            on {id} doReturn mock<EntityID<UUID>>()
-            on {it.userRatingId} doReturn userRating
-            on {role} doReturn PlayerRole.CITIZEN
-            on {gamesWon} doReturn 5
-            on {gamesTotal} doReturn 10
-            on {bonusPoints} doReturn 100
+            on { id } doReturn mock<EntityID<UUID>>()
+            on { it.userRatingId } doReturn userRating
+            on { role } doReturn PlayerRole.CITIZEN
+            on { gamesWon } doReturn 5
+            on { gamesTotal } doReturn 10
+            on { bonusPoints } doReturn 100
         }
         val roleStatistic2 = mock<RoleStatistic> {
-            on {id} doReturn mock<EntityID<UUID>>()
-            on {it.userRatingId} doReturn userRating
-            on {role} doReturn PlayerRole.MAFIOSO
-            on {gamesWon} doReturn 5
-            on {gamesTotal} doReturn 10
-            on {bonusPoints} doReturn 100
+            on { id } doReturn mock<EntityID<UUID>>()
+            on { it.userRatingId } doReturn userRating
+            on { role } doReturn PlayerRole.MAFIOSO
+            on { gamesWon } doReturn 5
+            on { gamesTotal } doReturn 10
+            on { bonusPoints } doReturn 100
         }
         val roleStatistics = listOf(roleStatistic1, roleStatistic2)
 
@@ -158,12 +156,12 @@ class UserStatisticsUseCaseTest {
         val userRatingId = UUID.randomUUID()
         val userRating = getMockUserRating()
         val roleStatistic = mock<RoleStatistic> {
-            on {id} doReturn mock<EntityID<UUID>>()
-            on {it.userRatingId} doReturn userRating
-            on {role} doReturn PlayerRole.MAFIOSO
-            on {gamesWon} doReturn 5
-            on {gamesTotal} doReturn 10
-            on {bonusPoints} doReturn 100
+            on { id } doReturn mock<EntityID<UUID>>()
+            on { it.userRatingId } doReturn userRating
+            on { role } doReturn PlayerRole.MAFIOSO
+            on { gamesWon } doReturn 5
+            on { gamesTotal } doReturn 10
+            on { bonusPoints } doReturn 100
         }
 
         userStatisticsUseCase.updateRoleStatistic(roleStatistic)

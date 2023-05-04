@@ -10,7 +10,6 @@ import net.critika.domain.user.repository.UserSettingsRepository
 import net.critika.domain.user.repository.UserVerificationCodeRepository
 import net.critika.infrastructure.Argon2PasswordEncoder
 import net.critika.infrastructure.EmailSender
-import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
 import java.util.*
 
@@ -19,7 +18,7 @@ class UserSettingsUseCase(
     private val userRepository: UserRepository,
     private val passwordEncoder: Argon2PasswordEncoder,
     private val verificationCodeRepository: UserVerificationCodeRepository,
-    private val userSettingsRepository: UserSettingsRepository
+    private val userSettingsRepository: UserSettingsRepository,
 ) {
     suspend fun createUserSettings(userId: UUID, language: String? = null): UserSetting {
         return userSettingsRepository.createUserSettings(userId, language)
@@ -132,7 +131,7 @@ class UserSettingsUseCase(
                 settings.publicVisibility,
                 settings.pushNotifications,
                 settings.language.toString(),
-                settings.promotion
+                settings.promotion,
             ).right()
         }
     }

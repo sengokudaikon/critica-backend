@@ -13,10 +13,8 @@ import net.critika.persistence.repository.GameRepository
 import net.critika.persistence.repository.LobbyRepository
 import net.critika.persistence.repository.PlayerRepository
 import net.critika.persistence.repository.UserRepositoryImpl
-import org.joda.time.DateTime
 import org.joda.time.LocalTime
 import org.koin.core.annotation.Single
-import java.time.LocalDateTime
 import java.util.*
 
 @Single
@@ -32,8 +30,8 @@ class LobbyUseCase(
             val date = lobby.date.withHour(time.hourOfDay)
             val game = gameRepository.create(CreateGame(date, host))
 
-            require(!lobby.games.contains(game)) {"Game is already in lobby"}
-            require(game.status == GameStatus.WAITING) {  "Game is not in status 'waiting'"}
+            require(!lobby.games.contains(game)) { "Game is already in lobby" }
+            require(game.status == GameStatus.WAITING) { "Game is not in status 'waiting'" }
             require(game.players.empty()) { "There shouldn't be any players in game" }
 
             lobby.games.plus(game)
@@ -75,7 +73,7 @@ class LobbyUseCase(
             require(!lobby.players.contains(result)) { ("Player not in lobby") }
             lobby.toResponse().right()
         } catch (e: Exception) {
-            return e.left()
+            e.left()
         }
     }
 
@@ -85,7 +83,7 @@ class LobbyUseCase(
             val result = playerRepository.createTemporaryPlayer(playerName, id, null)
             require(!lobby.players.contains(result)) { "Player is already in lobby" }
             lobby.players.plus(result)
-            require (!lobby.players.contains(result)) { "Player not in lobby" }
+            require(!lobby.players.contains(result)) { "Player not in lobby" }
             lobby.toResponse().right()
         } catch (e: Exception) {
             e.left()
@@ -97,15 +95,18 @@ class LobbyUseCase(
         val user = userRepository.findById(playerId) ?: return LobbyException.NotFound("User not found").left()
         val result = playerRepository.create(user)
         lobby.players.plus(result)
-        return if (!lobby.players.contains(result)) LobbyException.AlreadyCreated("Player not in lobby").left()
-        else lobby.toResponse().right()
+        return if (!lobby.players.contains(result)) {
+            LobbyException.AlreadyCreated("Player not in lobby").left()
+        } else {
+            lobby.toResponse().right()
+        }
     }
 
     suspend fun removePlayer(id: UUID, playerName: String): Either<Exception, LobbyResponse> {
         return try {
             val lobby = repository.get(id)
             val player = playerRepository.getPlayerByName(playerName)
-            require (player != null) { "Player not found" }
+            require(player != null) { "Player not found" }
             require(!lobby.players.contains(player)) { "Player not in lobby" }
             lobby.players.minus(player)
             lobby.toResponse().right()
@@ -118,7 +119,7 @@ class LobbyUseCase(
         return try {
             val lobby = repository.get(id)
             val player = playerRepository.get(playerId)
-            require (player != null) { "Player not found" }
+            require(player != null) { "Player not found" }
             lobby.players.minus(player)
             lobby.toResponse().right()
         } catch (e: Exception) {

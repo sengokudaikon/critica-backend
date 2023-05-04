@@ -9,7 +9,7 @@ import org.koin.core.annotation.Single
 import java.util.*
 
 @Single
-class UserRepositoryImpl: UserRepository {
+class UserRepositoryImpl : UserRepository {
     override suspend fun findByUsername(playerName: String): User? {
         return suspendedTransactionAsync { User.find { Users.playerName eq playerName }.firstOrNull() }.await()
     }
@@ -26,12 +26,14 @@ class UserRepositoryImpl: UserRepository {
     }
 
     override suspend fun create(userName: String, email: String, password: String): User {
-        return suspendedTransactionAsync { User.new(UUID.randomUUID()) {
-            this.username = userName
-            this.email = email
-            this.password = password
-            this.role = UserRole.USER
-        } }.await()
+        return suspendedTransactionAsync {
+            User.new(UUID.randomUUID()) {
+                this.username = userName
+                this.email = email
+                this.password = password
+                this.role = UserRole.USER
+            }
+        }.await()
     }
 
     override suspend fun promoteToOwner(user: User): User {

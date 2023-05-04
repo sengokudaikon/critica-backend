@@ -6,5 +6,5 @@ enum class DayStage {
     REDISCUSS,
     REVOTE,
     BOTH,
-    END
+    END,
 }

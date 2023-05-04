@@ -12,7 +12,7 @@ import org.koin.core.annotation.Single
 import java.util.*
 
 @Single
-class UserSettingsRepositoryImpl: UserSettingsRepository {
+class UserSettingsRepositoryImpl : UserSettingsRepository {
     override suspend fun updateEmailVerificationStatus(userId: UUID, emailVerified: Boolean) {
         suspendedTransactionAsync {
             val user = User.findById(userId) ?: return@suspendedTransactionAsync
@@ -53,8 +53,8 @@ class UserSettingsRepositoryImpl: UserSettingsRepository {
         suspendedTransactionAsync {
             val user = User.findById(userId) ?: return@suspendedTransactionAsync
             val userSettings = user.settings.singleOrNull() ?: return@suspendedTransactionAsync
-        userSettings.pushNotifications = b
-        userSettings.updatedAt = DateTime.now().millis
+            userSettings.pushNotifications = b
+            userSettings.updatedAt = DateTime.now().millis
         }.await()
     }
 
@@ -91,7 +91,7 @@ class UserSettingsRepositoryImpl: UserSettingsRepository {
                 this.emailVerified = false
                 this.publicVisibility = false
                 this.pushNotifications = false
-                this.language = language?.let { Language.valueOf(it) }?: Language.ENGLISH
+                this.language = language?.let { Language.valueOf(it) } ?: Language.ENGLISH
                 this.promotion = false
                 this.createdAt = DateTime.now().millis
                 this.updatedAt = DateTime.now().millis

@@ -19,7 +19,6 @@ import net.critika.unit.Helpers.getMockLobbyWithPlayer
 import net.critika.unit.Helpers.getMockPlayer
 import net.critika.unit.Helpers.getMockUser
 import net.critika.usecase.lobby.LobbyUseCase
-import org.jetbrains.exposed.sql.emptySized
 import org.joda.time.LocalTime
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -50,7 +49,6 @@ class LobbyUseCaseTest {
     private lateinit var mockUser: User
     private lateinit var mockPlayer: Player
 
-
     @BeforeEach
     fun setUp() {
         lobbyRepository = mock()
@@ -65,22 +63,6 @@ class LobbyUseCaseTest {
         mockLobby = getMockLobby()
         mockUser = getMockUser()
         mockPlayer = getMockPlayer()
-    }
-
-    suspend fun whatevers() {
-        val games = emptySized<Game>()
-        whenever(mockLobby.games).thenReturn(games)
-        whenever(mockLobby.players).thenReturn(emptySized())
-        whenever(mockGame.lobby).thenReturn(mockLobby)
-        whenever(mockGame.players).thenReturn(emptySized())
-        whenever(mockPlayer.lobby).thenReturn(mockLobby)
-        whenever(mockPlayer.user).thenReturn(mockUser)
-
-        whenever(lobbyRepository.get(lobbyId)).thenReturn(mockLobby)
-        whenever(userRepository.findByUsername(username)).thenReturn(mockUser)
-        whenever(userRepository.findById(userId)).thenReturn(mockUser)
-        whenever(playerRepository.create(mockUser)).thenReturn(mockPlayer)
-        whenever(playerRepository.createTemporaryPlayer(playerName, lobbyId, null)).thenReturn(mockPlayer)
     }
 
     @Test
@@ -138,7 +120,7 @@ class LobbyUseCaseTest {
         val lobby = getMockLobby()
         val user = getMockUser().apply { username = playerName }
         val player = getMockPlayer().apply { name = playerName }
-        `when`(lobbyRepository.get(id)).thenAnswer{
+        `when`(lobbyRepository.get(id)).thenAnswer {
             lobby.players.shouldBeEmpty()
             lobby
         }
@@ -163,7 +145,7 @@ class LobbyUseCaseTest {
         val playerName = "TestPlayer"
         val lobby = getMockLobby()
         val tempPlayer = getMockPlayer().apply { name = playerName }
-        `when`(lobbyRepository.get(id)).thenAnswer{
+        `when`(lobbyRepository.get(id)).thenAnswer {
             lobby.players.shouldBeEmpty()
             lobby
         }

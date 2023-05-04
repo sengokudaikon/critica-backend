@@ -4,11 +4,12 @@ enum class GameStatus {
     CREATED,
     WAITING,
     STARTED,
-    FINISHED;
+    FINISHED,
+    ;
 
     companion object {
         fun fromString(status: String): GameStatus {
-            //return value based on string matching value.name
+            // return value based on string matching value.name
             return values().first { it.name == status }
         }
     }

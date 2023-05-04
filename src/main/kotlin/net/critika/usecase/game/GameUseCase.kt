@@ -21,12 +21,13 @@ import org.koin.core.annotation.Single
 import java.util.*
 
 private const val MAX_PLAYERS: Int = 10
+
 @Single
 class GameUseCase(
     private val repository: GameRepository,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
-    private val userStatisticsUseCase: UserStatisticsUseCase
+    private val userStatisticsUseCase: UserStatisticsUseCase,
 ) {
     suspend fun assignHost(gameId: UUID, hostId: UUID) {
         val game = repository.get(gameId)
@@ -45,7 +46,7 @@ class GameUseCase(
                 date = game.date.toString(),
                 host = game.host?.toPlayer()?.toResponse(),
                 players,
-                null
+                null,
             )
         }
         val currentStage = game.getCurrentStage()
@@ -61,23 +62,24 @@ class GameUseCase(
         game.lobby.players.apply { minus(game.players) }
         return if (game.status != GameStatus.CREATED) {
             BadRequestException("Game is already started").left()
-        } else repository.update(game, status = GameStatus.STARTED).right()
+        } else {
+            repository.update(game, status = GameStatus.STARTED).right()
+        }
     }
 
-    suspend fun addPlayerById( gameId: UUID, playerId: UUID): Either<Exception, Player>
-    {
+    suspend fun addPlayerById(gameId: UUID, playerId: UUID): Either<Exception, Player> {
         return try {
             val game = repository.get(gameId)
             val lobby = lobbyRepository.getByGameId(gameId)
 
             require(!lobby.games.contains(game)) { "Game is not in lobby" }
-            require(game.status == GameStatus.WAITING) {"Game is not in status 'waiting'" }
-            require (game.status == GameStatus.FINISHED) {"Game is in status 'finished'"}
-            require (game.status == GameStatus.STARTED) {"Game is in status 'started'"}
-            require (game.players.count().toInt() == MAX_PLAYERS) {"Too many players in game"}
+            require(game.status == GameStatus.WAITING) { "Game is not in status 'waiting'" }
+            require(game.status == GameStatus.FINISHED) { "Game is in status 'finished'" }
+            require(game.status == GameStatus.STARTED) { "Game is in status 'started'" }
+            require(game.players.count().toInt() == MAX_PLAYERS) { "Too many players in game" }
 
             val player = playerRepository.getPlayerByPlayerIdAndGameId(playerId, gameId)
-                requireNotNull(player) { "Player not found" }
+            requireNotNull(player) { "Player not found" }
             val result = game.players.plus(player)
 
             require(!result.contains(player)) { "Player is already in game" }
@@ -88,8 +90,7 @@ class GameUseCase(
         }
     }
 
-    suspend fun addPlayerByName(gameId: UUID, playerName: String): Either<Exception, Player>
-    {
+    suspend fun addPlayerByName(gameId: UUID, playerName: String): Either<Exception, Player> {
         return try {
             val game = repository.get(gameId)
             val lobby = lobbyRepository.getByGameId(gameId)
@@ -123,7 +124,9 @@ class GameUseCase(
 
         return if (result.contains(player)) {
             PlayerException.AlreadyInGame("Player is still in game").left()
-        } else null.right()
+        } else {
+            null.right()
+        }
     }
 
     suspend fun finish(gameId: UUID, winningTeam: PlayerRole): Map<PlayerRole, MutableList<Player>> {
@@ -135,7 +138,7 @@ class GameUseCase(
         game.players.forEach {
             if (it.user != null) {
                 val userRating = userStatisticsUseCase.getUserRating(it.user!!.id.value) ?: throw IllegalStateException(
-                    "User rating not found"
+                    "User rating not found",
                 )
                 val roleStatistic = userStatisticsUseCase.getRoleStatistic(it.user!!.id.value)
                     ?: throw IllegalStateException("Role statistic not found")

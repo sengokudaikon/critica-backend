@@ -10,7 +10,8 @@ enum class Language {
     ARMENIAN,
     UKRAINIAN,
     KAZAKH,
-    BELARUSIAN;
+    BELARUSIAN,
+    ;
 
     companion object {
         fun shortValueOf(it: String): String {
@@ -26,7 +27,8 @@ enum class Language {
                 KAZAKH.toString() -> "kz"
                 BELARUSIAN.toString() -> "by"
                 else -> {
-                    throw IllegalArgumentException("Language $it is not supported")}
+                    throw IllegalArgumentException("Language $it is not supported")
+                }
             }
         }
     }

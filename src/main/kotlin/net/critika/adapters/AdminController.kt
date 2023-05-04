@@ -4,24 +4,24 @@ import com.github.dimitark.ktorannotations.annotations.Get
 import com.github.dimitark.ktorannotations.annotations.Post
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.RouteController
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.swagger.v3.oas.annotations.tags.Tag
 import net.critika.application.user.query.UserQuery
 import net.critika.domain.user.model.UserRole
 import net.critika.infrastructure.AuthPrincipality
 import net.critika.infrastructure.authorize
 import net.critika.infrastructure.validation.validate
 import net.critika.usecase.admin.AdminUseCase
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.swagger.v3.oas.annotations.tags.Tag
 import java.util.*
 
 @RouteController
 @Tag(name = "Admin")
 class AdminController(
     private val adminUseCase: AdminUseCase,
-    private val authPrincipality: AuthPrincipality
+    private val authPrincipality: AuthPrincipality,
 ) {
 
     @ProtectedRoute("jwt-user-provider")

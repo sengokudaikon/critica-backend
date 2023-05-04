@@ -3,14 +3,13 @@ package net.critika.usecase.lobby
 import net.critika.application.lobby.response.LobbyResponse
 import net.critika.persistence.repository.LobbyRepository
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
-import org.joda.time.DateTime
 import org.koin.core.annotation.Single
 import java.time.LocalDateTime
 import java.util.*
 
 @Single
 class LobbyCrudUseCase(
-    private val repository: LobbyRepository
+    private val repository: LobbyRepository,
 ) {
     suspend fun create(creator: UUID, date: LocalDateTime): LobbyResponse {
         return suspendedTransactionAsync {

@@ -1,8 +1,8 @@
 package net.critika.domain
 
 import net.critika.application.game.response.GameResponse
-import net.critika.domain.events.model.DayEvent
 import net.critika.domain.events.Event
+import net.critika.domain.events.model.DayEvent
 import net.critika.domain.events.model.NightEvent
 import net.critika.domain.user.model.User
 import net.critika.persistence.db.DayEvents
@@ -14,7 +14,7 @@ import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
-class Game(id: EntityID<UUID>): UUIDEntity(id) {
+class Game(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<Game>(Games)
     var date by Games.date
     var host by User optionalReferencedOn Games.hostId
@@ -29,13 +29,15 @@ class Game(id: EntityID<UUID>): UUIDEntity(id) {
     fun getCurrentStage(): Event {
         return if (dayEvents.count() > nightEvents.count()) {
             dayEvents.last()
-        } else nightEvents.last()
+        } else {
+            nightEvents.last()
+        }
     }
 
     fun toResponse(): GameResponse {
         val stage = this.getCurrentStage()
         val playersEliminated = if (!this.playersEliminated.empty()) {
-            this.playersEliminated.map { it.toResponse()}
+            this.playersEliminated.map { it.toResponse() }
         } else { listOf() }
 
         return GameResponse(

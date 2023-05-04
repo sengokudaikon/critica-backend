@@ -10,12 +10,12 @@ interface Event {
     fun toGameResponse(
         game: Game,
         players: List<PlayerResponse>,
-        bestMove: List<PlayerResponse>? = null
+        bestMove: List<PlayerResponse>? = null,
     ): GameResponse {
-        when (this) {
+        return when (this) {
             is DayEvent -> {
                 val stageResponse = this.toResponse()
-                return GameResponse(
+                GameResponse(
                     id = game.id.value.toString(),
                     date = game.date.toString(),
                     host = game.host?.toPlayer()?.toResponse(),
@@ -24,13 +24,13 @@ interface Event {
                     stageResponse.candidates,
                     stageResponse.votes,
                     playersEliminated = game.playersEliminated.map { it.toResponse() },
-                    bestMove = bestMove
+                    bestMove = bestMove,
                 )
             }
 
             is NightEvent -> {
                 val stageResponse = this.toResponse()
-                return GameResponse(
+                GameResponse(
                     id = game.id.value.toString(),
                     date = game.date.toString(),
                     host = game.host?.toPlayer()?.toResponse(),
@@ -40,16 +40,16 @@ interface Event {
                     donCheck = stageResponse.donCheck,
                     detectiveCheck = stageResponse.detectiveCheck,
                     playersEliminated = game.playersEliminated.map { it.toResponse() },
-                    bestMove = bestMove
+                    bestMove = bestMove,
                 )
             }
 
-            else -> return GameResponse(
+            else -> GameResponse(
                 id = game.id.value.toString(),
                 date = game.date.toString(),
                 host = game.host?.toPlayer()?.toResponse(),
                 players,
-                null
+                null,
             )
         }
     }

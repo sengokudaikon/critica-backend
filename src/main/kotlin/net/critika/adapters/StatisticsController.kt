@@ -8,7 +8,7 @@ import net.critika.usecase.user.UserStatisticsUseCase
 
 @RouteController
 class StatisticsController(
-    private val userStatisticsUseCase: UserStatisticsUseCase
+    private val userStatisticsUseCase: UserStatisticsUseCase,
 ) {
     @Get("/statistics/rating/week/{week}")
     suspend fun getRatingForWeek(call: ApplicationCall) {
@@ -30,6 +30,7 @@ class StatisticsController(
         val rating = userStatisticsUseCase.getRatingForYear(year)
         call.respond(rating)
     }
+
     @Get("/statistics/rating/month/{month}")
     suspend fun getRatingForMonth(call: ApplicationCall) {
         val month = call.parameters["month"]?.toIntOrNull() ?: return

@@ -7,4 +7,3 @@ class EmailValidator : Validator<String> {
         return emailRegex.matches(value)
     }
 }
-

@@ -1,17 +1,17 @@
 package net.critika.infrastructure
 
-import net.critika.domain.user.model.UserRole
-import net.critika.persistence.repository.UserRepositoryImpl
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
+import net.critika.domain.user.model.UserRole
+import net.critika.persistence.repository.UserRepositoryImpl
 import java.util.*
 suspend inline fun ApplicationCall.authorize(
     requiredRoles: List<UserRole>,
     userRepository: UserRepositoryImpl,
-    crossinline block: suspend () -> Unit
+    crossinline block: suspend () -> Unit,
 ) {
     val userId = getUserId()
     if (userId != null) {
@@ -37,4 +37,3 @@ suspend inline fun ApplicationCall.getUserId(): UUID? {
     val claim = userIdPrincipal.payload.getClaim("userId")
     return UUID.fromString(claim.asString())
 }
-

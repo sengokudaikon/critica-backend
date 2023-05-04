@@ -28,8 +28,8 @@ class Player(id: EntityID<UUID>) : UUIDEntity(id) {
             inGame = this.status == PlayerStatus.INGAME.toString(),
             bonusPoints = this.bonusPoints,
             bestMove = this.bestMove,
-            role = this.role?.let { PlayerRole.valueOf(it)},
-            seat = this.seat
+            role = this.role?.let { PlayerRole.valueOf(it) },
+            seat = this.seat,
         )
     }
 }

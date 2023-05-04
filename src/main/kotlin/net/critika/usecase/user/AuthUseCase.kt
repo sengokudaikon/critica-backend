@@ -5,10 +5,9 @@ import arrow.core.left
 import arrow.core.right
 import net.critika.application.user.command.CreateAccount
 import net.critika.application.user.command.SignIn
-import net.critika.infrastructure.Argon2PasswordEncoder
 import net.critika.domain.user.model.User
 import net.critika.domain.user.repository.UserRepository
-import net.critika.persistence.repository.UserRepositoryImpl
+import net.critika.infrastructure.Argon2PasswordEncoder
 import org.koin.core.annotation.Single
 
 @Single
@@ -16,14 +15,14 @@ class AuthUseCase(
     private val userRepository: UserRepository,
     private val userStatisticsUseCase: UserStatisticsUseCase,
     private val userSettingsUseCase: UserSettingsUseCase,
-    private val passwordEncoder: Argon2PasswordEncoder
+    private val passwordEncoder: Argon2PasswordEncoder,
 ) {
     suspend fun register(request: CreateAccount): Either<Exception, User> {
         return try {
             val user = userRepository.create(
                 request.username,
                 request.email,
-                passwordEncoder.encode(request.password)
+                passwordEncoder.encode(request.password),
             )
             userStatisticsUseCase.createUserRating(user.id.value)
             userSettingsUseCase.createUserSettings(user.id.value)

@@ -25,11 +25,14 @@ object EmailSender {
     }
 
     private val session: Session by lazy {
-        Session.getInstance(properties, object : jakarta.mail.Authenticator() {
-            override fun getPasswordAuthentication(): PasswordAuthentication {
-                return PasswordAuthentication(EMAIL_USERNAME, EMAIL_PASSWORD)
-            }
-        })
+        Session.getInstance(
+            properties,
+            object : jakarta.mail.Authenticator() {
+                override fun getPasswordAuthentication(): PasswordAuthentication {
+                    return PasswordAuthentication(EMAIL_USERNAME, EMAIL_PASSWORD)
+                }
+            },
+        )
     }
 
     @Throws(MessagingException::class)
@@ -37,8 +40,8 @@ object EmailSender {
         sendEmail(
             to,
             "Verify your email for Critika",
-                code
-            )
+            code,
+        )
     }
 
     @Throws(MessagingException::class)

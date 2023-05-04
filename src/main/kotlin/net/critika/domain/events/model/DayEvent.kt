@@ -12,7 +12,7 @@ import java.util.UUID
 
 class DayEvent(
     id: EntityID<UUID>,
-): UUIDEntity(id), Event {
+) : UUIDEntity(id), Event {
     companion object : UUIDEntityClass<DayEvent>(DayEvents)
     var game by DayEvents.game
     var day by DayEvents.day
@@ -20,12 +20,11 @@ class DayEvent(
     val candidates by DayCandidate referrersOn DayCandidates.day
     val votes by DayVote referrersOn DayVotes.day
 
-    fun toResponse(): DayStageResponse
-    {
+    fun toResponse(): DayStageResponse {
         return DayStageResponse(
             dayNumber = this.day,
             candidates = this.candidates.map { it.toResponse() },
-            votes = this.votes.map { it.toResponse() }
+            votes = this.votes.map { it.toResponse() },
         )
     }
 }

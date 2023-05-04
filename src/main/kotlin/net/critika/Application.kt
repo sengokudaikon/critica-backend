@@ -1,11 +1,6 @@
 package net.critika
 
 import com.github.dimitark.ktor.routing.ktorRoutingAnnotationConfig
-import net.critika.config.AppConfig
-import net.critika.di.MainModule
-import net.critika.infrastructure.DatabaseFactory
-import net.critika.infrastructure.Security
-import net.critika.infrastructure.handleErrors
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -32,6 +27,11 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import kotlinx.serialization.json.Json
+import net.critika.config.AppConfig
+import net.critika.di.MainModule
+import net.critika.infrastructure.DatabaseFactory
+import net.critika.infrastructure.Security
+import net.critika.infrastructure.handleErrors
 import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
@@ -166,7 +166,7 @@ private fun Application.configHttp() {
                 prettyPrint = true
                 isLenient = true
                 ignoreUnknownKeys = true
-            }
+            },
         )
     }
     handleErrors()
@@ -184,7 +184,7 @@ private fun Application.configCache() {
         options { _, outgoingContent ->
             when (outgoingContent.contentType?.withoutParameters()) {
                 ContentType.Text.CSS -> io.ktor.http.content.CachingOptions(
-                    CacheControl.MaxAge(maxAgeSeconds = MAX_AGE_SECONDS)
+                    CacheControl.MaxAge(maxAgeSeconds = MAX_AGE_SECONDS),
                 )
                 else -> null
             }

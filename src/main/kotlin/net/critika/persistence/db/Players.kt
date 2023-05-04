@@ -3,7 +3,6 @@ package net.critika.persistence.db
 import net.critika.domain.PlayerRole
 import net.critika.domain.PlayerStatus
 import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.max
 import java.util.*
 
 object Players : IdTable<UUID>(name = "players") {

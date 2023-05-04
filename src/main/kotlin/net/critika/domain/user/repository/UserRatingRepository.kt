@@ -3,7 +3,6 @@ package net.critika.domain.user.repository
 import net.critika.domain.PlayerRole
 import net.critika.domain.user.model.RoleStatistic
 import net.critika.domain.user.model.UserRating
-import org.koin.core.annotation.Single
 import java.util.*
 
 interface UserRatingRepository {

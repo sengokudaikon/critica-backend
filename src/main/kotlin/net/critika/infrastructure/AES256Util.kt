@@ -4,10 +4,10 @@ import io.github.cdimascio.dotenv.Dotenv
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.SecureRandom
 import java.security.Security
+import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import java.util.Base64
 
 object AES256Util {
     private const val ALGORITHM = "AES"

@@ -18,5 +18,5 @@ data class GameResponse(
     val detectiveCheck: PlayerResponse? = null,
     val donCheck: PlayerResponse? = null,
     val playersEliminated: List<PlayerResponse> = listOf(),
-    val bestMove: List<PlayerResponse>? = listOf()
+    val bestMove: List<PlayerResponse>? = listOf(),
 )

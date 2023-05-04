@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
+    property = "type",
 )
 @JsonSubTypes(
     JsonSubTypes.Type(value = DayStageResponse::class, name = "day"),
-    JsonSubTypes.Type(value = NightStageResponse::class, name = "night")
+    JsonSubTypes.Type(value = NightStageResponse::class, name = "night"),
 )
 @Serializable
 sealed class StageResponse(val type: String)

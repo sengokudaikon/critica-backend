@@ -5,24 +5,23 @@ import com.github.dimitark.ktorannotations.annotations.Post
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.Put
 import com.github.dimitark.ktorannotations.annotations.RouteController
-import net.critika.application.game.query.GameQuery
-import net.critika.application.lobby.command.CreateLobby
-import net.critika.application.lobby.query.LobbyQuery
-import net.critika.application.player.query.PlayerQuery
-import net.critika.domain.user.model.UserRole
-import net.critika.infrastructure.AuthPrincipality
-import net.critika.infrastructure.authorize
-import net.critika.usecase.lobby.LobbyCrudUseCase
-import net.critika.usecase.lobby.LobbyUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.uuid.toJavaUUID
+import net.critika.application.game.query.GameQuery
+import net.critika.application.lobby.command.CreateLobby
+import net.critika.application.lobby.query.LobbyQuery
 import net.critika.application.player.query.PlayerNameQuery
+import net.critika.application.player.query.PlayerQuery
+import net.critika.domain.user.model.UserRole
+import net.critika.infrastructure.AuthPrincipality
+import net.critika.infrastructure.authorize
 import net.critika.infrastructure.getUserId
-import org.joda.time.DateTime
+import net.critika.usecase.lobby.LobbyCrudUseCase
+import net.critika.usecase.lobby.LobbyUseCase
 import org.joda.time.LocalTime
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -33,9 +32,10 @@ import java.util.*
 @Tag(name = "Lobby")
 class LobbyController(
     private val useCase: LobbyUseCase,
-    private val crud: LobbyCrudUseCase
-): KoinComponent {
+    private val crud: LobbyCrudUseCase,
+) : KoinComponent {
     private val authPrincipality: AuthPrincipality by inject()
+
     @ProtectedRoute("jwt-user-provider")
     @Get("api/lobby/{lobbyId}/players")
     suspend fun getPlayers(call: ApplicationCall) {
@@ -78,7 +78,9 @@ class LobbyController(
                 val lobby = crud.create(creator, date)
 
                 call.respond(lobby)
-            } else call.respond(HttpStatusCode.BadRequest, "User not found")
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "User not found")
+            }
         }
     }
 
@@ -102,7 +104,9 @@ class LobbyController(
 
             val localTime = if (time != null) {
                 LocalTime.parse(time)
-            } else LocalTime.now()
+            } else {
+                LocalTime.now()
+            }
 
             val lobbyWithGame = useCase.addGame(id.lobbyId.toJavaUUID(), localTime, null)
             lobbyWithGame.fold({ call.respond(HttpStatusCode.BadRequest, it.localizedMessage) }, { call.respond(it) })
@@ -118,7 +122,7 @@ class LobbyController(
             val lobbyWithoutGame = useCase.removeGame(id.lobbyId.toJavaUUID(), UUID.fromString(gameId.gameId))
             lobbyWithoutGame.fold(
                 { call.respond(HttpStatusCode.BadRequest, it.localizedMessage) },
-                { call.respond(it) }
+                { call.respond(it) },
             )
         }
     }

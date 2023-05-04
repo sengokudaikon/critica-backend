@@ -12,12 +12,12 @@ import java.util.*
 
 class Lobby(
     id: EntityID<UUID>,
-): UUIDEntity(id) {
+) : UUIDEntity(id) {
 
     companion object : UUIDEntityClass<Lobby>(Lobbies)
     var date by Lobbies.date
     var creator by User referencedOn Lobbies.creator
-    val players by Player optionalReferrersOn  Players.lobbyId
+    val players by Player optionalReferrersOn Players.lobbyId
     val games by Game referrersOn Games.lobbyId
 
     fun toResponse(): LobbyResponse {

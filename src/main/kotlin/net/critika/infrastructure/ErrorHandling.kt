@@ -1,12 +1,12 @@
 package net.critika.infrastructure
 
-import net.critika.persistence.exception.GameException
-import net.critika.persistence.exception.LobbyException
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
+import net.critika.persistence.exception.GameException
+import net.critika.persistence.exception.LobbyException
 
 fun Application.handleErrors() {
     install(StatusPages) {

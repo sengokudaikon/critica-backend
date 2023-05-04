@@ -11,7 +11,7 @@ import java.util.UUID
 
 class NightEvent(
     id: EntityID<UUID>,
-): UUIDEntity(id), Event {
+) : UUIDEntity(id), Event {
     companion object : UUIDEntityClass<NightEvent>(NightEvents)
     var night by NightEvents.night
     var game by NightEvents.game
@@ -24,7 +24,7 @@ class NightEvent(
             dayNumber = this.night,
             mafiaShot = this.mafiaShot?.let { Player[it].toResponse() },
             detectiveCheck = this.detectiveCheck?.let { Player[it].toResponse() },
-            donCheck = this.donCheck?.let { Player[it].toResponse() }
+            donCheck = this.donCheck?.let { Player[it].toResponse() },
         )
     }
 }

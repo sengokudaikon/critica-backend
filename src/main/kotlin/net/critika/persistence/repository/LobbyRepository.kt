@@ -1,6 +1,6 @@
 package net.critika.persistence.repository
 
-//import net.critika.domain.user.model.User
+// import net.critika.domain.user.model.User
 import net.critika.domain.Game
 import net.critika.domain.Lobby
 import net.critika.domain.user.model.User
@@ -16,7 +16,7 @@ class LobbyRepository {
     suspend fun create(creator: UUID, date: LocalDateTime): Lobby {
         return suspendedTransactionAsync {
             val lobby = Lobby.new {
-                this.creator = User.findById(creator)?: throw LobbyException.NotFound("User not found")
+                this.creator = User.findById(creator) ?: throw LobbyException.NotFound("User not found")
                 this.date = date
             }
             lobby
@@ -37,14 +37,14 @@ class LobbyRepository {
 
     suspend fun delete(id: UUID) {
         return suspendedTransactionAsync {
-            val lobby = Lobby.findById(id)?: throw LobbyException.NotFound("Lobby not found")
+            val lobby = Lobby.findById(id) ?: throw LobbyException.NotFound("Lobby not found")
             lobby.delete()
         }.await()
     }
 
     suspend fun getByGameId(gameId: UUID): Lobby {
         return suspendedTransactionAsync {
-            val game = Game.findById(gameId)?: throw GameException.NotFound("Game not found")
+            val game = Game.findById(gameId) ?: throw GameException.NotFound("Game not found")
             val lobby = game.lobby
 
             lobby

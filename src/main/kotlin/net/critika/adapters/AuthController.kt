@@ -3,20 +3,20 @@ package net.critika.adapters
 import com.github.dimitark.ktorannotations.annotations.Post
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.RouteController
-import net.critika.application.user.command.CreateAccount
-import net.critika.application.user.command.RefreshToken
-import net.critika.application.user.command.SignIn
-import net.critika.application.user.command.SignOut
-import net.critika.infrastructure.Security
-import net.critika.infrastructure.validation.validate
-import net.critika.usecase.user.AuthUseCase
-import net.critika.usecase.user.UserSettingsUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
+import net.critika.application.user.command.CreateAccount
+import net.critika.application.user.command.RefreshToken
+import net.critika.application.user.command.SignIn
+import net.critika.application.user.command.SignOut
+import net.critika.infrastructure.Security
 import net.critika.infrastructure.getUserId
+import net.critika.infrastructure.validation.validate
+import net.critika.usecase.user.AuthUseCase
+import net.critika.usecase.user.UserSettingsUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
@@ -26,16 +26,17 @@ import java.util.*
 @Tag(name = "User")
 class AuthController(
     private val authUseCase: AuthUseCase,
-): KoinComponent {
+) : KoinComponent {
     private val settingsUseCase: UserSettingsUseCase by inject()
     private val security: Security by inject()
+
     @Post("/api/auth/register")
     suspend fun register(call: ApplicationCall) {
         val request = call.receive<CreateAccount>()
         try {
             validate(request)
         } catch (
-            e: Exception
+            e: Exception,
         ) {
             call.respond(HttpStatusCode.BadRequest, e.message ?: "Error during registration")
             return
@@ -52,9 +53,9 @@ class AuthController(
                 settingsUseCase.requestEmailVerification(user.id.value)
                 call.respond(
                     HttpStatusCode.Created,
-                    message = "User created successfully, verify your email to sign in"
+                    message = "User created successfully, verify your email to sign in",
                 )
-            }
+            },
         )
     }
 
@@ -78,10 +79,10 @@ class AuthController(
                     HttpStatusCode.OK,
                     message = mapOf(
                         "accessToken" to accessToken,
-                        "refreshToken" to refreshToken
-                    )
+                        "refreshToken" to refreshToken,
+                    ),
                 )
-            }
+            },
         )
     }
 
@@ -97,11 +98,15 @@ class AuthController(
                 call.respond(
                     HttpStatusCode.OK,
                     mapOf(
-                        "accessToken" to accessToken
-                    )
+                        "accessToken" to accessToken,
+                    ),
                 )
-            } else call.respond(HttpStatusCode.BadRequest, "Failed to refresh token")
-        } else call.respond(HttpStatusCode.BadRequest, "User doesn't exist")
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Failed to refresh token")
+            }
+        } else {
+            call.respond(HttpStatusCode.BadRequest, "User doesn't exist")
+        }
     }
 
     @Post("/api/auth/signout")

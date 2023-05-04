@@ -2,8 +2,8 @@ package net.critika.infrastructure.validation
 
 import net.critika.infrastructure.validation.constraints.ValidEmail
 import net.critika.infrastructure.validation.constraints.ValidPassword
-import net.critika.infrastructure.validation.constraints.ValidUUID
 import net.critika.infrastructure.validation.constraints.ValidPlayerName
+import net.critika.infrastructure.validation.constraints.ValidUUID
 import net.critika.infrastructure.validation.constraints.ValidUsername
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties

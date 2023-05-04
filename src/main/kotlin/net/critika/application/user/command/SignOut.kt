@@ -1,7 +1,7 @@
 package net.critika.application.user.command
 
-import net.critika.infrastructure.validation.constraints.ValidUUID
 import kotlinx.serialization.Serializable
+import net.critika.infrastructure.validation.constraints.ValidUUID
 
 @Serializable
 data class SignOut(

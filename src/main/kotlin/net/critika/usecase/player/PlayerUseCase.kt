@@ -19,7 +19,7 @@ import java.util.*
 class PlayerUseCase(
     private val playerRepository: PlayerRepository,
     private val lobbyRepository: LobbyRepository,
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
 ) {
     suspend fun getPlayerProfile(name: String): Either<Exception, Player> {
         val player = playerRepository.getPlayerByName(name)
@@ -28,7 +28,6 @@ class PlayerUseCase(
     }
 
     suspend fun getPlayerProfile(id: UUID): Player {
-
         return playerRepository.get(id)
     }
 

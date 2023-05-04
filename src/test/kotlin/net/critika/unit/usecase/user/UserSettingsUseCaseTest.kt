@@ -14,22 +14,20 @@ import net.critika.usecase.user.UserSettingsUseCase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.util.*
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import org.testng.annotations.BeforeTest
+import java.util.*
 
 @Testcontainers
 class UserSettingsUseCaseTest {
@@ -44,7 +42,7 @@ class UserSettingsUseCaseTest {
     companion object {
         @Container
         val postgreSQLContainer = PostgreSQLContainer<Nothing>(
-            DockerImageName.parse("postgres:13.3")
+            DockerImageName.parse("postgres:13.3"),
         ).apply {
             withDatabaseName("test_db")
             withUsername("test_user")
@@ -58,7 +56,7 @@ class UserSettingsUseCaseTest {
             url = postgreSQLContainer.jdbcUrl,
             driver = postgreSQLContainer.driverClassName,
             user = postgreSQLContainer.username,
-            password = postgreSQLContainer.password
+            password = postgreSQLContainer.password,
         )
         transaction {
             SchemaUtils.createMissingTablesAndColumns(Users, UserSettings)
@@ -72,7 +70,12 @@ class UserSettingsUseCaseTest {
         verificationCodeRepository = mock()
         userSettingsRepository = mock()
 
-        userSettingsUseCase = UserSettingsUseCase(userRepository, passwordEncoder, verificationCodeRepository, userSettingsRepository)
+        userSettingsUseCase = UserSettingsUseCase(
+            userRepository,
+            passwordEncoder,
+            verificationCodeRepository,
+            userSettingsRepository,
+        )
     }
 
     @Test
@@ -80,7 +83,7 @@ class UserSettingsUseCaseTest {
         // Given
         val userId = UUID.randomUUID()
         val language = "English"
-        val expectedUserSetting: UserSetting = mock<UserSetting>().apply{
+        val expectedUserSetting: UserSetting = mock<UserSetting>().apply {
             this.language = Language.ENGLISH
         }
 
@@ -111,7 +114,6 @@ class UserSettingsUseCaseTest {
     fun `changePassword successfully`() = runBlocking {
         // Given
         val userId = UUID.randomUUID()
-        val oldPassword = "oldPassword"
         val newPassword = "newPassword"
         val newEncodedPassword = "new_encoded_password"
         val user = getMockUser()
@@ -214,7 +216,7 @@ class UserSettingsUseCaseTest {
                 assertEquals(true, it.pushNotificationsEnabled)
                 assertEquals("ENGLISH", it.language)
                 assertEquals(true, it.promoted)
-            }
+            },
         )
     }
 }

@@ -11,13 +11,20 @@ plugins {
     id("org.flywaydb.flyway") version "7.15.0"
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("jacoco")
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
 }
-
+ktlint {
+    filter {
+        exclude("**/build/generated/ksp/**")
+        exclude("**/generated/**")
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+    }
+}
 detekt {
     buildUponDefaultConfig = true
     parallel = true
     autoCorrect = true
-    config = files("${rootDir}/detekt.yaml")
+    config = files("$rootDir/detekt.yaml")
 }
 
 val dotenv = Dotenv.configure().ignoreIfMissing().load()
@@ -52,13 +59,15 @@ ktor {
         jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
         localImageName.set("sample-docker-image")
         imageTag.set("0.0.1")
-        portMappings.set(listOf(
-            io.ktor.plugin.features.DockerPortMapping(
-                80,
-                8080,
-                io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+        portMappings.set(
+            listOf(
+                io.ktor.plugin.features.DockerPortMapping(
+                    80,
+                    8080,
+                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+                )
             )
-        ))
+        )
 
         externalRegistry.set(
             io.ktor.plugin.features.DockerImageRegistry.dockerHub(
@@ -131,15 +140,17 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt-jvm:2.2.4")
     implementation("app.softwork:kotlinx-uuid-core:0.0.18")
     implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
+    implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
+    implementation("com.pinterest.ktlint:ktlint-core:0.48.2")
+    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:0.48.2")
 
-
-    //annotations
+    // annotations
     annotationProcessor("org.hibernate.validator:hibernate-validator-annotation-processor:8.0.0.Final")
     ksp("io.insert-koin:koin-ksp-compiler:1.1.1")
     ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0-RC")
     ksp("com.github.dimitark.ktor-annotations:processor:0.0.3")
 
-    //test
+    // test
     testImplementation("org.testcontainers:testcontainers:1.17.6")
     testImplementation("org.testcontainers:postgresql:1.17.6")
     testImplementation("io.ktor:ktor-server-test-host-jvm:2.2.4")
@@ -173,13 +184,12 @@ tasks.test {
 //    finalizedBy("jacocoTestReport") // This ensures the test report is generated after the test task is executed
 }
 
-//tasks.jacocoTestReport {
+// tasks.jacocoTestReport {
 //    reports {
 //        xml.required
 //        html.required
 //    }
-//}
-
+// }
 
 jacoco {
     toolVersion = "0.8.7"

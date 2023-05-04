@@ -3,18 +3,18 @@ package net.critika.infrastructure
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import io.github.cdimascio.dotenv.Dotenv
+import net.critika.domain.user.model.User
 import net.critika.infrastructure.AES256Util.decrypt
 import net.critika.infrastructure.AES256Util.encrypt
 import net.critika.persistence.repository.UserTokenRepositoryImpl
-import io.github.cdimascio.dotenv.Dotenv
-import net.critika.domain.user.model.User
 import org.joda.time.LocalDateTime
 import org.koin.core.annotation.Single
 import java.util.*
 
 @Single
 class Security(
-    private val tokenRepository: UserTokenRepositoryImpl
+    private val tokenRepository: UserTokenRepositoryImpl,
 ) {
     private val jwtSecret = generateSecretKey()
     private val algorithm = Algorithm.HMAC256(jwtSecret)
@@ -79,4 +79,3 @@ class Security(
         return token.userId
     }
 }
-

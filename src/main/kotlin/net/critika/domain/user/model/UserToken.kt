@@ -7,8 +7,8 @@ import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
 class UserToken(
-    id: EntityID<UUID>
-): UUIDEntity(id) {
+    id: EntityID<UUID>,
+) : UUIDEntity(id) {
     companion object : UUIDEntityClass<UserToken>(UserTokens)
     var token by UserTokens.token
     var userId by User referencedOn UserTokens.userId

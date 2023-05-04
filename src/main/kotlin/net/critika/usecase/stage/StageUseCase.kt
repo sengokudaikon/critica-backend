@@ -18,11 +18,11 @@ import net.critika.persistence.repository.PlayerRepository
 import org.jetbrains.exposed.sql.and
 import java.util.*
 
-class StageUseCase (
+class StageUseCase(
     private val eventRepository: EventRepositoryImpl,
     private val playerRepository: PlayerRepository,
-    private val gameRepository: GameRepository
-){
+    private val gameRepository: GameRepository,
+) {
     suspend fun startDay(gameId: UUID, day: Int): GameResponse {
         val game = gameRepository.get(gameId)
         return eventRepository.startDay(game, day)
@@ -40,7 +40,7 @@ class StageUseCase (
             currentStage = day.toResponse(),
             nominates = candidates.map { it.toResponse() },
             votes = votes.map { it.toResponse() },
-            playersEliminated = game.playersEliminated.plus(eliminatedPlayer).map { it.toResponse() }
+            playersEliminated = game.playersEliminated.plus(eliminatedPlayer).map { it.toResponse() },
         )
         eventRepository.save(day)
         return gameResponse
@@ -66,7 +66,7 @@ class StageUseCase (
             detectiveCheck = detectiveCheck?.let { Player[it].toResponse() },
             donCheck = donCheck?.let { Player[it].toResponse() },
             playersEliminated = game.playersEliminated.plus(eliminatedPlayer)
-                .map { it?.toResponse() ?: throw Exception("Player not found") }
+                .map { it?.toResponse() ?: throw Exception("Player not found") },
         )
 
         eventRepository.save(night)
@@ -89,7 +89,11 @@ class StageUseCase (
             }
             eliminatePlayer(shotPlayer.id.value)
 
-            event.toGameResponse(game, game.players.map { it.toResponse() }, bestMove = bestMovePlayers.map { it.toResponse() })
+            event.toGameResponse(
+                game,
+                game.players.map { it.toResponse() },
+                bestMove = bestMovePlayers.map { it.toResponse() },
+            )
         } else {
             event.toGameResponse(game, game.players.map { it.toResponse() })
         }
@@ -100,7 +104,9 @@ class StageUseCase (
         val day = eventRepository.findStage(dayId)
         if (game.dayEvents.none { it.id.value == dayId }) throw Exception("Day not found")
         if (day !is DayEvent) throw Exception("Day not found")
-        return eventRepository.addCandidate(day, candidateSeat).toGameResponse(game, game.players.map { it.toResponse() })
+        return eventRepository
+            .addCandidate(day, candidateSeat)
+            .toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     suspend fun removeCandidate(gameId: UUID, dayId: UUID, candidateSeat: Int): GameResponse {
@@ -108,7 +114,9 @@ class StageUseCase (
         val day = eventRepository.findStage(dayId)
         if (game.dayEvents.none { it.id.value == dayId }) throw Exception("Day not found")
         if (day !is DayEvent) throw Exception("Day not found")
-        return eventRepository.removeCandidate(day, candidateSeat).toGameResponse(game, game.players.map { it.toResponse() })
+        return eventRepository
+            .removeCandidate(day, candidateSeat)
+            .toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     suspend fun voteOnCandidate(gameId: UUID, dayId: UUID, candidateId: Int, voterId: Int): GameResponse {
@@ -116,7 +124,9 @@ class StageUseCase (
         val day = eventRepository.findStage(dayId)
         if (game.dayEvents.none { it.id.value == dayId }) throw Exception("Day not found")
         if (day !is DayEvent) throw Exception("Day not found")
-        return eventRepository.addVote(day, candidateId, voterId).toGameResponse(game, game.players.map { it.toResponse() })
+        return eventRepository
+            .addVote(day, candidateId, voterId)
+            .toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     suspend fun setShot(gameId: UUID, nightId: UUID, shotId: Int): GameResponse {
@@ -124,7 +134,9 @@ class StageUseCase (
         val night = eventRepository.findStage(nightId)
         if (game.nightEvents.none { it.id.value == nightId }) throw Exception("Night not found")
         if (night !is NightEvent) throw Exception("Night not found")
-        return eventRepository.addShot(night, shotId).toGameResponse(game, game.players.map { it.toResponse() })
+        return eventRepository
+            .addShot(night, shotId)
+            .toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     suspend fun setCheck(gameId: UUID, nightId: UUID, checkedId: Int): GameResponse {
@@ -132,7 +144,9 @@ class StageUseCase (
         val night = eventRepository.findStage(nightId)
         if (game.nightEvents.none { it.id.value == nightId }) throw Exception("Night not found")
         if (night !is NightEvent) throw Exception("Night not found")
-        return eventRepository.addCheck(night, checkedId).toGameResponse(game, game.players.map { it.toResponse() })
+        return eventRepository
+            .addCheck(night, checkedId)
+            .toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     suspend fun setDonCheck(gameId: UUID, nightId: UUID, donCheckId: Int): GameResponse {
@@ -140,12 +154,19 @@ class StageUseCase (
         val night = eventRepository.findStage(nightId)
         if (game.nightEvents.none { it.id.value == nightId }) throw Exception("Night not found")
         if (night !is NightEvent) throw Exception("Night not found")
-        return eventRepository.addDonCheck(night, donCheckId).toGameResponse(game, game.players.map { it.toResponse() })
+        return eventRepository
+            .addDonCheck(night, donCheckId)
+            .toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     suspend fun finishStage(gameId: UUID, stageId: UUID): GameResponse {
         val game = gameRepository.get(gameId)
-        if (game.nightEvents.none { it.id.value == stageId } || game.dayEvents.none{it.id.value == stageId}) throw Exception("Day not found")
+        if (
+            game.nightEvents.none { it.id.value == stageId } ||
+            game.dayEvents.none { it.id.value == stageId }
+        ) {
+            throw Exception("Day not found")
+        }
         val stage = eventRepository.findStage(stageId)
         return when (stage) {
             is DayEvent -> finishDay(game, stage)
@@ -156,7 +177,12 @@ class StageUseCase (
 
     suspend fun nextStage(gameId: UUID, stageId: UUID): GameResponse {
         val game = gameRepository.get(gameId)
-        if (game.dayEvents.none { it.id.value == stageId } && game.nightEvents.none { it.id.value == stageId }) throw Exception("Stage not found")
+        if (
+            game.dayEvents.none { it.id.value == stageId } &&
+            game.nightEvents.none { it.id.value == stageId }
+        ) {
+            throw Exception("Stage not found")
+        }
         val stage = eventRepository.findStage(stageId)
         return when (stage) {
             is DayEvent -> selectDayStage(game, stage)
@@ -187,7 +213,6 @@ class StageUseCase (
         return playerRepository.save(player)
     }
 
-
     private suspend fun selectDayStage(game: Game, day: DayEvent): GameResponse {
         return when (day.stage) {
             DayStage.DISCUSS -> {
@@ -205,9 +230,11 @@ class StageUseCase (
 
                 if (totalVotes > nonEliminatedPlayers / 2) {
                     day.stage = DayStage.END
-                    game.playersEliminated.plus(day.candidates.map {
-                        eliminatePlayer(it.id.value)
-                    })
+                    game.playersEliminated.plus(
+                        day.candidates.map {
+                            eliminatePlayer(it.id.value)
+                        },
+                    )
                 } else {
                     day.stage = DayStage.END
                 }
@@ -221,24 +248,32 @@ class StageUseCase (
 
     suspend fun previousStage(gameId: UUID, stageId: UUID): GameResponse {
         val game = gameRepository.get(gameId)
-        if (game.dayEvents.none { it.id.value == stageId } && game.nightEvents.none { it.id.value == stageId }) throw Exception("Stage not found")
+        if (
+            game.dayEvents.none { it.id.value == stageId } &&
+            game.nightEvents.none { it.id.value == stageId }
+        ) {
+            throw Exception("Stage not found")
+        }
         val stage = eventRepository.findStage(stageId)
         return when (stage) {
             is DayEvent -> {
                 NightEvent.find { NightEvents.game eq game.id and (NightEvents.night eq stage.day - 1) }.last()
                     .toGameResponse(
                         game,
-                        game.players.map { it.toResponse() })
+                        game.players.map { it.toResponse() },
+                    )
             }
             is NightEvent -> {
                 DayEvent.find { DayEvents.game eq game.id and (DayEvents.day eq stage.night) }.last()
                     .toGameResponse(
                         game,
-                        game.players.map { it.toResponse() })
+                        game.players.map { it.toResponse() },
+                    )
             }
 
             else -> {
-                throw Exception("Stage not found")}
+                throw Exception("Stage not found")
+            }
         }
     }
 
@@ -262,7 +297,7 @@ class StageUseCase (
         val game = gameRepository.get(gameId)
         val player = playerRepository.getPlayerInGameBySeat(gameId, seat)
 
-        val opw = player.role?.let { PlayerRole.valueOf(it)}?.opw()
+        val opw = player.role?.let { PlayerRole.valueOf(it) }?.opw()
         return gameRepository.update(game, GameStatus.FINISHED, opw)
     }
 }

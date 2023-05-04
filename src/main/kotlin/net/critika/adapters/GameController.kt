@@ -5,6 +5,11 @@ import com.github.dimitark.ktorannotations.annotations.Post
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.Put
 import com.github.dimitark.ktorannotations.annotations.RouteController
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.swagger.v3.oas.annotations.tags.Tag
 import net.critika.application.game.query.GameQuery
 import net.critika.application.player.query.PlayerNameQuery
 import net.critika.application.player.query.PlayerQuery
@@ -15,11 +20,6 @@ import net.critika.infrastructure.AuthPrincipality
 import net.critika.infrastructure.authorize
 import net.critika.infrastructure.validation.validate
 import net.critika.usecase.game.GameUseCase
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.swagger.v3.oas.annotations.tags.Tag
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
@@ -27,9 +27,10 @@ import java.util.*
 @RouteController
 @Tag(name = "Game")
 class GameController(
-    private val gameUseCase: GameUseCase
-): KoinComponent {
+    private val gameUseCase: GameUseCase,
+) : KoinComponent {
     private val authPrincipality: AuthPrincipality by inject()
+
     @Get("/api/game/list")
     suspend fun listGames(call: ApplicationCall) {
         val games = gameUseCase.list()

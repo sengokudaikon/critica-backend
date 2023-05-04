@@ -2,8 +2,8 @@ package net.critika.persistence.repository
 
 import net.critika.domain.PlayerRole
 import net.critika.domain.user.model.RoleStatistic
-import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.model.User
+import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.repository.UserRatingRepository
 import net.critika.persistence.db.RoleStatistics
 import net.critika.persistence.db.UserRatings
@@ -77,28 +77,26 @@ class UserRatingRepositoryImpl : UserRatingRepository {
     override suspend fun findUserRatingsByMonth(month: Int): List<UserRating> {
         return suspendedTransactionAsync {
             UserRatings.select(
-                UserRatings.createdAt.month() eq month
+                UserRatings.createdAt.month() eq month,
             ).map {
                 UserRating.findById(it[UserRatings.id].value)!!
-            }.toList(
-            )
+            }.toList()
         }.await()
     }
 
     override suspend fun findUserRatingsByYear(year: Int): List<UserRating> {
         return suspendedTransactionAsync {
             UserRatings.select(
-                UserRatings.createdAt.year() eq year
+                UserRatings.createdAt.year() eq year,
             ).map {
                 UserRating.findById(it[UserRatings.id].value)!!
-            }.toList(
-            )
+            }.toList()
         }.await()
     }
 
     override suspend fun findCurrentSeasonUserRatings(): List<UserRating> {
         return suspendedTransactionAsync {
-            val season = //jan-mar, apr-jun, jul-sep, oct-dec
+            val season = // jan-mar, apr-jun, jul-sep, oct-dec
                 when (DateTime.now().monthOfYear) {
                     in 1..3 -> 1
                     in 4..6 -> 2
@@ -106,35 +104,32 @@ class UserRatingRepositoryImpl : UserRatingRepository {
                     else -> 4
                 }
 
-            //select all user ratings from current season
+            // select all user ratings from current season
             UserRatings.select(
-                UserRatings.createdAt.month() inList listOf(season * 3 - 2, season * 3 - 1, season * 3)
+                UserRatings.createdAt.month() inList listOf(season * 3 - 2, season * 3 - 1, season * 3),
             ).map {
                 UserRating.findById(it[UserRatings.id].value)!!
-            }.toList(
-            )
+            }.toList()
         }.await()
     }
 
     override suspend fun findUserRatingsByDay(day: Int): List<UserRating> {
         return suspendedTransactionAsync {
             UserRatings.select(
-                UserRatings.createdAt.day() eq day
+                UserRatings.createdAt.day() eq day,
             ).map {
                 UserRating.findById(it[UserRatings.id].value)!!
-            }.toList(
-            )
+            }.toList()
         }.await()
     }
 
     override suspend fun findUserRatingsByWeek(week: Int): List<UserRating> {
         return suspendedTransactionAsync {
             UserRatings.select(
-                UserRatings.createdAt.day() inList listOf(week * 7 - 6, week * 7 - 5, week * 7 - 4, week * 7 - 3, week * 7 - 2, week * 7 - 1, week * 7)
+                UserRatings.createdAt.day() inList listOf(week * 7 - 6, week * 7 - 5, week * 7 - 4, week * 7 - 3, week * 7 - 2, week * 7 - 1, week * 7),
             ).map {
                 UserRating.findById(it[UserRatings.id].value)!!
-            }.toList(
-            )
+            }.toList()
         }.await()
     }
 }

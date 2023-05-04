@@ -15,7 +15,7 @@ object DatabaseFactory {
         dbConfig: DbConfig,
         runMigrations: Boolean,
         drop: Boolean = false,
-        test: Boolean = false
+        test: Boolean = false,
     ) {
         val config = HikariConfig().apply {
             driverClassName = dbConfig.driver
@@ -50,7 +50,9 @@ object DatabaseFactory {
                     .baselineOnMigrate(true)
                     .dataSource(ds)
                     .load()
-            } else null
+            } else {
+                null
+            }
 
             // If database is empty, first create missing tables and columns, then baseline
             // Else apply migrations before renamed tables and columns are created as new instead of being renamed

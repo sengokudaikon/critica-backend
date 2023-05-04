@@ -4,9 +4,7 @@ import arrow.core.Either
 import kotlinx.coroutines.runBlocking
 import net.critika.application.user.command.CreateAccount
 import net.critika.application.user.command.SignIn
-import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserRating
-import net.critika.domain.user.model.UserRole
 import net.critika.domain.user.model.UserSetting
 import net.critika.domain.user.repository.UserRepository
 import net.critika.infrastructure.Argon2PasswordEncoder
@@ -20,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.*
@@ -35,7 +32,7 @@ class AuthUseCaseTest {
         userRepository,
         userStatisticsUseCase,
         userSettingsUseCase,
-        passwordEncoder
+        passwordEncoder,
     )
 
     @BeforeEach

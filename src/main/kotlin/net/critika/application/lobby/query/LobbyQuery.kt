@@ -6,5 +6,5 @@ import net.critika.infrastructure.validation.constraints.ValidUUID
 
 @Serializable
 data class LobbyQuery(
-    @ValidUUID val lobbyId: UUID
+    @ValidUUID val lobbyId: UUID,
 )

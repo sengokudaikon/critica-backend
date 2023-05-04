@@ -6,5 +6,5 @@ enum class PlayerStatus {
     ALIVE,
     DEAD,
     REMOVED,
-    OPW
+    OPW,
 }

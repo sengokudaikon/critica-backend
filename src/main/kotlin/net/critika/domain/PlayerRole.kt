@@ -4,7 +4,8 @@ enum class PlayerRole {
     CITIZEN,
     MAFIOSO,
     DON,
-    DETECTIVE;
+    DETECTIVE,
+    ;
 
     fun toTeam(): PlayerRole {
         return when (this) {

@@ -3,7 +3,6 @@ package net.critika.domain.user.repository
 import arrow.core.Either
 import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserSetting
-import org.koin.core.annotation.Single
 import java.util.*
 
 interface UserSettingsRepository {

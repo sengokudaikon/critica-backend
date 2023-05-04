@@ -10,5 +10,5 @@ data class LobbyResponse(
     val date: String,
     val creator: String,
     val games: List<GameResponse> = listOf(),
-    val players: List<PlayerResponse> = listOf()
+    val players: List<PlayerResponse> = listOf(),
 )

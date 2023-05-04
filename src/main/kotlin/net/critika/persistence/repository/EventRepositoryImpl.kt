@@ -4,20 +4,21 @@ import net.critika.application.game.response.GameResponse
 import net.critika.domain.Game
 import net.critika.domain.Player
 import net.critika.domain.PlayerStatus
+import net.critika.domain.events.Event
 import net.critika.domain.events.model.DayCandidate
 import net.critika.domain.events.model.DayEvent
 import net.critika.domain.events.model.DayStage
 import net.critika.domain.events.model.DayVote
-import net.critika.domain.events.Event
 import net.critika.domain.events.model.NightEvent
 import net.critika.domain.events.repository.EventRepository
 import net.critika.persistence.db.Players
+import net.critika.persistence.exception.StageException
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
 import java.util.*
 
 @Single
-class EventRepositoryImpl: EventRepository {
+class EventRepositoryImpl : EventRepository {
     override suspend fun startDay(game: Game, day: Int): GameResponse {
         return suspendedTransactionAsync {
             DayEvent.new {
@@ -42,10 +43,12 @@ class EventRepositoryImpl: EventRepository {
             val candidateExists = dayEvent.candidates.any { it.player.seat == candidate }
             if (!candidateExists) {
                 val player = Player.find { Players.seat eq candidate }.first()
-                dayEvent.candidates.plus(DayCandidate.new {
-                    this.player = player
-                    this.day = dayEvent
-                })
+                dayEvent.candidates.plus(
+                    DayCandidate.new {
+                        this.player = player
+                        this.day = dayEvent
+                    },
+                )
             }
             dayEvent
         }.await()
@@ -78,18 +81,20 @@ class EventRepositoryImpl: EventRepository {
 
     override suspend fun addVote(dayEvent: DayEvent, voter: Int, target: Int): DayEvent {
         return suspendedTransactionAsync {
-            dayEvent.votes.plus(DayVote.new {
-                this.voter = Player.find { Players.seat eq voter }.first()
-                this.day = dayEvent
-                this.target = Player.find { Players.seat eq target }.first()
-            })
+            dayEvent.votes.plus(
+                DayVote.new {
+                    this.voter = Player.find { Players.seat eq voter }.first()
+                    this.day = dayEvent
+                    this.target = Player.find { Players.seat eq target }.first()
+                },
+            )
             dayEvent
         }.await()
     }
 
     override suspend fun findStage(id: UUID): Event {
         return suspendedTransactionAsync {
-            DayEvent.findById(id) ?: NightEvent.findById(id) ?: throw Exception("Stage not found")
+            DayEvent.findById(id) ?: NightEvent.findById(id) ?: throw StageException.NotFound("Stage not found")
         }.await()
     }
 
@@ -106,7 +111,7 @@ class EventRepositoryImpl: EventRepository {
                         this.day = dayEvent
                         this.player = it
                     }
-                }
+                },
             )
             dayEvent
         }.await()
@@ -123,7 +128,8 @@ class EventRepositoryImpl: EventRepository {
                 is DayEvent -> event.flush()
                 is NightEvent -> event.flush()
                 else -> {
-                    throw Exception("Event not found")}
+                    throw StageException.NotFound("Event not found")
+                }
             }
         }.await()
     }

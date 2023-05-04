@@ -10,5 +10,5 @@ data class UserSettings(
     val publicVisibility: Boolean,
     val pushNotificationsEnabled: Boolean,
     val language: String,
-    val promoted: Boolean?
+    val promoted: Boolean?,
 )

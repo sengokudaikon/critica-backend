@@ -1,11 +1,11 @@
 package net.critika.persistence.repository
 
+import io.ktor.server.plugins.*
 import net.critika.application.game.command.CreateGame
 import net.critika.domain.Game
 import net.critika.domain.GameStatus
 import net.critika.domain.PlayerRole
 import net.critika.domain.user.model.User
-import io.ktor.server.plugins.*
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
 import java.util.UUID
