@@ -11,14 +11,6 @@ plugins {
     id("org.flywaydb.flyway") version "7.15.0"
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("jacoco")
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
-}
-ktlint {
-    filter {
-        exclude("**/build/generated/ksp/**")
-        exclude("**/generated/**")
-        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
-    }
 }
 detekt {
     buildUponDefaultConfig = true
@@ -140,8 +132,6 @@ dependencies {
     implementation("app.softwork:kotlinx-uuid-core:0.0.18")
     implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
     implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
-    implementation("com.pinterest.ktlint:ktlint-core:0.48.2")
-    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:0.48.2")
 
     // annotations
     annotationProcessor("org.hibernate.validator:hibernate-validator-annotation-processor:8.0.0.Final")
