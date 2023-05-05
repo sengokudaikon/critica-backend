@@ -25,6 +25,10 @@ class UserSettingsUseCase(
         return userSettingsRepository.createUserSettings(userId, language)
     }
 
+    suspend fun setPlayerName(userId: UUID, playerName: String) {
+        userRepository.updatePlayerName(userId, playerName)
+    }
+
     suspend fun changeUsername(userId: UUID, newUsername: String) {
         userRepository.updateUsername(userId, newUsername)
     }

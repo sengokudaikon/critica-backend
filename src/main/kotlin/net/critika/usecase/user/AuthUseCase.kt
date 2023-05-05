@@ -45,6 +45,7 @@ class AuthUseCase(
             }
 
             if (user != null && passwordEncoder.verify(request.password, user.password)) {
+                userSettingsUseCase.setPlayerName(user.id.value, request.playerName)
                 user.right()
             } else {
                 Exception("Invalid username or password").left()

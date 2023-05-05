@@ -8,6 +8,7 @@ object Users : UUIDTable(name = "users") {
     val email = varchar("email", 255).uniqueIndex()
     val hashedPassword = varchar("hashed_password", 255)
     val playerName = varchar("player_name", 255)
+    val username = varchar("username", 255).uniqueIndex()
     val role = enumeration("role", UserRole::class)
     val createdAt = datetime("created_at")
     val updatedAt = datetime("updated_at")

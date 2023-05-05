@@ -21,14 +21,15 @@ class User(
     fun toResponse(): UserResponse {
         return UserResponse(
             id = this.id.value.toString(),
-            name = this.username,
+            playerName = this.playerName,
             email = this.email,
         )
     }
 
     companion object : UUIDEntityClass<User>(Users)
 
-    var username by Users.playerName
+    var username by Users.username
+    var playerName by Users.playerName
     var email by Users.email
     var password by Users.hashedPassword
     var role by Users.role

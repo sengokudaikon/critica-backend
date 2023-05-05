@@ -2158,8 +2158,8 @@ components:
           example: "johndoe@example.com"
         username:
           type: "string"
-          pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
-          example: "John Doe"
+          pattern: "^[A-Za-z0-9]*$"
+          example: "asfgasfgasfg"
         password:
           type: "string"
           pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
@@ -2173,12 +2173,16 @@ components:
           example: "johndoe@example.com"
         username:
           type: "string"
-          pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
-          example: "John Doe"
+          pattern: "^[A-Za-z0-9]*$"
+          example: "asjfhasfjhasf"
         password:
           type: "string"
           pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
           example: "p@ssw0rd123!"
+        playerName:
+          type: "string"
+          pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
+          example: "John Doe"
     SignOut:
       type: object
       properties:

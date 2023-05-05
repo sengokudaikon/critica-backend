@@ -11,7 +11,7 @@ import java.util.*
 @Single
 class UserRepositoryImpl : UserRepository {
     override suspend fun findByUsername(playerName: String): User? {
-        return suspendedTransactionAsync { User.find { Users.playerName eq playerName }.firstOrNull() }.await()
+        return suspendedTransactionAsync { User.find { Users.username eq playerName }.firstOrNull() }.await()
     }
 
     override suspend fun findByEmail(email: String): User? {
@@ -70,6 +70,14 @@ class UserRepositoryImpl : UserRepository {
         suspendedTransactionAsync {
             val user = User.findById(userId)
             user?.email = email
+            user
+        }.await()
+    }
+
+    override suspend fun updatePlayerName(userId: UUID, playerName: String) {
+        suspendedTransactionAsync {
+            val user = User.findById(userId)
+            user?.playerName = playerName
             user
         }.await()
     }
