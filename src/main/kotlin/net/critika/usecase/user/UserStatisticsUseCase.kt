@@ -19,7 +19,7 @@ class UserStatisticsUseCase(
         return userRatingRepository.findUserRatingById(id)
     }
 
-    suspend fun getUserRatingsByPlayerId(playerId: UUID): List<UserRating> {
+    suspend fun getUserRatingsByPlayerId(playerId: UUID): UserRating {
         return userRatingRepository.findUserRatingsByPlayerId(playerId)
     }
 
@@ -35,10 +35,6 @@ class UserStatisticsUseCase(
         return userRatingRepository.createRoleStatistic(userRatingId, role)
     }
 
-    suspend fun getRoleStatistic(id: UUID): RoleStatistic? {
-        return userRatingRepository.findRoleStatisticById(id)
-    }
-
     suspend fun getRoleStatisticsByUserRatingId(userRatingId: UUID): List<RoleStatistic> {
         return userRatingRepository.findRoleStatisticsByUserRatingId(userRatingId)
     }
@@ -49,25 +45,5 @@ class UserStatisticsUseCase(
 
     suspend fun deleteRoleStatistic(id: UUID) {
         userRatingRepository.deleteRoleStatistic(id)
-    }
-
-    suspend fun getRatingForMonth(month: Int): List<UserRating> {
-        return userRatingRepository.findUserRatingsByMonth(month)
-    }
-
-    suspend fun getRatingForWeek(week: Int): List<UserRating> {
-        return userRatingRepository.findUserRatingsByWeek(week)
-    }
-
-    suspend fun getRatingForDay(day: Int): List<UserRating> {
-        return userRatingRepository.findUserRatingsByDay(day)
-    }
-
-    suspend fun getRatingForYear(year: Int): List<UserRating> {
-        return userRatingRepository.findUserRatingsByYear(year)
-    }
-
-    suspend fun getRatingForSeason(): List<UserRating> {
-        return userRatingRepository.findCurrentSeasonUserRatings()
     }
 }

@@ -9,7 +9,7 @@ import java.util.*
 interface UserRatingRepository {
     suspend fun createUserRating(userId: UUID): UserRating
     suspend fun findUserRatingById(id: UUID): UserRating?
-    suspend fun findUserRatingsByPlayerId(playerId: UUID): List<UserRating>
+    suspend fun findUserRatingsByPlayerId(playerId: UUID): UserRating
     suspend fun updateUserRating(userRating: UserRating): UserRating
     suspend fun deleteUserRating(id: UUID): Unit?
 

@@ -78,7 +78,7 @@ paths:
         - "Admin"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Promotes a player to admin"
       parameters:
         - name: "userId"
           in: "path"
@@ -111,7 +111,7 @@ paths:
         - "Admin"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Rejects a player's promotion"
       parameters:
         - name: "userId"
           in: "path"
@@ -144,7 +144,7 @@ paths:
         - "Admin"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Owner can check a list of players who applied to become admins"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -171,7 +171,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Refresh the authentication token"
       requestBody:
         content:
           application/json:
@@ -193,7 +193,7 @@ paths:
       tags:
         - "Auth"
         - "User"
-      description: ""
+      description: "Register a new user"
       requestBody:
         content:
           application/json:
@@ -213,7 +213,7 @@ paths:
       tags:
         - "Auth"
         - "User"
-      description: ""
+      description: "Log in to the application"
       requestBody:
         content:
           application/json:
@@ -234,7 +234,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Log out of the application"
       requestBody:
         content:
           application/json:
@@ -254,7 +254,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Host can give the first killed player bonus points, if he guessed the correct roles out of 3 players he named"
       parameters:
         - name: "id"
           in: "path"
@@ -266,6 +266,11 @@ paths:
           required: true
           schema:
             type: "string"
+        - name: "bestMove"
+          in: "query"
+          required: false
+          schema:
+              type: "string"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -290,7 +295,7 @@ paths:
         - "Stage"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "During the day, each player can nominate another player for the voting phase. The nominated player will be among the candidates for the voting phase."
       parameters:
         - name: "id"
           in: "path"
@@ -331,7 +336,7 @@ paths:
         - "Stage"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Remove candidate from the current vote. Note: This should not be used in most cases, only if a manual error occured."
       parameters:
         - name: "id"
           in: "path"
@@ -372,7 +377,7 @@ paths:
         - "Stage"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "During the day, record the player's vote against a nominated player"
       parameters:
         - name: "id"
           in: "path"
@@ -384,6 +389,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vote"
+        required: true
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -408,7 +419,7 @@ paths:
         - "Stage"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "During the night, the detective can choose a player to investigate. The role will not be revealed in the api. The detective will be notified of the role."
       parameters:
         - name: "id"
           in: "path"
@@ -447,7 +458,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "During the night, the Don can check the role of one player. For now, the information about the role is not returned."
       security:
         - AccessToken: [ ]
       parameters:
@@ -488,7 +499,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "During the night, mafia shoots one player. If the mafia misses, this endpoint should not be called."
       security:
         - AccessToken: [ ]
       parameters:
@@ -528,7 +539,7 @@ paths:
     put:
       tags:
         - "Game"
-      description: ""
+      description: "Add bonus to player"
       security:
         - AccessToken: [ ]
       parameters:
@@ -563,7 +574,7 @@ paths:
     put:
       tags:
         - "Game"
-      description: ""
+      description: "Adds a foul to the player. On 4 fouls the player is removed from the game."
       security:
         - AccessToken: [ ]
       parameters:
@@ -583,7 +594,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-            $ref: "#/components/responses/Forbidden"
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
         "500":
@@ -598,7 +609,7 @@ paths:
     put:
       tags:
         - "Game"
-      description: ""
+      description: "Creates Opposite Party Win for the game, indicts the player in the seat and ends the game"
       security:
         - AccessToken: [ ]
       parameters:
@@ -634,7 +645,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "Finish the stage by id"
       security:
         - AccessToken: [ ]
       parameters:
@@ -670,7 +681,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "Go to next stage"
       security:
         - AccessToken: [ ]
       parameters:
@@ -706,7 +717,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "Cycle back to the previous stage"
       security:
         - AccessToken: [ ]
       parameters:
@@ -743,7 +754,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Get game by id"
       parameters:
         - name: "id"
           in: "path"
@@ -773,7 +784,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Add player by name to the game"
       parameters:
         - name: "id"
           in: "path"
@@ -803,7 +814,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Add player to game"
       parameters:
         - name: "id"
           in: "path"
@@ -838,7 +849,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Finishes the current game"
       parameters:
         - name: "id"
           in: "path"
@@ -875,7 +886,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Removes a player from the game"
       parameters:
         - name: "id"
           in: "path"
@@ -907,7 +918,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "Starts the day stage of the game"
       security:
         - AccessToken: [ ]
       parameters:
@@ -943,7 +954,7 @@ paths:
       tags:
         - "Game"
         - "Stage"
-      description: ""
+      description: "Start night stage in game"
       security:
         - AccessToken: [ ]
       parameters:
@@ -978,7 +989,7 @@ paths:
     post:
       tags:
         - "Game"
-      description: ""
+      description: "Assign a host to a hostless game. Note that the host must be an admin."
       security:
         - AccessToken: [ ]
       parameters:
@@ -1016,7 +1027,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Starts the game. Note: This endpoint is for testing purposes only. In production, all endpoints for games would be called from the lobby."
       parameters:
         - name: "id"
           in: "path"
@@ -1046,7 +1057,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Create a new game. Note: This endpoint is for testing purposes only."
       requestBody:
         content:
           application/json:
@@ -1076,7 +1087,7 @@ paths:
         - "Game"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Get all games. Note: This endpoint is for testing purposes only."
       responses:
         "200":
           description: "OK"
@@ -1102,7 +1113,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Get lobby by id"
       parameters:
         - name: "id"
           in: "path"
@@ -1132,13 +1143,18 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Add game"
       parameters:
         - name: "id"
           in: "path"
           required: true
           schema:
             type: "string"
+        - name: "time"
+          in: "query"
+          required: true
+          schema:
+              type: "string"
       responses:
         "200":
           description: "OK"
@@ -1162,10 +1178,10 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Add player by name"
       parameters:
-        - name: "id"
-          in: "path"
+        - name: "name"
+          in: "query"
           required: true
           schema:
             type: "string"
@@ -1192,7 +1208,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Add player to lobby by id"
       parameters:
         - name: "id"
           in: "path"
@@ -1227,7 +1243,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Add player without user registration. Note: This endpoint is not secure and should only be used for testing purposes."
       parameters:
         - name: "id"
           in: "path"
@@ -1257,7 +1273,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Delete a lobby"
       parameters:
         - name: "id"
           in: "path"
@@ -1287,7 +1303,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Get all games in a lobby"
       parameters:
         - name: "id"
           in: "path"
@@ -1319,7 +1335,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Get players that are currently in the lobby"
       parameters:
         - name: "id"
           in: "path"
@@ -1351,7 +1367,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Removes a game from the lobby. If the game is not in the lobby, nothing happens."
       parameters:
         - name: "id"
           in: "path"
@@ -1386,10 +1402,10 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Remove player by name. Only the lobby owner can remove players."
       parameters:
-        - name: "id"
-          in: "path"
+        - name: "name"
+          in: "query"
           required: true
           schema:
             type: "string"
@@ -1416,7 +1432,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Remove a player from a lobby. Only the lobby owner can remove players."
       parameters:
         - name: "id"
           in: "path"
@@ -1451,7 +1467,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Create a new lobby, only Owner can do this"
       requestBody:
         content:
           application/json:
@@ -1481,7 +1497,7 @@ paths:
         - "Lobby"
       security:
         - AccessToken: []
-      description: ""
+      description: "Get list of lobbies"
       responses:
         "200":
           description: "OK"
@@ -1521,7 +1537,7 @@ paths:
         - "Player"
       description: "Get player by id"
       security:
-          - AccessToken: [ ]
+        - AccessToken: [ ]
       parameters:
         - name: "id"
           in: "path"
@@ -1561,7 +1577,7 @@ paths:
     get:
       tags:
         - "Player"
-      description: ""
+      description: "Get player by name"
       security:
         - AccessToken: [ ]
       parameters:
@@ -1601,7 +1617,7 @@ paths:
     get:
       tags:
         - "Player"
-      description: ""
+      description: "Enter game"
       security:
         - AccessToken: [ ]
       parameters:
@@ -1631,7 +1647,7 @@ paths:
     get:
       tags:
         - "Player"
-      description: ""
+      description: "Enter lobby"
       security:
         - AccessToken: [ ]
       parameters:
@@ -1661,7 +1677,7 @@ paths:
     get:
       tags:
         - "Player"
-      description: ""
+      description: "Quit game"
       security:
         - AccessToken: [ ]
       responses:
@@ -1675,7 +1691,7 @@ paths:
     get:
       tags:
         - "Player"
-      description: ""
+      description: "Quit lobby"
       security:
         - AccessToken: [ ]
       parameters:
@@ -1707,7 +1723,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Get user settings"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -1731,7 +1747,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Change language"
       requestBody:
         content:
           text/plain:
@@ -1761,7 +1777,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Change password"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -1785,7 +1801,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Change public visibility settings"
       requestBody:
         content:
           application/json:
@@ -1815,7 +1831,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Change push notification settings"
       requestBody:
         content:
           application/json:
@@ -1845,7 +1861,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Change username"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -1869,7 +1885,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Request promotion to admin"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -1893,7 +1909,7 @@ paths:
         - "User"
       security:
         - AccessToken: [ ]
-      description: ""
+      description: "Verify user email"
       requestBody:
         content:
           text/plain:
@@ -1917,6 +1933,139 @@ paths:
             application/json:
               schema:
                 type: "object"
+  /api/user/statistics:
+    get:
+      tags:
+        - "User"
+      description: "Get personal rating"
+      security:
+        - AccessToken: [ ]
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "No user id found"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                type: "object"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RatingResponse"
+  /api/statistics/rating/day/{day}:
+    get:
+      tags:
+        - "Statistics"
+      security:
+        - AccessToken: [ ]
+      description: "Get daily rating"
+      parameters:
+        - name: "day"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/statistics/rating/month/{month}:
+    get:
+      tags:
+        - "Statistics"
+      security:
+        - AccessToken: [ ]
+      description: "Get monthly rating"
+      parameters:
+        - name: "month"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/statistics/rating/season:
+    get:
+      tags:
+        - "Statistics"
+      security:
+        - AccessToken: [ ]
+      description: "Get seasonal rating"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/statistics/rating/week/{week}:
+    get:
+      tags:
+        - "Statistics"
+      security:
+        - AccessToken: [ ]
+      description: "Get weekly rating"
+      parameters:
+        - name: "week"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/statistics/rating/year/{year}:
+    get:
+      tags:
+        - "Statistics"
+      security:
+        - AccessToken: [ ]
+      description: "Get annual rating"
+      parameters:
+        - name: "year"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
 components:
   securitySchemes:
     AccessToken:
@@ -1924,6 +2073,52 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    Vote:
+      type: object
+      properties:
+        candidate:
+          type: "string"
+        voter:
+          type: "string"
+    RoleResponse:
+      type: object
+      properties:
+        id:
+          type: "string"
+        role:
+          type: "string"
+        gamesWon:
+          type: "integer"
+          format: "int32"
+        gamesTotal:
+          type: "integer"
+          format: "int32"
+        bonusPoints:
+          type: "integer"
+          format: "int32"
+    RatingResponse:
+      type: object
+      properties:
+        id:
+          type: "string"
+        userId:
+          type: "string"
+        totalPoints:
+          type: "integer"
+          format: "int32"
+        bonusPoints:
+          type: "integer"
+          format: "int32"
+        malusPoints:
+          type: "integer"
+          format: "int32"
+        bestMovePoints:
+          type: "integer"
+          format: "int32"
+        roleStatistics:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/RoleResponse"
     UserResponse:
       description: "User response"
       type: object
@@ -1948,14 +2143,14 @@ components:
           type: string
           example: "JWT_TOKEN"
     RefreshToken:
-      type: "object"
+      type: object
       properties:
         id:
           type: "string"
         refreshToken:
           type: "string"
     CreateAccount:
-      type: "object"
+      type: object
       properties:
         email:
           type: "string"
@@ -1970,7 +2165,7 @@ components:
           pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
           example: "p@ssw0rd123!"
     SignIn:
-      type: "object"
+      type: object
       properties:
         email:
           type: "string"
@@ -1985,7 +2180,7 @@ components:
           pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
           example: "p@ssw0rd123!"
     SignOut:
-      type: "object"
+      type: object
       properties:
         id:
           type: "string"
@@ -2037,6 +2232,36 @@ components:
           $ref: "#/components/schemas/PlayerResponse"
         player:
           $ref: "#/components/schemas/PlayerResponse"
+    DayStageResponse:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+          enum:
+            - "DAY"
+        dayNumber:
+          type: "integer"
+          format: "int32"
+        candidates:
+          type: "array"
+          items:
+              $ref: "#/components/schemas/PlayerResponse"
+        votes:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/DayVoteResponse"
+    NightStageResponse:
+        type: "object"
+        properties:
+          dayNumber:
+            type: "integer"
+            format: "int32"
+          mafiaShot:
+            $ref: "#/components/schemas/PlayerResponse"
+          detectiveCheck:
+            $ref: "#/components/schemas/PlayerResponse"
+          donCheck:
+              $ref: "#/components/schemas/PlayerResponse"
     GameResponse:
       type: "object"
       properties:
@@ -2049,7 +2274,11 @@ components:
           items:
             $ref: "#/components/schemas/PlayerResponse"
         currentStage:
-          $ref: "#/components/schemas/StageResponse"
+          anyOf:
+            - title: "DayStageResponse"
+              $ref: "#/components/schemas/DayStageResponse"
+            - title: "NightStageResponse"
+              $ref: "#/components/schemas/NightStageResponse"
         nominates:
           type: "array"
           items:
@@ -2068,21 +2297,6 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/PlayerResponse"
-    Object:
-      type: "object"
-      properties: {}
-    ResultRow:
-      type: "object"
-      properties:
-        fieldIndex:
-          type: "object"
-    Game:
-      type: "object"
-      properties:
-        writeValues:
-          $ref: "#/components/schemas/Object"
-        _readValues:
-          $ref: "#/components/schemas/ResultRow"
     LobbyResponse:
       type: "object"
       properties:
@@ -2138,7 +2352,7 @@ components:
       required:
         - "status"
         - "message"
-  responses: 
+  responses:
     BadRequest:
       description: "Malformed data or otherwise invalid request"
       schema:

@@ -174,7 +174,7 @@ class GameStageController(
             validate(gameId)
             val nightId = call.receive<StageQuery>()
             val candidate = call.receiveParameters()["candidate"]?.toInt() ?: 0
-            val vote = call.receiveParameters()["vote"]?.toInt() ?: 0
+            val vote = call.receiveParameters()["voter"]?.toInt() ?: 0
             val game =
                 stageUseCase.voteOnCandidate(
                     UUID.fromString(gameId.gameId),

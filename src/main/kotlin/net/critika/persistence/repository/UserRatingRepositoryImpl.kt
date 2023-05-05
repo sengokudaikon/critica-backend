@@ -35,8 +35,8 @@ class UserRatingRepositoryImpl : UserRatingRepository {
         UserRating.findById(id)
     }.await()
 
-    override suspend fun findUserRatingsByPlayerId(playerId: UUID): List<UserRating> = suspendedTransactionAsync {
-        UserRating.find { UserRatings.userId eq playerId }.toList()
+    override suspend fun findUserRatingsByPlayerId(playerId: UUID): UserRating = suspendedTransactionAsync {
+        UserRating.find { UserRatings.userId eq playerId }.firstOrNull() ?: throw UserException.NotFound("UserRating not found")
     }.await()
 
     override suspend fun updateUserRating(userRating: UserRating) = suspendedTransactionAsync {
@@ -50,14 +50,17 @@ class UserRatingRepositoryImpl : UserRatingRepository {
 
     override suspend fun createRoleStatistic(userRatingId: UUID, role: PlayerRole): RoleStatistic {
         return suspendedTransactionAsync {
-            RoleStatistic.new {
-                this.userRatingId = UserRating.findById(userRatingId)
-                    ?: throw UserException.NotFound("UserRating not found")
+            val userRating = UserRating.findById(userRatingId)
+                ?: throw UserException.NotFound("UserRating not found")
+            val stat = RoleStatistic.new {
+                this.userRatingId = userRating
                 this.role = role
                 gamesWon = 0
                 gamesTotal = 0
                 bonusPoints = 0
             }
+            userRating.roleStatistics.plus(stat)
+            stat
         }.await()
     }
 

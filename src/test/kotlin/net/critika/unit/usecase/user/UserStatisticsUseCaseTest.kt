@@ -58,26 +58,6 @@ class UserStatisticsUseCaseTest {
     }
 
     @Test
-    fun `get role statistic`() = runBlocking {
-        val roleStatisticId = UUID.randomUUID()
-        val userRatingId = UUID.randomUUID()
-        val roleStatistic = mock<RoleStatistic> {
-            on { id } doReturn mock<EntityID<UUID>>()
-            on { it.userRatingId } doReturn mock<UserRating>()
-            on { role } doReturn PlayerRole.CITIZEN
-            on { gamesWon } doReturn 0
-            on { gamesTotal } doReturn 0
-            on { bonusPoints } doReturn 0
-        }
-
-        whenever(userRatingRepository.findRoleStatisticById(any())).thenReturn(roleStatistic)
-
-        val result = userStatisticsUseCase.getRoleStatistic(roleStatisticId)
-
-        assertEquals(roleStatistic, result)
-    }
-
-    @Test
     fun `update user rating`(): Unit = runBlocking {
         val userId = UUID.randomUUID()
         val userRating = mock<UserRating>().apply {
@@ -136,7 +116,7 @@ class UserStatisticsUseCaseTest {
         val roleStatistic2 = mock<RoleStatistic> {
             on { id } doReturn mock<EntityID<UUID>>()
             on { it.userRatingId } doReturn userRating
-            on { role } doReturn PlayerRole.MAFIOSO
+            on { role } doReturn PlayerRole.MAFIA
             on { gamesWon } doReturn 5
             on { gamesTotal } doReturn 10
             on { bonusPoints } doReturn 100
@@ -158,7 +138,7 @@ class UserStatisticsUseCaseTest {
         val roleStatistic = mock<RoleStatistic> {
             on { id } doReturn mock<EntityID<UUID>>()
             on { it.userRatingId } doReturn userRating
-            on { role } doReturn PlayerRole.MAFIOSO
+            on { role } doReturn PlayerRole.MAFIA
             on { gamesWon } doReturn 5
             on { gamesTotal } doReturn 10
             on { bonusPoints } doReturn 100

@@ -19,13 +19,13 @@ import net.critika.unit.Helpers.getMockLobbyWithPlayer
 import net.critika.unit.Helpers.getMockPlayer
 import net.critika.unit.Helpers.getMockUser
 import net.critika.usecase.lobby.LobbyUseCase
-import org.joda.time.LocalTime
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.time.LocalTime
 import java.util.*
 
 class LobbyUseCaseTest {

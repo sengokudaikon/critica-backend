@@ -1,46 +1,52 @@
 package net.critika.adapters
 
 import com.github.dimitark.ktorannotations.annotations.Get
+import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.RouteController
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import net.critika.usecase.user.UserStatisticsUseCase
+import net.critika.usecase.stats.StatisticsUseCase
 
 @RouteController
 class StatisticsController(
-    private val userStatisticsUseCase: UserStatisticsUseCase,
+    private val statisticsUseCase: StatisticsUseCase,
 ) {
-    @Get("/statistics/rating/week/{week}")
+    @ProtectedRoute("jwt-user-provider")
+    @Get("api/statistics/rating/week/{week}")
     suspend fun getRatingForWeek(call: ApplicationCall) {
         val week = call.parameters["week"]?.toIntOrNull() ?: return
-        val rating = userStatisticsUseCase.getRatingForWeek(week)
+        val rating = statisticsUseCase.getRatingForWeek(week)
         call.respond(rating)
     }
 
-    @Get("/statistics/rating/day/{day}")
+    @ProtectedRoute("jwt-user-provider")
+    @Get("api/statistics/rating/day/{day}")
     suspend fun getRatingForDay(call: ApplicationCall) {
         val day = call.parameters["day"]?.toIntOrNull() ?: return
-        val rating = userStatisticsUseCase.getRatingForDay(day)
+        val rating = statisticsUseCase.getRatingForDay(day)
         call.respond(rating)
     }
 
-    @Get("/statistics/rating/year/{year}")
+    @ProtectedRoute("jwt-user-provider")
+    @Get("api/statistics/rating/year/{year}")
     suspend fun getRatingForYear(call: ApplicationCall) {
         val year = call.parameters["year"]?.toIntOrNull() ?: return
-        val rating = userStatisticsUseCase.getRatingForYear(year)
+        val rating = statisticsUseCase.getRatingForYear(year)
         call.respond(rating)
     }
 
-    @Get("/statistics/rating/month/{month}")
+    @ProtectedRoute("jwt-user-provider")
+    @Get("api/statistics/rating/month/{month}")
     suspend fun getRatingForMonth(call: ApplicationCall) {
         val month = call.parameters["month"]?.toIntOrNull() ?: return
-        val rating = userStatisticsUseCase.getRatingForMonth(month)
+        val rating = statisticsUseCase.getRatingForMonth(month)
         call.respond(rating)
     }
 
-    @Get("/statistics/rating/season")
+    @ProtectedRoute("jwt-user-provider")
+    @Get("api/statistics/rating/season")
     suspend fun getRatingForSeason(call: ApplicationCall) {
-        val rating = userStatisticsUseCase.getRatingForSeason()
+        val rating = statisticsUseCase.getRatingForSeason()
         call.respond(rating)
     }
 }

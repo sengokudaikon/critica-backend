@@ -141,7 +141,7 @@ class GameUseCase(
                 val userRating = userStatisticsUseCase.getUserRating(it.user!!.id.value) ?: throw IllegalStateException(
                     "User rating not found",
                 )
-                val roleStatistic = userStatisticsUseCase.getRoleStatistic(it.user!!.id.value)
+                val roleStatistic = userRating.roleStatistics.find { it.role.toTeam() == winningTeam }
                     ?: throw IllegalStateException("Role statistic not found")
 
                 if (it.bestMove > 0) {
