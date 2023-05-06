@@ -12,17 +12,14 @@ import net.critika.domain.events.model.DayStage
 import net.critika.domain.events.model.DayVote
 import net.critika.domain.events.repository.EventRepository
 import net.critika.domain.user.model.User
-import net.critika.domain.user.repository.UserRepository
 import net.critika.persistence.db.Games
 import net.critika.persistence.repository.GameRepository
-import net.critika.persistence.repository.LobbyRepository
 import net.critika.persistence.repository.PlayerRepository
 import net.critika.unit.Helpers.getMockGame
 import net.critika.unit.Helpers.getMockLobby
 import net.critika.unit.Helpers.getMockPlayer
 import net.critika.unit.Helpers.getMockUser
 import net.critika.usecase.stage.StageUseCase
-import net.critika.usecase.user.UserStatisticsUseCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.emptySized
@@ -42,16 +39,9 @@ class NextStageUseCaseTest {
     private var gameRepository: GameRepository = mock()
 
     @Mock
-    private var lobbyRepository: LobbyRepository = mock()
-
-    @Mock
     private var playerRepository: PlayerRepository = mock()
 
     private var eventRepository: EventRepository = mock()
-
-    @Mock
-    private var userStatisticsUseCase: UserStatisticsUseCase = mock()
-    private var userRepository: UserRepository = mock()
 
     private lateinit var stageUseCase: StageUseCase
 

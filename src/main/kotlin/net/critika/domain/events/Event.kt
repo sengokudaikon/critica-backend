@@ -12,10 +12,10 @@ interface Event {
         players: List<PlayerResponse>,
         bestMove: List<PlayerResponse>? = null,
     ): GameResponse {
-        when (this) {
+        return when (this) {
             is DayEvent -> {
                 val stageResponse = this.toResponse()
-                return GameResponse(
+                GameResponse(
                     id = game.id.value.toString(),
                     date = game.date.toString(),
                     host = game.host?.toPlayer()?.toResponse(),
@@ -30,7 +30,7 @@ interface Event {
 
             is NightEvent -> {
                 val stageResponse = this.toResponse()
-                return GameResponse(
+                GameResponse(
                     id = game.id.value.toString(),
                     date = game.date.toString(),
                     host = game.host?.toPlayer()?.toResponse(),
@@ -44,7 +44,7 @@ interface Event {
                 )
             }
 
-            else -> return GameResponse(
+            else -> GameResponse(
                 id = game.id.value.toString(),
                 date = game.date.toString(),
                 host = game.host?.toPlayer()?.toResponse(),

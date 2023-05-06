@@ -39,7 +39,8 @@ class UserRatingRepositoryImpl : UserRatingRepository {
     }.await()
 
     override suspend fun findUserRatingsByPlayerId(playerId: UUID): UserRating = suspendedTransactionAsync {
-        UserRating.find { UserRatings.userId eq playerId }.firstOrNull() ?: throw UserException.NotFound("UserRating not found")
+        UserRating.find { UserRatings.userId eq playerId }.firstOrNull()
+            ?: throw UserException.NotFound("UserRating not found")
     }.await()
 
     override suspend fun updateUserRating(userRating: UserRating) = suspendedTransactionAsync {

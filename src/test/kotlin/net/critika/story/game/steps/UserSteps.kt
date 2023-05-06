@@ -12,7 +12,12 @@ open class UserSteps : KoinComponent {
     private val userUseCase: AuthUseCase by inject()
 
     @Step("Register user {username}")
-    open suspend fun register(email: String, username: String, playerName: String, password: String): Either<Exception, User> {
+    open suspend fun register(
+        email: String,
+        username: String,
+        playerName: String,
+        password: String,
+    ): Either<Exception, User> {
         return userUseCase.register(CreateAccount(email, password, username, playerName))
     }
 

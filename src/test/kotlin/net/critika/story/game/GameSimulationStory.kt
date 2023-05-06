@@ -83,7 +83,8 @@ class GameSimulationStory : KoinComponent {
             game.players.find { it.id == playerId }?.apply { role = winningRole }
         }
 
-        // 9) the end result should be the result of GameUseCase.finish which is a map of winningRole to List<PlayerResponse>
+        // 9) the end result should be the result of GameUseCase.finish
+        // which is a map of winningRole to List<PlayerResponse>
         val result = gameSteps.finish(UUID.fromString(game.id), winningRole)
         val winners = result[winningRole]
 
