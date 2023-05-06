@@ -16,7 +16,6 @@ import net.critika.infrastructure.Security
 import net.critika.infrastructure.getUserId
 import net.critika.infrastructure.validation.validate
 import net.critika.usecase.user.AuthUseCase
-import net.critika.usecase.user.UserSettingsUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
