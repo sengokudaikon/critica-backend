@@ -35,4 +35,6 @@ class User(
     var role by Users.role
     val tokens by UserToken referrersOn UserTokens.userId
     val settings by UserSetting referrersOn UserSettings.userId
+    var created by Users.createdAt
+    var updated by Users.updatedAt
 }

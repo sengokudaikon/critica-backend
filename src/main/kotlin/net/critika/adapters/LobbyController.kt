@@ -98,7 +98,7 @@ class LobbyController(
     @ProtectedRoute("jwt-user-provider")
     @Put("api/lobby/{lobbyId}/addGame")
     suspend fun addGame(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val id = call.receive<LobbyQuery>()
             val time = call.request.queryParameters["time"]
 
@@ -116,7 +116,7 @@ class LobbyController(
     @ProtectedRoute("jwt-user-provider")
     @Put("api/lobby/{lobbyId}/removeGame/{gameId}")
     suspend fun removeGame(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val id = call.receive<LobbyQuery>()
             val gameId = call.receive<GameQuery>()
             val lobbyWithoutGame = useCase.removeGame(id.lobbyId.toJavaUUID(), UUID.fromString(gameId.gameId))
@@ -130,7 +130,7 @@ class LobbyController(
     @ProtectedRoute("jwt-user-provider")
     @Put("api/lobby/{lobbyId}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val id = call.parameters["lobbyId"].toString()
             val playerName = call.receive<PlayerNameQuery>().playerName
             if (playerName == null) {
@@ -163,7 +163,7 @@ class LobbyController(
     @ProtectedRoute("jwt-user-provider")
     @Put("api/lobby/{lobbyId}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val id = call.receive<LobbyQuery>()
             val playerId = call.receive<PlayerQuery>()
 
@@ -175,7 +175,7 @@ class LobbyController(
     @ProtectedRoute("jwt-user-provider")
     @Put("api/lobby/{lobbyId}/removePlayer")
     suspend fun removePlayer(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val id = call.receive<LobbyQuery>()
             val playerName = call.request.queryParameters["playerName"]
             if (playerName == null) {
@@ -191,7 +191,7 @@ class LobbyController(
     @ProtectedRoute("jwt-user-provider")
     @Put("api/lobby/{lobbyId}/removePlayer/{playerId}")
     suspend fun removePlayerById(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val id = call.receive<LobbyQuery>()
             val playerId = call.receive<PlayerQuery>()
 

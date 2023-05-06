@@ -9,12 +9,12 @@ import net.critika.domain.PlayerStatus
 import net.critika.domain.events.model.DayEvent
 import net.critika.domain.events.model.DayStage
 import net.critika.domain.events.model.NightEvent
+import net.critika.domain.events.repository.EventRepository
 import net.critika.persistence.db.DayEvents
 import net.critika.persistence.db.NightEvents
 import net.critika.persistence.db.Players
 import net.critika.persistence.exception.PlayerException
 import net.critika.persistence.exception.StageException
-import net.critika.persistence.repository.EventRepositoryImpl
 import net.critika.persistence.repository.GameRepository
 import net.critika.persistence.repository.PlayerRepository
 import org.jetbrains.exposed.sql.and
@@ -22,7 +22,7 @@ import java.util.*
 
 @Suppress("TooManyFunctions")
 class StageUseCase(
-    private val eventRepository: EventRepositoryImpl,
+    private val eventRepository: EventRepository,
     private val playerRepository: PlayerRepository,
     private val gameRepository: GameRepository,
 ) {
@@ -196,19 +196,34 @@ class StageUseCase(
     }
 
     private suspend fun votingPhase(game: Game, day: DayEvent): GameResponse {
+        if (day.candidates.count().toInt() == 1) {
+            day.stage = DayStage.END
+            eventRepository.save(day)
+            if (day.day > 0) {
+                game.playersEliminated.plus(eliminatePlayer(day.candidates.first().player.id.value))
+            }
+            return eventRepository.startNight(game, day.day + 1)
+        }
+
         val voteGroups = day.votes.groupBy { it.target }
         val maxVotes = voteGroups.values.maxOf { it.size }
         val maxVotedTargets = voteGroups.filterValues { it.size == maxVotes }.keys
 
-        if (maxVotedTargets.size == 1) {
+        return if (maxVotedTargets.isEmpty()) {
             day.stage = DayStage.END
+            eventRepository.save(day)
+            eventRepository.startNight(game, day.day + 1)
+        } else if (maxVotedTargets.size == 1) {
+            day.stage = DayStage.END
+            eventRepository.save(day)
             game.playersEliminated.plus(eliminatePlayer(maxVotedTargets.first().id.value))
+            eventRepository.startNight(game, day.day + 1)
         } else {
+            eventRepository.save(day)
             val newStage = if (day.stage == DayStage.VOTE) DayStage.REDISCUSS else DayStage.BOTH
             val newDay = eventRepository.createNewDayEvent(game, day.day, newStage, maxVotedTargets)
-            return newDay.toGameResponse(game, game.players.map { it.toResponse() })
+            newDay.toGameResponse(game, game.players.map { it.toResponse() })
         }
-        return day.toGameResponse(game, game.players.map { it.toResponse() })
     }
 
     private suspend fun eliminatePlayer(playerId: UUID): Player {
@@ -217,15 +232,17 @@ class StageUseCase(
         return playerRepository.save(player)
     }
 
-    private suspend fun selectDayStage(game: Game, day: DayEvent): GameResponse {
+    suspend fun selectDayStage(game: Game, day: DayEvent): GameResponse {
         return when (day.stage) {
             DayStage.DISCUSS -> {
                 day.stage = DayStage.VOTE
+                eventRepository.save(day)
                 day.toGameResponse(game, game.players.map { it.toResponse() })
             }
             DayStage.VOTE, DayStage.REVOTE -> votingPhase(game, day)
             DayStage.REDISCUSS -> {
                 day.stage = DayStage.REVOTE
+                eventRepository.save(day)
                 day.toGameResponse(game, game.players.map { it.toResponse() })
             }
             DayStage.BOTH -> {
@@ -234,6 +251,7 @@ class StageUseCase(
 
                 if (totalVotes > nonEliminatedPlayers / 2) {
                     day.stage = DayStage.END
+                    eventRepository.save(day)
                     game.playersEliminated.plus(
                         day.candidates.map {
                             eliminatePlayer(it.id.value)
@@ -241,10 +259,12 @@ class StageUseCase(
                     )
                 } else {
                     day.stage = DayStage.END
+                    eventRepository.save(day)
                 }
                 day.toGameResponse(game, game.players.map { it.toResponse() })
             }
             DayStage.END -> {
+                eventRepository.save(day)
                 eventRepository.startNight(game, day.day)
             }
         }

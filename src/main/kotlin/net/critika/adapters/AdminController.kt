@@ -35,12 +35,12 @@ class AdminController(
 
     @ProtectedRoute("jwt-user-provider")
     @Post("/api/admin/users/{userId}/promote")
-    suspend fun promoteUserToAdmin(call: ApplicationCall) {
+    suspend fun promoteUserToHost(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {
             val userId = call.receive<UserQuery>()
             validate(userId)
-            adminUseCase.promoteUserToAdmin(UUID.fromString(userId.id))
-            call.respond(HttpStatusCode.OK, "User promoted to admin")
+            adminUseCase.promoteUserToHost(UUID.fromString(userId.id))
+            call.respond(HttpStatusCode.OK, "User promoted to host")
         }
     }
 

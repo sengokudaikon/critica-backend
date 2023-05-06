@@ -10,9 +10,10 @@ import net.critika.domain.GameStatus
 import net.critika.domain.Player
 import net.critika.domain.PlayerRole
 import net.critika.domain.PlayerStatus
-import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserRole
+import net.critika.domain.user.repository.UserRepository
 import net.critika.persistence.exception.PlayerException
+import net.critika.persistence.exception.UserException
 import net.critika.persistence.repository.GameRepository
 import net.critika.persistence.repository.LobbyRepository
 import net.critika.persistence.repository.PlayerRepository
@@ -27,12 +28,13 @@ class GameUseCase(
     private val repository: GameRepository,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
+    private val userRepository: UserRepository,
     private val userStatisticsUseCase: UserStatisticsUseCase,
 ) {
     suspend fun assignHost(gameId: UUID, hostId: UUID) {
         val game = repository.get(gameId)
-        val host = User[hostId]
-        require(host.role == UserRole.ADMIN) { "Player is not host" }
+        val host = userRepository.findById(hostId) ?: throw UserException.NotFound("User not found")
+        require(host.role == UserRole.HOST) { "Player is not host" }
         game.host = host
         repository.update(game, status = GameStatus.WAITING)
     }
@@ -60,7 +62,7 @@ class GameUseCase(
     suspend fun start(gameId: UUID): Either<Exception, Game> {
         val game = repository.get(gameId)
         game.lobby.players.apply { minus(game.players) }
-        return if (game.status != GameStatus.CREATED) {
+        return if (game.status != GameStatus.CREATED || game.status != GameStatus.WAITING) {
             BadRequestException("Game is already started").left()
         } else {
             repository.update(game, status = GameStatus.STARTED).right()

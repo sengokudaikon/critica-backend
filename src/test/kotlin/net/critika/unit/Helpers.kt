@@ -55,6 +55,8 @@ object Helpers {
             on { date } doReturn LocalDateTime.now()
             on { status } doReturn GameStatus.WAITING
             on { players } doReturn emptySized()
+            on { dayEvents } doReturn emptySized()
+            on { nightEvents } doReturn emptySized()
         }
     }
 

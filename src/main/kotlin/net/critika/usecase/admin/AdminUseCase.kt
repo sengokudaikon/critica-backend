@@ -16,9 +16,9 @@ class AdminUseCase(
         return userSettingsRepository.findUsersRequestingPromotion().map { it.toResponse() }
     }
 
-    suspend fun promoteUserToAdmin(userId: UUID) {
+    suspend fun promoteUserToHost(userId: UUID) {
         val user = userRepository.findById(userId) ?: throw UserException.NotFound("User not found")
-        userRepository.promoteToAdmin(user)
+        userRepository.promoteToHost(user)
         userSettingsRepository.updatePromotion(userId, null)
     }
 

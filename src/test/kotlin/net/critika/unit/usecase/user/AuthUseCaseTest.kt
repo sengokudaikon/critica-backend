@@ -43,13 +43,13 @@ class AuthUseCaseTest {
     @Test
     fun `register success`() = runBlocking {
         // Given
-        val request = CreateAccount("username", "email@example.com", "password")
+        val request = CreateAccount("email@example.com", "password", "username", "playerName")
         val encodedPassword = "encoded_password"
         val createdUser = getMockUser()
         val mockId: EntityID<UUID> = mock()
         val userRating: UserRating = mock()
         val userSettings: UserSetting = mock()
-        whenever(userRepository.create(any(), any(), any())).thenReturn(createdUser)
+        whenever(userRepository.create(any(), any(), any(), any())).thenReturn(createdUser)
         whenever(passwordEncoder.encode(any())).thenReturn(encodedPassword)
         whenever(userStatisticsUseCase.createUserRating(any())).thenReturn(userRating)
         whenever(userSettingsUseCase.createUserSettings(any(), any())).thenReturn(userSettings)
@@ -58,7 +58,7 @@ class AuthUseCaseTest {
         val result = authUseCase.register(request)
 
         // Then
-        verify(userRepository, times(1)).create(request.username, request.email, encodedPassword)
+        verify(userRepository, times(1)).create(request.username, request.email, request.playerName, encodedPassword)
         verify(passwordEncoder, times(1)).encode(request.password)
         verify(userStatisticsUseCase, times(1)).createUserRating(createdUser.id.value)
         verify(userSettingsUseCase, times(1)).createUserSettings(createdUser.id.value)
@@ -74,7 +74,7 @@ class AuthUseCaseTest {
         whenever(passwordEncoder.verify(request.password, user.password)).thenReturn(true)
 
         // When
-        val result = authUseCase.signIn(request)
+        val result = authUseCase.signIn(request.email, request.username, request.password)
 
         // Then
         request.email?.let { verify(userRepository, times(1)).findByEmail(it) }
@@ -91,7 +91,7 @@ class AuthUseCaseTest {
         whenever(passwordEncoder.verify(request.password, user.password)).thenReturn(true)
 
         // When
-        val result = authUseCase.signIn(request)
+        val result = authUseCase.signIn(request.email, request.username, request.password)
 
         // Then
         request.username?.let { verify(userRepository, times(1)).findByUsername(it) }
@@ -105,7 +105,7 @@ class AuthUseCaseTest {
         val request = SignIn(null, null, "password")
 
         // When
-        val result = authUseCase.signIn(request)
+        val result = authUseCase.signIn(request.email, request.username, request.password)
 
         // Then
         verify(userRepository, never()).findByEmail(any())
@@ -125,7 +125,7 @@ class AuthUseCaseTest {
         whenever(passwordEncoder.verify(request.password, user.password)).thenReturn(false)
 
         // When
-        val result = authUseCase.signIn(request)
+        val result = authUseCase.signIn(request.email, request.username, request.password)
 
         // Then
         request.email?.let { verify(userRepository, times(1)).findByEmail(it) }

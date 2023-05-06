@@ -17,6 +17,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.joda.time.DateTime
 import org.koin.core.annotation.Single
+import java.time.LocalDateTime
 import java.util.*
 
 @Single
@@ -28,6 +29,8 @@ class UserRatingRepositoryImpl : UserRatingRepository {
             bonusPoints = 0
             malusPoints = 0
             bestMovePoints = 0
+            createdAt = LocalDateTime.now()
+            updatedAt = LocalDateTime.now()
         }
     }.await()
 
@@ -40,6 +43,7 @@ class UserRatingRepositoryImpl : UserRatingRepository {
     }.await()
 
     override suspend fun updateUserRating(userRating: UserRating) = suspendedTransactionAsync {
+        userRating.updatedAt = LocalDateTime.now()
         userRating.flush()
         userRating
     }.await()
@@ -58,8 +62,13 @@ class UserRatingRepositoryImpl : UserRatingRepository {
                 gamesWon = 0
                 gamesTotal = 0
                 bonusPoints = 0
+                createdAt = LocalDateTime.now()
+                updatedAt = LocalDateTime.now()
             }
+            stat.flush()
             userRating.roleStatistics.plus(stat)
+            userRating.updatedAt = LocalDateTime.now()
+            userRating.flush()
             stat
         }.await()
     }
@@ -75,6 +84,7 @@ class UserRatingRepositoryImpl : UserRatingRepository {
     }
 
     override suspend fun updateRoleStatistic(roleStatistic: RoleStatistic) = suspendedTransactionAsync {
+        roleStatistic.updatedAt = LocalDateTime.now()
         roleStatistic.flush()
         roleStatistic
     }.await()

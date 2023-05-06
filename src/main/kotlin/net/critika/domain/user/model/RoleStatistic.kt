@@ -24,4 +24,6 @@ class RoleStatistic(id: EntityID<UUID>) : UUIDEntity(id) {
     var gamesWon by RoleStatistics.gamesWon
     var gamesTotal by RoleStatistics.gamesTotal
     var bonusPoints by RoleStatistics.bonusPoints
+    var createdAt by RoleStatistics.createdAt
+    var updatedAt by RoleStatistics.updatedAt
 }

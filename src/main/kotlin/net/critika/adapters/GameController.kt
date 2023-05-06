@@ -40,7 +40,7 @@ class GameController(
     @ProtectedRoute("jwt-user-provider")
     @Put("/api/game/{id}/host")
     suspend fun setHost(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val gameId = call.receive<GameQuery>()
             val hostId = call.receive<UserQuery>()
             validate(gameId)
@@ -61,7 +61,7 @@ class GameController(
     @ProtectedRoute("jwt-user-provider")
     @Post("/api/game/{id}/start")
     suspend fun startGame(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val gameId = call.receive<GameQuery>()
             val game = gameUseCase.start(UUID.fromString(gameId.gameId))
             call.respond(game)
@@ -71,7 +71,7 @@ class GameController(
     @ProtectedRoute("jwt-user-provider")
     @Put("/api/game/{id}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val gameId = call.receive<GameQuery>()
             val playerName = call.receiveParameters()["playerName"].toString()
             validate(PlayerNameQuery(playerName))
@@ -84,7 +84,7 @@ class GameController(
     @ProtectedRoute("jwt-user-provider")
     @Put("/api/game/{id}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val gameId = call.receive<GameQuery>()
             validate(gameId)
             val playerId = call.receive<PlayerQuery>()
@@ -98,7 +98,7 @@ class GameController(
     @ProtectedRoute("jwt-user-provider")
     @Put("/api/game/{id}/removePlayer/{playerId}")
     suspend fun removePlayer(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val gameId = call.receive<GameQuery>()
             val playerId = call.receive<PlayerQuery>()
             gameUseCase.removePlayerById(UUID.fromString(gameId.gameId), UUID.fromString(playerId.playerId))
@@ -110,7 +110,7 @@ class GameController(
     @ProtectedRoute("jwt-user-provider")
     @Post("/api/game/{id}/finish")
     suspend fun finishGame(call: ApplicationCall) {
-        call.authorize(listOf(UserRole.ADMIN, UserRole.OWNER), authPrincipality.userRepository) {
+        call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
             val gameId = call.receive<GameQuery>()
             val winner = call.receive<String>()
             val game = gameUseCase.finish(UUID.fromString(gameId.gameId), PlayerRole.valueOf(winner))

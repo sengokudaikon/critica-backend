@@ -131,6 +131,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt-jvm:2.2.4")
     implementation("app.softwork:kotlinx-uuid-core:0.0.18")
     implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
+    implementation("com.google.firebase:firebase-admin:9.1.1")
 
     // annotations
     ksp("io.insert-koin:koin-ksp-compiler:1.1.1")

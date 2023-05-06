@@ -27,7 +27,7 @@ class GameSimulationStory : KoinComponent {
     @Test
     fun `simulate game process`() = runBlocking {
         // 1) user1 registers
-        val user1 = userSteps.register("test@mail.ru", "user1", "password").getOrNull()
+        val user1 = userSteps.register("test@mail.ru", "user1", "playerName", "password").getOrNull()
         if (user1 == null) {
             assert(false)
             return@runBlocking
@@ -63,7 +63,7 @@ class GameSimulationStory : KoinComponent {
         )
 
         users.forEach { username ->
-            userSteps.register("$username@mail.ru", username, "password")
+            userSteps.register("$username@mail.ru", username, username, "password")
             lobbySteps.addPlayer(UUID.fromString(lobby.id), username)
             val user = userSteps.login(null, username, "password").getOrNull() ?: return@forEach
             gameSteps.joinGame(user.id.value, UUID.fromString(game.id))

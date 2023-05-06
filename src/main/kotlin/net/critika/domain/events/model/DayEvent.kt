@@ -22,6 +22,7 @@ class DayEvent(
 
     fun toResponse(): DayStageResponse {
         return DayStageResponse(
+            stage = this.stage,
             dayNumber = this.day,
             candidates = this.candidates.map { it.toResponse() },
             votes = this.votes.map { it.toResponse() },

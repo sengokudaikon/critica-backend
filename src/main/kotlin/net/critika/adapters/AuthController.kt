@@ -27,7 +27,6 @@ import java.util.*
 class AuthController(
     private val authUseCase: AuthUseCase,
 ) : KoinComponent {
-    private val settingsUseCase: UserSettingsUseCase by inject()
     private val security: Security by inject()
 
     @Post("/api/auth/register")
@@ -48,7 +47,6 @@ class AuthController(
         return either.fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Error during registration") },
             { user ->
-                settingsUseCase.requestEmailVerification(user.id.value)
                 call.respond(
                     HttpStatusCode.Created,
                     message = "User created successfully, verify your email to sign in",
@@ -67,7 +65,7 @@ class AuthController(
             return
         }
 
-        authUseCase.signIn(request).fold(
+        authUseCase.signIn(request.email, request.username, request.password).fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Invalid credentials") },
             { user ->
                 val accessToken = security.generateAccessToken(user.id.value)

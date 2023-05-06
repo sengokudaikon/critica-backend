@@ -5,5 +5,7 @@ CREATE TABLE IF NOT EXISTS user_ratings (
     bonus_points int NOT NULL,
     malus_points int NOT NULL,
     best_move_points int NOT NULL,
+    created_at date NOT NULL DEFAULT NOW(),
+    updated_at date NOT NULL DEFAULT NOW(),
     foreign key (user_id) references users(id) on delete cascade on update cascade
 )

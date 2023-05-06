@@ -29,4 +29,6 @@ class UserRating(id: EntityID<UUID>) : UUIDEntity(id) {
     var malusPoints by UserRatings.malusPoints
     var bestMovePoints by UserRatings.bestMovePoints
     val roleStatistics by RoleStatistic referrersOn RoleStatistics.userRatingId
+    var createdAt by UserRatings.createdAt
+    var updatedAt by UserRatings.updatedAt
 }

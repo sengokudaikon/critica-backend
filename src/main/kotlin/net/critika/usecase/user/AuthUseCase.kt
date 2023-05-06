@@ -4,10 +4,10 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import net.critika.application.user.command.CreateAccount
-import net.critika.application.user.command.SignIn
 import net.critika.domain.user.model.User
 import net.critika.domain.user.repository.UserRepository
 import net.critika.infrastructure.Argon2PasswordEncoder
+import net.critika.persistence.exception.UserException
 import org.koin.core.annotation.Single
 
 @Single
@@ -22,6 +22,7 @@ class AuthUseCase(
             val user = userRepository.create(
                 request.username,
                 request.email,
+                request.playerName,
                 passwordEncoder.encode(request.password),
             )
             userStatisticsUseCase.createUserRating(user.id.value)
@@ -32,20 +33,21 @@ class AuthUseCase(
         }
     }
 
-    suspend fun signIn(request: SignIn): Either<Exception, User> {
+    suspend fun signIn(email: String?, username: String?, password: String): Either<Exception, User> {
         return try {
-            if (request.email == null && request.username == null) {
+            if (email == null && username == null) {
                 Exception("Email or username must be provided").left()
             }
 
-            val user = if (request.email != null) {
-                userRepository.findByEmail(request.email)
+            val user = if (email != null) {
+                userRepository.findByEmail(email)
+            } else if (username != null) {
+                userRepository.findByUsername(username)
             } else {
-                userRepository.findByUsername(request.username!!)
+                throw UserException.NotFound("Email or username must be provided")
             }
 
-            if (user != null && passwordEncoder.verify(request.password, user.password)) {
-                userSettingsUseCase.setPlayerName(user.id.value, request.playerName)
+            if (user != null && passwordEncoder.verify(password, user.password)) {
                 user.right()
             } else {
                 Exception("Invalid username or password").left()
