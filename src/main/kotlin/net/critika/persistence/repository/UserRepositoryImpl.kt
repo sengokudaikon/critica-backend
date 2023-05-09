@@ -1,6 +1,7 @@
 package net.critika.persistence.repository
 
 import net.critika.domain.user.model.User
+import net.critika.domain.user.model.UserDeviceToken
 import net.critika.domain.user.model.UserRole
 import net.critika.domain.user.repository.UserRepository
 import net.critika.persistence.db.Users
@@ -26,9 +27,16 @@ class UserRepositoryImpl : UserRepository {
         }.await()
     }
 
-    override suspend fun create(userName: String, email: String, playerName: String, password: String): User {
+    override suspend fun create(
+        uid: String,
+        userName: String,
+        email: String,
+        playerName: String,
+        password: String,
+    ): User {
         return suspendedTransactionAsync {
             User.new(UUID.randomUUID()) {
+                this.uid = uid
                 this.username = userName
                 this.playerName = playerName
                 this.email = email
@@ -87,6 +95,28 @@ class UserRepositoryImpl : UserRepository {
         suspendedTransactionAsync {
             val user = User.findById(userId) ?: return@suspendedTransactionAsync null
             user.playerName = playerName
+            user.updated = LocalDateTime.now()
+            user
+        }.await()
+    }
+
+    override suspend fun findByUid(uid: String): User? {
+        return suspendedTransactionAsync {
+            User.find { Users.uid eq uid }.firstOrNull()
+        }.await()
+    }
+
+    override suspend fun addDeviceToken(userId: UUID, deviceToken: String) {
+        suspendedTransactionAsync {
+            val user = User.findById(userId) ?: return@suspendedTransactionAsync null
+            user.deviceTokens.plus(
+                UserDeviceToken.new {
+                    this.userId = user
+                    this.token = deviceToken
+                    this.createdAt = LocalDateTime.now()
+                    this.expiresAt = LocalDateTime.now().plusYears(1)
+                },
+            )
             user.updated = LocalDateTime.now()
             user
         }.await()

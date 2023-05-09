@@ -21,7 +21,7 @@ class GameStageController(
     private val stageUseCase: StageUseCase,
     private val authPrincipality: AuthPrincipality,
 ) {
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/bestMove/{seat}")
     suspend fun bestMove(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -37,7 +37,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/addFoul/{seat}")
     suspend fun addFoul(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -49,7 +49,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/addBonus/{seat}")
     suspend fun addBonus(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -61,7 +61,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/addOPW/{seat}")
     suspend fun addOPW(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -73,7 +73,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/startDay/{day}")
     suspend fun startDay(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -85,7 +85,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/startNight/{night}")
     suspend fun startNight(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -97,7 +97,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{nightId}/shot/{seat}")
     suspend fun shot(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -110,7 +110,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{nightId}/detective/{seat}")
     suspend fun detective(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -123,7 +123,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{nightId}/don/{seat}")
     suspend fun don(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -136,7 +136,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{dayId}/nominate/{candidate}")
     suspend fun addCandidate(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -149,7 +149,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{dayId}/remove/{candidate}")
     suspend fun removeCandidate(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -166,7 +166,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{dayId}/vote")
     suspend fun addVote(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -186,7 +186,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{stageId}/next")
     suspend fun nextStage(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -199,7 +199,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{stageId}/finish")
     suspend fun finishStage(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -212,7 +212,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/stage/{stageId}/prev")
     suspend fun prevStage(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {

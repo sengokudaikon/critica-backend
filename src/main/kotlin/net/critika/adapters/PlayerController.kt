@@ -39,7 +39,7 @@ class PlayerController(
         )
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/player")
     suspend fun getCurrentPlayer(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -47,7 +47,7 @@ class PlayerController(
         call.respond(player)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/player/enterLobby/{id}")
     suspend fun enterLobby(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -57,7 +57,7 @@ class PlayerController(
         call.respond(player)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/player/leaveLobby/{id}")
     suspend fun leaveLobby(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -67,7 +67,7 @@ class PlayerController(
         call.respond(player)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/player/enterGame/{id}")
     suspend fun enterGame(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -77,7 +77,7 @@ class PlayerController(
         call.respond(player)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/player/leaveGame")
     suspend fun leaveGame(call: ApplicationCall) {
         val userId = call.getUserId() ?: return

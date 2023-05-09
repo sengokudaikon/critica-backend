@@ -208,11 +208,35 @@ paths:
               schema:
                 type: string
                 example: "OK"
+  /api/auth/register-firebase:
+    post:
+      tags:
+        - "Auth"
+        - "User"
+      security:
+        - FirebaseToken: [ ]
+      description: "Register a new user with Firebase token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAccount"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "OK"
   /api/auth/signIn:
     post:
       tags:
         - "Auth"
         - "User"
+      security:
+        - FirebaseToken: []
       description: "Log in to the application"
       requestBody:
         content:
@@ -2072,6 +2096,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    FirebaseToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Vote:
       type: object
@@ -2164,6 +2192,10 @@ components:
           type: "string"
           pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
           example: "p@ssw0rd123!"
+        playerName:
+            type: "string"
+            pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
+            example: "John Doe"
     SignIn:
       type: object
       properties:

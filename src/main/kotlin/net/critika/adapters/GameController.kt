@@ -37,7 +37,7 @@ class GameController(
         call.respond(games)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/host")
     suspend fun setHost(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -58,7 +58,7 @@ class GameController(
         call.respond(game)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/game/{id}/start")
     suspend fun startGame(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -68,7 +68,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -81,7 +81,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -95,7 +95,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("/api/game/{id}/removePlayer/{playerId}")
     suspend fun removePlayer(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -107,7 +107,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/game/{id}/finish")
     suspend fun finishGame(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {

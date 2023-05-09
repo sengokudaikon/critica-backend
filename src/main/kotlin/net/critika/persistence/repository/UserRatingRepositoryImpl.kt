@@ -10,9 +10,9 @@ import net.critika.persistence.db.UserRatings
 import net.critika.persistence.exception.UserException
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
-import org.jetbrains.exposed.sql.`java-time`.day
-import org.jetbrains.exposed.sql.`java-time`.month
-import org.jetbrains.exposed.sql.`java-time`.year
+import org.jetbrains.exposed.sql.javatime.day
+import org.jetbrains.exposed.sql.javatime.month
+import org.jetbrains.exposed.sql.javatime.year
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.joda.time.DateTime

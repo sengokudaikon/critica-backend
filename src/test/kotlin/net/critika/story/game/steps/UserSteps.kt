@@ -7,6 +7,7 @@ import net.critika.domain.user.model.User
 import net.critika.usecase.user.AuthUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.util.*
 
 open class UserSteps : KoinComponent {
     private val userUseCase: AuthUseCase by inject()
@@ -18,11 +19,11 @@ open class UserSteps : KoinComponent {
         playerName: String,
         password: String,
     ): Either<Exception, User> {
-        return userUseCase.register(CreateAccount(email, password, username, playerName))
+        return userUseCase.register(UUID.randomUUID().toString(), CreateAccount(email, password, username, playerName))
     }
 
     @Step("Login user {username}")
     open suspend fun login(email: String?, username: String?, password: String): Either<Exception, User> {
-        return userUseCase.signIn(email, username, password)
+        return userUseCase.signIn(UUID.randomUUID().toString(), email, username, password)
     }
 }

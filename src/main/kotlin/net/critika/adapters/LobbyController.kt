@@ -36,7 +36,7 @@ class LobbyController(
 ) : KoinComponent {
     private val authPrincipality: AuthPrincipality by inject()
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/lobby/{lobbyId}/players")
     suspend fun getPlayers(call: ApplicationCall) {
         val id = call.receive<LobbyQuery>()
@@ -44,7 +44,7 @@ class LobbyController(
         call.respond(players)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/lobby/{lobbyId}")
     suspend fun getLobby(call: ApplicationCall) {
         val id = call.receive<LobbyQuery>()
@@ -52,14 +52,14 @@ class LobbyController(
         call.respond(lobby)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/lobby/list")
     suspend fun listLobbies(call: ApplicationCall) {
         val lobbies = crud.list()
         call.respond(lobbies)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/lobby/{lobbyId}/games")
     suspend fun getGames(call: ApplicationCall) {
         val id = call.receive<LobbyQuery>()
@@ -67,7 +67,7 @@ class LobbyController(
         call.respond(games)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("api/lobby/create")
     suspend fun createLobby(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {
@@ -84,7 +84,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/delete")
     suspend fun deleteLobby(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {
@@ -95,7 +95,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/addGame")
     suspend fun addGame(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -113,7 +113,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/removeGame/{gameId}")
     suspend fun removeGame(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -127,7 +127,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -143,7 +143,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/addTemporaryPlayer")
     suspend fun addTemporaryPlayer(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {
@@ -160,7 +160,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -172,7 +172,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/removePlayer")
     suspend fun removePlayer(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {
@@ -188,7 +188,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Put("api/lobby/{lobbyId}/removePlayer/{playerId}")
     suspend fun removePlayerById(call: ApplicationCall) {
         call.authorize(listOf(UserRole.HOST, UserRole.OWNER), authPrincipality.userRepository) {

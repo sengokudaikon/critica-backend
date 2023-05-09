@@ -2,7 +2,7 @@ package net.critika.persistence.db
 
 import net.critika.domain.PlayerRole
 import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.javatime.datetime
 
 object RoleStatistics : UUIDTable("user_role_statistics") {
     val userRatingId = reference("userRatingId", UserRatings)

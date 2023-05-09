@@ -3,13 +3,16 @@ package net.critika.infrastructure
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import io.github.cdimascio.dotenv.Dotenv
-import net.critika.domain.user.model.User
 import net.critika.infrastructure.AES256Util.decrypt
 import net.critika.infrastructure.AES256Util.encrypt
 import net.critika.persistence.repository.UserTokenRepositoryImpl
 import org.joda.time.LocalDateTime
 import org.koin.core.annotation.Single
+import java.io.FileInputStream
 import java.util.*
 
 @Single
@@ -75,8 +78,11 @@ class Security(
         tokenRepository.deleteTokens(userId)
     }
 
-    suspend fun getUserByRefreshToken(refreshToken: String): User {
-        val token = tokenRepository.findByToken(refreshToken)
-        return token.userId
+    fun configureFirebase(): FirebaseApp {
+        val serviceAccount = FileInputStream("./serviceAccountKey.json")
+        val options = FirebaseOptions.builder()
+            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .build()
+        return FirebaseApp.initializeApp(options)
     }
 }

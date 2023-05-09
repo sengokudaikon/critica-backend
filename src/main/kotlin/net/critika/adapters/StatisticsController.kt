@@ -11,7 +11,7 @@ import net.critika.usecase.stats.StatisticsUseCase
 class StatisticsController(
     private val statisticsUseCase: StatisticsUseCase,
 ) {
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/statistics/rating/week/{week}")
     suspend fun getRatingForWeek(call: ApplicationCall) {
         val week = call.parameters["week"]?.toIntOrNull() ?: return
@@ -19,7 +19,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/statistics/rating/day/{day}")
     suspend fun getRatingForDay(call: ApplicationCall) {
         val day = call.parameters["day"]?.toIntOrNull() ?: return
@@ -27,7 +27,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/statistics/rating/year/{year}")
     suspend fun getRatingForYear(call: ApplicationCall) {
         val year = call.parameters["year"]?.toIntOrNull() ?: return
@@ -35,7 +35,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/statistics/rating/month/{month}")
     suspend fun getRatingForMonth(call: ApplicationCall) {
         val month = call.parameters["month"]?.toIntOrNull() ?: return
@@ -43,7 +43,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("api/statistics/rating/season")
     suspend fun getRatingForSeason(call: ApplicationCall) {
         val rating = statisticsUseCase.getRatingForSeason()

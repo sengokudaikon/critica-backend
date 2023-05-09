@@ -2,6 +2,7 @@ package net.critika.domain.user.model
 
 import net.critika.application.user.response.UserResponse
 import net.critika.domain.Player
+import net.critika.persistence.db.UserDeviceTokens
 import net.critika.persistence.db.UserSettings
 import net.critika.persistence.db.UserTokens
 import net.critika.persistence.db.Users
@@ -28,12 +29,14 @@ class User(
 
     companion object : UUIDEntityClass<User>(Users)
 
+    var uid by Users.uid
     var username by Users.username
     var playerName by Users.playerName
     var email by Users.email
     var password by Users.hashedPassword
     var role by Users.role
     val tokens by UserToken referrersOn UserTokens.userId
+    val deviceTokens by UserDeviceToken referrersOn UserDeviceTokens.userId
     val settings by UserSetting referrersOn UserSettings.userId
     var created by Users.createdAt
     var updated by Users.updatedAt

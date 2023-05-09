@@ -27,7 +27,7 @@ class AuthUseCaseTest {
     private val userStatisticsUseCase: UserStatisticsUseCase = mock()
     private val userSettingsUseCase: UserSettingsUseCase = mock()
     private val passwordEncoder: Argon2PasswordEncoder = mock()
-
+    val uid = UUID.randomUUID().toString()
     private val authUseCase = AuthUseCase(
         userRepository,
         userStatisticsUseCase,
@@ -49,16 +49,16 @@ class AuthUseCaseTest {
         val mockId: EntityID<UUID> = mock()
         val userRating: UserRating = mock()
         val userSettings: UserSetting = mock()
-        whenever(userRepository.create(any(), any(), any(), any())).thenReturn(createdUser)
+        whenever(userRepository.create(any(), any(), any(), any(), any())).thenReturn(createdUser)
         whenever(passwordEncoder.encode(any())).thenReturn(encodedPassword)
         whenever(userStatisticsUseCase.createUserRating(any())).thenReturn(userRating)
         whenever(userSettingsUseCase.createUserSettings(any(), any())).thenReturn(userSettings)
         whenever(createdUser.id).thenReturn(mockId)
         // When
-        val result = authUseCase.register(request)
+        val result = authUseCase.register(uid, request)
 
         // Then
-        verify(userRepository, times(1)).create(request.username, request.email, request.playerName, encodedPassword)
+        verify(userRepository, times(1)).create(uid, request.username, request.email, request.playerName, encodedPassword)
         verify(passwordEncoder, times(1)).encode(request.password)
         verify(userStatisticsUseCase, times(1)).createUserRating(createdUser.id.value)
         verify(userSettingsUseCase, times(1)).createUserSettings(createdUser.id.value)
@@ -74,7 +74,7 @@ class AuthUseCaseTest {
         whenever(passwordEncoder.verify(request.password, user.password)).thenReturn(true)
 
         // When
-        val result = authUseCase.signIn(request.email, request.username, request.password)
+        val result = authUseCase.signIn(uid, request.email, request.username, request.password)
 
         // Then
         request.email?.let { verify(userRepository, times(1)).findByEmail(it) }
@@ -91,7 +91,7 @@ class AuthUseCaseTest {
         whenever(passwordEncoder.verify(request.password, user.password)).thenReturn(true)
 
         // When
-        val result = authUseCase.signIn(request.email, request.username, request.password)
+        val result = authUseCase.signIn(uid, request.email, request.username, request.password)
 
         // Then
         request.username?.let { verify(userRepository, times(1)).findByUsername(it) }
@@ -105,7 +105,7 @@ class AuthUseCaseTest {
         val request = SignIn(null, null, "password")
 
         // When
-        val result = authUseCase.signIn(request.email, request.username, request.password)
+        val result = authUseCase.signIn(uid, request.email, request.username, request.password)
 
         // Then
         verify(userRepository, never()).findByEmail(any())
@@ -125,7 +125,7 @@ class AuthUseCaseTest {
         whenever(passwordEncoder.verify(request.password, user.password)).thenReturn(false)
 
         // When
-        val result = authUseCase.signIn(request.email, request.username, request.password)
+        val result = authUseCase.signIn(uid, request.email, request.username, request.password)
 
         // Then
         request.email?.let { verify(userRepository, times(1)).findByEmail(it) }
@@ -143,7 +143,7 @@ class AuthUseCaseTest {
         whenever(userRepository.findByUsername(user.username)).thenReturn(user)
 
         // When
-        val exists = authUseCase.checkIfExists(user.username, user.email)
+        val exists = authUseCase.checkIfExists(uid, user.username, user.email)
 
         // Then
         verify(userRepository, times(1)).findByEmail(user.email)
@@ -158,7 +158,7 @@ class AuthUseCaseTest {
         whenever(userRepository.findByUsername(any())).thenReturn(null)
 
         // When
-        val exists = authUseCase.checkIfExists("nonexistent_username", "nonexistent_email@example.com")
+        val exists = authUseCase.checkIfExists(UUID.randomUUID().toString(), "nonexistent_username", "nonexistent_email@example.com")
 
         // Then
         verify(userRepository, times(1)).findByEmail("nonexistent_email@example.com")

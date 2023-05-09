@@ -23,7 +23,7 @@ class UserController(
     private val userSettingsUseCase: UserSettingsUseCase,
     private val userStatisticsUseCase: UserStatisticsUseCase,
 ) {
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/user/statistics")
     suspend fun getStatistics(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -31,7 +31,7 @@ class UserController(
         call.respond(statistics.toResponse())
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/change-username")
     suspend fun changeUsername(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -49,7 +49,7 @@ class UserController(
         call.respond(HttpStatusCode.OK)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/change-password")
     suspend fun changePassword(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -59,7 +59,7 @@ class UserController(
         call.respond(HttpStatusCode.OK)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/verify-email")
     suspend fun verifyEmail(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -68,7 +68,7 @@ class UserController(
         call.respond(HttpStatusCode.OK)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/request-promotion")
     suspend fun requestPromotion(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -76,7 +76,7 @@ class UserController(
         call.respond(HttpStatusCode.OK, user)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/change-language")
     suspend fun changeLanguage(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -85,7 +85,7 @@ class UserController(
         call.respond(HttpStatusCode.OK)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/change-push-notifications")
     suspend fun changePushNotifications(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -94,7 +94,7 @@ class UserController(
         call.respond(HttpStatusCode.OK)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/user/settings/change-public-visibility")
     suspend fun changePublicVisibility(call: ApplicationCall) {
         val userId = call.getUserId() ?: return
@@ -103,7 +103,7 @@ class UserController(
         call.respond(HttpStatusCode.OK)
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/user/settings")
     suspend fun getUserSettings(call: ApplicationCall) {
         val userId = call.getUserId() ?: return

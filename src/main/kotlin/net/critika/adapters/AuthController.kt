@@ -5,16 +5,21 @@ import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.RouteController
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
 import net.critika.application.user.command.CreateAccount
 import net.critika.application.user.command.RefreshToken
 import net.critika.application.user.command.SignIn
+import net.critika.application.user.command.SignInWithProviderRequest
 import net.critika.application.user.command.SignOut
+import net.critika.application.user.query.UserExistsQuery
 import net.critika.infrastructure.Security
+import net.critika.infrastructure.authentication.FirebasePrincipal
 import net.critika.infrastructure.getUserId
 import net.critika.infrastructure.validation.validate
+import net.critika.persistence.exception.UserException
 import net.critika.usecase.user.AuthUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -38,11 +43,43 @@ class AuthController(
         ) {
             call.respond(HttpStatusCode.BadRequest, e.message ?: "Error during registration")
         }
-        val userExists = authUseCase.checkIfExists(request.username, request.email)
+        val uid = authUseCase.createFirebaseUser(request.email, request.username, request.password)
+        val userExists = authUseCase.checkIfExists(uid, request.username, request.email)
         if (userExists) {
             call.respond(HttpStatusCode.BadRequest, "User already exists")
         }
-        val either = authUseCase.register(request)
+        val either = authUseCase.register(uid, request)
+        return either.fold(
+            { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Error during registration") },
+            { user ->
+                call.respond(
+                    HttpStatusCode.Created,
+                    message = mapOf(
+                        "message" to "User created successfully, verify your email to sign in",
+                        "uid" to uid,
+                    ),
+                )
+            },
+        )
+    }
+
+    @ProtectedRoute("firebase")
+    @Post("/api/auth/register-firebase")
+    suspend fun registerWithFirebase(call: ApplicationCall) {
+        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
+        val request = call.receive<CreateAccount>()
+        try {
+            validate(request)
+        } catch (
+            e: Exception,
+        ) {
+            call.respond(HttpStatusCode.BadRequest, e.message ?: "Error during registration")
+        }
+        val userExists = authUseCase.checkIfExists(uid, request.username, request.email)
+        if (userExists) {
+            call.respond(HttpStatusCode.BadRequest, "User already exists")
+        }
+        val either = authUseCase.register(uid, request)
         return either.fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Error during registration") },
             { user ->
@@ -54,17 +91,19 @@ class AuthController(
         )
     }
 
+    @ProtectedRoute("firebase")
     @Post("/api/auth/signIn")
     suspend fun signIn(call: ApplicationCall) {
+        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
         val request = call.receive<SignIn>()
         validate(request)
-        val userExists = authUseCase.checkIfExists(request.username, request.email)
+        val userExists = authUseCase.checkIfExists(uid, request.username, request.email)
         if (!userExists) {
             call.respond(HttpStatusCode.BadRequest, "User doesn't exist")
             return
         }
 
-        authUseCase.signIn(request.email, request.username, request.password).fold(
+        authUseCase.signIn(uid, request.email, request.username, request.password).fold(
             { error -> call.respond(HttpStatusCode.BadRequest, error.message ?: "Invalid credentials") },
             { user ->
                 val accessToken = security.generateAccessToken(user.id.value)
@@ -81,7 +120,35 @@ class AuthController(
         )
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("firebase")
+    @Post("/api/auth/userExists")
+    suspend fun getUserExists(call: ApplicationCall) {
+        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
+        val request = call.receive<UserExistsQuery>()
+        validate(request)
+        val userDoesntExist = authUseCase.checkIfExists(uid, request.username, request.email)
+        call.respond(HttpStatusCode.OK, userDoesntExist)
+    }
+
+    @ProtectedRoute("firebase")
+    @Post("/api/auth/signInProvider")
+    suspend fun signInWithProvider(call: ApplicationCall) {
+        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
+        val request = call.receive<SignInWithProviderRequest>()
+        val email = request.email
+        val username = request.username
+        val deviceToken = request.deviceToken
+
+        val userExists = authUseCase.checkIfExists(uid, null, request.email)
+        if (!userExists) {
+            call.respond(HttpStatusCode.BadRequest, "User doesn't exist")
+            return
+        }
+
+        authUseCase.signInProvider(uid, email, username, deviceToken)
+    }
+
+    @ProtectedRoute("jwt")
     @Post("/api/auth/refresh")
     suspend fun refresh(call: ApplicationCall) {
         val request = call.receive<RefreshToken>()

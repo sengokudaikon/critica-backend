@@ -1,7 +1,7 @@
 package net.critika.persistence.db
 
 import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.javatime.datetime
 
 object UserRatings : UUIDTable("user_ratings") {
     val userId = reference("user_id", Users)

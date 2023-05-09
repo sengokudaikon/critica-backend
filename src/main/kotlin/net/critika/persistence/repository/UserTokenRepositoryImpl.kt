@@ -8,7 +8,7 @@ import net.critika.persistence.db.UserTokens
 import net.critika.persistence.exception.UserException
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
-import java.util.UUID
+import java.util.*
 
 @Single
 class UserTokenRepositoryImpl : UserTokenRepository {

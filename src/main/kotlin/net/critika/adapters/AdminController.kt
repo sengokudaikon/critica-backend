@@ -24,7 +24,7 @@ class AdminController(
     private val authPrincipality: AuthPrincipality,
 ) {
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Get("/api/admin/users/requesting-promotion")
     suspend fun listUsersRequestingPromotion(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {
@@ -33,7 +33,7 @@ class AdminController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/admin/users/{userId}/promote")
     suspend fun promoteUserToHost(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {
@@ -44,7 +44,7 @@ class AdminController(
         }
     }
 
-    @ProtectedRoute("jwt-user-provider")
+    @ProtectedRoute("jwt")
     @Post("/api/admin/users/{userId}/reject")
     suspend fun rejectPromotion(call: ApplicationCall) {
         call.authorize(listOf(UserRole.OWNER), authPrincipality.userRepository) {

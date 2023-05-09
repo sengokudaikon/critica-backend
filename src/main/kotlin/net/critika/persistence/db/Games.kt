@@ -2,7 +2,7 @@ package net.critika.persistence.db
 
 import net.critika.domain.GameStatus
 import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.javatime.datetime
 
 object Games : UUIDTable("games") {
     val hostId = reference("host_id", Users).nullable()

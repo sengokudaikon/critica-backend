@@ -33,6 +33,9 @@ import net.critika.config.AppConfig
 import net.critika.di.MainModule
 import net.critika.infrastructure.DatabaseFactory
 import net.critika.infrastructure.Security
+import net.critika.infrastructure.authentication.FirebaseAdmin
+import net.critika.infrastructure.authentication.FirebasePrincipal
+import net.critika.infrastructure.authentication.firebase
 import net.critika.infrastructure.handleErrors
 import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
@@ -60,8 +63,19 @@ fun Application.main() {
 
     DatabaseFactory.init(runMigrations = runMigrations, dbConfig = config.dbConfig())
     val security: Security by inject()
+    FirebaseAdmin.init()
     install(Authentication) {
-        jwt("jwt-user-provider") {
+        firebase {
+            validate { firebaseToken ->
+                val userId = firebaseToken.uid
+                if (userId != null) {
+                    FirebasePrincipal(userId)
+                } else {
+                    null
+                }
+            }
+        }
+        jwt("jwt") {
             verifier(security.configureSecurity())
             realm = "critica.io"
             validate { credential ->
@@ -188,6 +202,7 @@ private fun Application.configCache() {
                 ContentType.Text.CSS -> io.ktor.http.content.CachingOptions(
                     CacheControl.MaxAge(maxAgeSeconds = MAX_AGE_SECONDS),
                 )
+
                 else -> null
             }
         }
