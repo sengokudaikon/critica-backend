@@ -109,11 +109,11 @@ private fun Application.configRouting() {
                 }
             }
         }
-        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {
+        swaggerUI(path = "/api/docs", swaggerFile = "openapi/documentation.yaml") {
             version = "4.15.5"
             configLoaders
         }
-        openAPI(path = "openapi", swaggerFile = "openapi/documentation.yaml") {
+        openAPI(path = "/api/openapi", swaggerFile = "openapi/documentation.yaml") {
             codegen = StaticHtmlCodegen()
         }
 

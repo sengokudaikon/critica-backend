@@ -27,7 +27,7 @@ object FirebaseAdmin {
         return FirebaseApp.initializeApp(
             FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
-                .build()
+                .build(),
         )
     }
 
