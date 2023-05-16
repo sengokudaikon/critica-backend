@@ -8,7 +8,7 @@ COPY build.gradle.kts ./
 COPY settings.gradle.kts ./
 COPY gradle.properties ./
 COPY detekt.yaml ./
-COPY .env ./.env
+COPY .env.local ./.env
 
 # Download and cache the project dependencies
 RUN ./gradlew build --no-daemon
