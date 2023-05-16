@@ -21,7 +21,7 @@ paths:
               examples:
                 Example#1:
                   value: "/static/index.html"
-  /health:
+  /api/health:
     get:
       description: ""
       responses:

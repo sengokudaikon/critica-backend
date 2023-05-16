@@ -117,7 +117,7 @@ private fun Application.configRouting() {
             codegen = StaticHtmlCodegen()
         }
 
-        get("/health") {
+        get("/api/health") {
             call.respond(HttpStatusCode.OK, "Healthy")
         }
     }
