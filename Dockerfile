@@ -21,6 +21,6 @@ RUN ./gradlew buildFatJar --no-daemon
 
 # Expose the application port
 EXPOSE 8080
-
+RUN echo $FIREBASE_SERVICE_ACCOUNT > ./src/main/resources/adminsdk.json
 # Run the application
 CMD ["java", "-jar", "build/libs/critika.jar"]
