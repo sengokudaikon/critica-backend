@@ -8,7 +8,7 @@ COPY build.gradle.kts ./
 COPY settings.gradle.kts ./
 COPY gradle.properties ./
 COPY detekt.yaml ./
-COPY .env.local ./.env
+COPY .env ./.env
 
 # Download and cache the project dependencies
 RUN ./gradlew build --no-daemon
@@ -21,6 +21,6 @@ RUN ./gradlew buildFatJar --no-daemon
 
 # Expose the application port
 EXPOSE 8080
-RUN echo $FIREBASE_SERVICE_ACCOUNT > ./src/main/resources/adminsdk.json
+RUN echo FIREBASE_SERVICE_ACCOUNT | base64 -d > ./src/main/resources/adminsdk.json
 # Run the application
 CMD ["java", "-jar", "build/libs/critika.jar"]
