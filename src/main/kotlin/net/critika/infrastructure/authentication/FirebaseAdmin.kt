@@ -8,16 +8,29 @@ import com.google.firebase.auth.UserRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
+import java.util.*
 
 object FirebaseAdmin {
-    private val serviceAccount: InputStream? =
-        this::class.java.classLoader.getResourceAsStream("adminsdk.json")
+    fun init(): FirebaseApp {
+        var serviceAccountStream: InputStream? =
+            this::class.java.classLoader.getResourceAsStream("adminsdk.json")
 
-    private val options: FirebaseOptions = FirebaseOptions.builder()
-        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-        .build()
+        if (serviceAccountStream == null) {
+            val serviceAccountContent = Base64.getDecoder().decode(System.getenv("FIREBASE_SERVICE_ACCOUNT"))
+            if (serviceAccountContent != null) {
+                serviceAccountStream = serviceAccountContent.inputStream()
+            } else {
+                throw Exception("FIREBASE_SERVICE_ACCOUNT is not set")
+            }
+        }
 
-    fun init(): FirebaseApp = FirebaseApp.initializeApp(options)
+        return FirebaseApp.initializeApp(
+            FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
+                .build()
+        )
+    }
+
     suspend fun createUserWithEmailAndPassword(email: String, username: String, password: String): UserRecord {
         return withContext(Dispatchers.IO) {
             FirebaseAuth.getInstance().createUser(
