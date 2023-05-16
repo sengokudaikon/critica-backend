@@ -117,12 +117,6 @@ private fun Application.configRouting() {
             codegen = StaticHtmlCodegen()
         }
 
-        static("/static") {
-            resources("static")
-        }
-
-        get("/") { call.respondRedirect("/static/index.html") }
-
         get("/health") {
             call.respond(HttpStatusCode.OK, "Healthy")
         }

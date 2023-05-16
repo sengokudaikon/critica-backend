@@ -120,14 +120,12 @@ class AuthController(
         )
     }
 
-    @ProtectedRoute("firebase")
     @Post("/api/auth/userExists")
     suspend fun getUserExists(call: ApplicationCall) {
-        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
         val request = call.receive<UserExistsQuery>()
         validate(request)
-        val userDoesntExist = authUseCase.checkIfExists(uid, request.username, request.email)
-        call.respond(HttpStatusCode.OK, userDoesntExist)
+        val userExists = request.email?.let { authUseCase.checkIfMailExists(it) } ?: false
+        call.respond(HttpStatusCode.OK, userExists)
     }
 
     @ProtectedRoute("firebase")
