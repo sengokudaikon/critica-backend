@@ -9,6 +9,8 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import net.critika.application.user.command.CreateAccount
 import net.critika.application.user.command.RefreshToken
 import net.critika.application.user.command.SignIn
@@ -66,7 +68,8 @@ class AuthController(
     @ProtectedRoute("firebase")
     @Post("/api/auth/register-firebase")
     suspend fun registerWithFirebase(call: ApplicationCall) {
-        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
+        val uid =
+            call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
         val request = call.receive<CreateAccount>()
         try {
             validate(request)
@@ -94,7 +97,8 @@ class AuthController(
     @ProtectedRoute("firebase")
     @Post("/api/auth/signIn")
     suspend fun signIn(call: ApplicationCall) {
-        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
+        val uid =
+            call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
         val request = call.receive<SignIn>()
         validate(request)
         val userExists = authUseCase.checkIfExists(uid, request.username, request.email)
@@ -122,16 +126,18 @@ class AuthController(
 
     @Post("/api/auth/userExists")
     suspend fun getUserExists(call: ApplicationCall) {
-        val request = call.receive<UserExistsQuery>()
-        validate(request)
-        val userExists = request.email?.let { authUseCase.checkIfMailExists(it) } ?: false
+        val request = call.receive<String>()
+        val query = Json.decodeFromString<UserExistsQuery>(request)
+        validate(query)
+        val userExists = query.email?.let { authUseCase.checkIfMailExists(it) } ?: false
         call.respond(HttpStatusCode.OK, userExists)
     }
 
     @ProtectedRoute("firebase")
     @Post("/api/auth/signInProvider")
     suspend fun signInWithProvider(call: ApplicationCall) {
-        val uid = call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
+        val uid =
+            call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
         val request = call.receive<SignInWithProviderRequest>()
         val email = request.email
         val username = request.username

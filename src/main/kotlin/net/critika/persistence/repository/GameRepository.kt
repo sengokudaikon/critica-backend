@@ -8,7 +8,7 @@ import net.critika.domain.PlayerRole
 import net.critika.domain.user.model.User
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.koin.core.annotation.Single
-import java.util.UUID
+import java.util.*
 
 @Single
 class GameRepository {
@@ -40,6 +40,7 @@ class GameRepository {
             Game.findById(id) ?: throw NotFoundException()
         }.await()
     }
+
     suspend fun getGames(): List<Game> {
         return suspendedTransactionAsync {
             Game.all().toList()

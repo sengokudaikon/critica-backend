@@ -8,6 +8,7 @@ import io.ktor.server.response.*
 import net.critika.domain.user.model.UserRole
 import net.critika.persistence.repository.UserRepositoryImpl
 import java.util.*
+
 suspend inline fun ApplicationCall.authorize(
     requiredRoles: List<UserRole>,
     userRepository: UserRepositoryImpl,

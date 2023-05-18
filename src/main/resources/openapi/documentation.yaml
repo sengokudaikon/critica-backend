@@ -208,6 +208,25 @@ paths:
               schema:
                 type: string
                 example: "OK"
+  /api/auth/userExists:
+    post:
+      description: ""
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: "string"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                type: "boolean"
   /api/auth/register-firebase:
     post:
       tags:
@@ -294,7 +313,7 @@ paths:
           in: "query"
           required: false
           schema:
-              type: "string"
+            type: "string"
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -1178,7 +1197,7 @@ paths:
           in: "query"
           required: true
           schema:
-              type: "string"
+            type: "string"
       responses:
         "200":
           description: "OK"
@@ -2193,9 +2212,9 @@ components:
           pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
           example: "p@ssw0rd123!"
         playerName:
-            type: "string"
-            pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
-            example: "John Doe"
+          type: "string"
+          pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
+          example: "John Doe"
     SignIn:
       type: object
       properties:
@@ -2281,23 +2300,23 @@ components:
         candidates:
           type: "array"
           items:
-              $ref: "#/components/schemas/PlayerResponse"
+            $ref: "#/components/schemas/PlayerResponse"
         votes:
           type: "array"
           items:
             $ref: "#/components/schemas/DayVoteResponse"
     NightStageResponse:
-        type: "object"
-        properties:
-          dayNumber:
-            type: "integer"
-            format: "int32"
-          mafiaShot:
-            $ref: "#/components/schemas/PlayerResponse"
-          detectiveCheck:
-            $ref: "#/components/schemas/PlayerResponse"
-          donCheck:
-              $ref: "#/components/schemas/PlayerResponse"
+      type: "object"
+      properties:
+        dayNumber:
+          type: "integer"
+          format: "int32"
+        mafiaShot:
+          $ref: "#/components/schemas/PlayerResponse"
+        detectiveCheck:
+          $ref: "#/components/schemas/PlayerResponse"
+        donCheck:
+          $ref: "#/components/schemas/PlayerResponse"
     GameResponse:
       type: "object"
       properties:
