@@ -1,13 +1,13 @@
 package net.critika.domain.user.model
 
-import net.critika.persistence.db.UserVerificationCodes
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import kotlinx.uuid.UUID
+import kotlinx.uuid.exposed.KotlinxUUIDEntity
+import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
+import net.critika.persistence.user.entity.UserVerificationCodes
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
 
-class VerificationCode(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<VerificationCode>(UserVerificationCodes)
+class VerificationCode(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
+    companion object : KotlinxUUIDEntityClass<VerificationCode>(UserVerificationCodes)
 
     var userId by User referencedOn UserVerificationCodes.userId
     var code by UserVerificationCodes.code

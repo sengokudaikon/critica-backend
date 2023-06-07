@@ -3,21 +3,29 @@ package net.critika.unit.usecase.game
 import io.qameta.allure.Description
 import io.qameta.allure.Feature
 import kotlinx.coroutines.runBlocking
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.application.game.command.GameCommand
+import net.critika.application.game.usecase.GameUseCase
+import net.critika.application.user.usecase.UserStatisticsUseCase
 import net.critika.domain.*
+import net.critika.domain.club.model.Game
+import net.critika.domain.club.model.GameStatus
+import net.critika.domain.club.model.Lobby
+import net.critika.domain.gameprocess.model.Player
+import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserRole
-import net.critika.domain.user.repository.UserRepository
-import net.critika.persistence.db.UserSettings
-import net.critika.persistence.db.Users
-import net.critika.persistence.repository.GameRepository
-import net.critika.persistence.repository.LobbyRepository
-import net.critika.persistence.repository.PlayerRepository
+import net.critika.domain.user.repository.UserRepositoryPort
+import net.critika.persistence.club.repository.GameRepository
+import net.critika.persistence.club.repository.LobbyRepository
+import net.critika.persistence.club.repository.PlayerRepository
+import net.critika.persistence.user.entity.UserSettings
+import net.critika.persistence.user.entity.Users
 import net.critika.unit.Helpers.getMockGame
 import net.critika.unit.Helpers.getMockLobby
 import net.critika.unit.Helpers.getMockPlayer
 import net.critika.unit.Helpers.getMockUser
-import net.critika.usecase.game.GameUseCase
-import net.critika.usecase.user.UserStatisticsUseCase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -34,7 +42,7 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import org.testng.annotations.BeforeTest
-import java.util.*
+import kotlin.random.Random
 
 @Testcontainers
 class GameUseCaseTest {
@@ -50,7 +58,7 @@ class GameUseCaseTest {
 
     @Mock
     private var userStatisticsUseCase: UserStatisticsUseCase = mock()
-    private var userRepository: UserRepository = mock()
+    private var userRepository: UserRepositoryPort = mock()
 
     private lateinit var gameUseCase: GameUseCase
 
@@ -98,8 +106,8 @@ class GameUseCaseTest {
     @Test
     fun `assignHost success`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
-        val hostId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
+        val hostId = UUID.generateUUID(Random)
         val mockUser = getMockUser()
         `when`(mockUser.role).thenReturn(UserRole.HOST)
         `when`(userRepository.findById(any())).thenReturn(mockUser)
@@ -110,7 +118,7 @@ class GameUseCaseTest {
 
         // Then
         Mockito.verify(repository, Mockito.times(1)).get(gameId)
-        Mockito.verify(repository, Mockito.times(1)).update(mockGame, GameStatus.WAITING)
+        Mockito.verify(repository, Mockito.times(1)).update(GameCommand.Update(mockGame, mockGame.host, GameStatus.WAITING))
     }
 
     @Feature("Get Game")
@@ -118,7 +126,7 @@ class GameUseCaseTest {
     @Test
     fun `get success`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
         `when`(mockGame.id.value).thenReturn(gameId)
         `when`(repository.get(gameId)).thenReturn(mockGame)
 
@@ -136,14 +144,14 @@ class GameUseCaseTest {
     fun `list success`(): Unit = runBlocking {
         // Given
         val games = listOf(mockGame)
-        `when`(repository.getGames()).thenReturn(games)
+        `when`(repository.list()).thenReturn(games)
 
         // When
         val result = gameUseCase.list()
 
         // Then
         assertEquals(games, result)
-        Mockito.verify(repository, Mockito.times(1)).getGames()
+        Mockito.verify(repository, Mockito.times(1)).list()
     }
 
     @Feature("Start Game")
@@ -151,7 +159,7 @@ class GameUseCaseTest {
     @Test
     fun `start success`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
         `when`(mockGame.lobby).thenReturn(mockLobby)
         `when`(repository.get(gameId)).thenReturn(mockGame)
 
@@ -161,7 +169,7 @@ class GameUseCaseTest {
         // Then
         assertTrue(result.isRight())
         Mockito.verify(repository, Mockito.times(1)).get(gameId)
-        Mockito.verify(repository, Mockito.times(1)).update(mockGame, GameStatus.STARTED)
+        Mockito.verify(repository, Mockito.times(1)).update(GameCommand.Update(mockGame, mockGame.host, GameStatus.STARTED))
     }
 
     @Feature("Finish Game")
@@ -169,7 +177,7 @@ class GameUseCaseTest {
     @Test
     fun `finish success`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
         val winningTeam = PlayerRole.MAFIA
         `when`(mockGame.lobby).thenReturn(mockLobby)
         `when`(repository.get(gameId)).thenReturn(mockGame)
@@ -180,6 +188,6 @@ class GameUseCaseTest {
         // Then
         assertTrue(resultMap.containsKey(winningTeam))
         Mockito.verify(repository, Mockito.times(1)).get(gameId)
-        Mockito.verify(repository, Mockito.times(1)).update(mockGame, GameStatus.FINISHED, winningTeam)
+        Mockito.verify(repository, Mockito.times(1)).update(GameCommand.Update(mockGame, mockGame.host, GameStatus.FINISHED, winningTeam))
     }
 }

@@ -164,6 +164,471 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/UserResponse"
+  /api/club/{clubId}:
+    get:
+      description: ""
+      tags:
+        - "Club"
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/ClubQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ClubResponse"
+  /api/club/{clubId}/createLobby:
+    post:
+      description: ""
+      tags:
+        - "Club"
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/ClubQuery"
+        required: true
+      responses:
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LobbyResponse"
+  /api/club/create:
+    post:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: "Creates a new club"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                description:
+                  type: "string"
+                country:
+                  type: "string"
+                city:
+                  type: "string"
+                address:
+                  type: "string"
+                creatorId:
+                  type: "string"
+                logo:
+                  type: "string"
+                ruleSet:
+                  type: "string"
+        required: true
+      responses:
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClubResponse"
+  /api/club/{clubId}/games:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClubQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/GameResponse"
+  /api/club/{clubId}/join:
+    put:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClubMembershipQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClubResponse"
+  /api/club/{clubId}/leave:
+    put:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClubMembershipQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClubResponse"
+  /api/club/{clubId}/lobbies:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClubQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/LobbyResponse"
+  /api/club/{clubId}/members:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClubQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+  /api/club/{id}/rating:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "from"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "to"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/club/{id}/rating/day/{day}:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "day"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/club/{id}/rating/month/{month}:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "month"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/club/{id}/rating/season:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/club/{id}/rating/week/{week}:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "week"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/club/{id}/rating/year/{year}:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "year"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RatingResponse"
+  /api/club/{clubId}/update:
+    put:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Update"
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You must be authenticated to access this resource."
+                Example#2:
+                  value: "No user id found"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You do not have the required role to access this resource."
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClubResponse"
+  /api/club/list:
+    get:
+      tags:
+        - "Club"
+      security:
+        - AccessToken: [ ]
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ClubResponse"
   /api/auth/refresh:
     post:
       tags:
@@ -210,7 +675,9 @@ paths:
                 example: "OK"
   /api/auth/userExists:
     post:
-      description: ""
+      description: "Check if user exists in the database"
+      tags:
+        - "Auth"
       requestBody:
         content:
           'application/json':
@@ -331,10 +798,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{dayId}/nominate/{candidate}:
+  /api/stage/{dayId}/nominate/{candidate}:
     put:
       tags:
-        - "Game"
         - "Stage"
       security:
         - AccessToken: [ ]
@@ -372,10 +838,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{dayId}/remove/{candidate}:
+  /api/stage/{dayId}/remove/{candidate}:
     put:
       tags:
-        - "Game"
         - "Stage"
       security:
         - AccessToken: [ ]
@@ -413,10 +878,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{dayId}/vote:
+  /api/stage/{dayId}/vote:
     put:
       tags:
-        - "Game"
         - "Stage"
       security:
         - AccessToken: [ ]
@@ -455,10 +919,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{nightId}/detective/{seat}:
+  /api/stage/{nightId}/detective/{seat}:
     put:
       tags:
-        - "Game"
         - "Stage"
       security:
         - AccessToken: [ ]
@@ -496,10 +959,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{nightId}/don/{seat}:
+  /api/stage/{nightId}/don/{seat}:
     put:
       tags:
-        - "Game"
         - "Stage"
       description: "During the night, the Don can check the role of one player. For now, the information about the role is not returned."
       security:
@@ -537,10 +999,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{nightId}/shot/{seat}:
+  /api/stage/{nightId}/shot/{seat}:
     put:
       tags:
-        - "Game"
         - "Stage"
       description: "During the night, mafia shoots one player. If the mafia misses, this endpoint should not be called."
       security:
@@ -683,10 +1144,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{stageId}/finish:
+  /api/stage/{stageId}/finish:
     put:
       tags:
-        - "Game"
         - "Stage"
       description: "Finish the stage by id"
       security:
@@ -719,10 +1179,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{stageId}/next:
+  /api/stage/{stageId}/next:
     put:
       tags:
-        - "Game"
         - "Stage"
       description: "Go to next stage"
       security:
@@ -755,10 +1214,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/stage/{stageId}/prev:
+  /api/stage/{stageId}/prev:
     put:
       tags:
-        - "Game"
         - "Stage"
       description: "Cycle back to the previous stage"
       security:
@@ -2005,110 +2463,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RatingResponse"
-  /api/statistics/rating/day/{day}:
-    get:
-      tags:
-        - "Statistics"
-      security:
-        - AccessToken: [ ]
-      description: "Get daily rating"
-      parameters:
-        - name: "day"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
-  /api/statistics/rating/month/{month}:
-    get:
-      tags:
-        - "Statistics"
-      security:
-        - AccessToken: [ ]
-      description: "Get monthly rating"
-      parameters:
-        - name: "month"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
-  /api/statistics/rating/season:
-    get:
-      tags:
-        - "Statistics"
-      security:
-        - AccessToken: [ ]
-      description: "Get seasonal rating"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
-  /api/statistics/rating/week/{week}:
-    get:
-      tags:
-        - "Statistics"
-      security:
-        - AccessToken: [ ]
-      description: "Get weekly rating"
-      parameters:
-        - name: "week"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
-  /api/statistics/rating/year/{year}:
-    get:
-      tags:
-        - "Statistics"
-      security:
-        - AccessToken: [ ]
-      description: "Get annual rating"
-      parameters:
-        - name: "year"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
+
 components:
   securitySchemes:
     AccessToken:
@@ -2120,6 +2475,75 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    UUID:
+      type: "object"
+      properties: { }
+    ClubQuery:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+    ClubResponse:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        creator:
+          $ref: "#/components/schemas/UserResponse"
+        members:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/UserResponse"
+        lobbies:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/LobbyResponse"
+        games:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GameResponse"
+        createdAt:
+          type: "string"
+        updatedAt:
+          type: "string"
+        country:
+          type: "string"
+        city:
+          type: "string"
+        address:
+          type: "string"
+        logo:
+          type: "string"
+        description:
+          type: "string"
+        ruleSet:
+          type: "string"
+    ClubMembershipQuery:
+      type: "object"
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+    Update:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        country:
+          type: "string"
+        city:
+          type: "string"
+        address:
+          type: "string"
+        ruleSet:
+          type: "string"
+        logo:
+          type: "string"
     Vote:
       type: object
       properties:

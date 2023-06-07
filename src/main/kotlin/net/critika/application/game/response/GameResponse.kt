@@ -2,7 +2,7 @@ package net.critika.application.game.response
 
 import kotlinx.serialization.Serializable
 import net.critika.application.player.response.PlayerResponse
-import net.critika.application.stage.StageResponse
+import net.critika.application.stage.response.StageResponse
 import net.critika.application.vote.DayVoteResponse
 
 @Serializable

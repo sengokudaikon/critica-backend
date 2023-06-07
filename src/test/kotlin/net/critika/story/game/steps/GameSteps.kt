@@ -1,13 +1,13 @@
 package net.critika.story.game.steps
 
 import io.qameta.allure.Step
-import net.critika.domain.Player
-import net.critika.domain.PlayerRole
-import net.critika.usecase.game.GameUseCase
-import net.critika.usecase.player.PlayerUseCase
+import net.critika.domain.gameprocess.model.Player
+import net.critika.domain.gameprocess.model.PlayerRole
+import net.critika.application.game.usecase.GameUseCase
+import net.critika.application.player.usecase.PlayerUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.*
+import kotlinx.uuid.UUID
 
 class GameSteps : KoinComponent {
     private val gameUseCase: GameUseCase by inject()

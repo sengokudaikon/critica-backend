@@ -1,11 +1,14 @@
 package net.critika.unit.usecase.lobby
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.application.lobby.command.LobbyCommand
 import net.critika.application.lobby.response.LobbyResponse
-import net.critika.persistence.repository.LobbyRepository
+import net.critika.application.lobby.usecase.LobbyCrudUseCase
+import net.critika.persistence.club.repository.LobbyRepository
 import net.critika.unit.Helpers.getMockLobby
 import net.critika.unit.Helpers.getMockUser
-import net.critika.usecase.lobby.LobbyCrudUseCase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
-import java.util.*
+import kotlin.random.Random
 
 class LobbyCrudUseCaseTest {
     private lateinit var lobbyRepository: LobbyRepository
@@ -29,32 +32,33 @@ class LobbyCrudUseCaseTest {
 
     @Test
     fun `create lobby`() = runBlocking {
-        val lobbyId = UUID.randomUUID().toString()
+        val clubId = UUID.generateUUID(Random)
+        val lobbyId = UUID.generateUUID(Random)
         val user = getMockUser()
-        val dateM = mock<Date>().toString()
+        val dateM = mock<LocalDateTime>().toString()
         val lobby = getMockLobby()
         whenever(lobby.creator).thenReturn(user)
 
         val lobbyResponse = LobbyResponse(
-            lobbyId,
+            lobbyId.toString(),
             dateM,
             user.id.toString(),
         )
 
-        whenever(lobbyRepository.create(any(), LocalDateTime.parse(dateM))).thenReturn(lobby)
+        whenever(lobbyRepository.create(any())).thenReturn(lobby)
 
-        val result = lobbyCrudUseCase.create(user.id.value, LocalDateTime.parse(dateM))
+        val result = lobbyCrudUseCase.create(LobbyCommand.Create(user.id.value, dateM, clubId))
 
         assertEquals(lobbyResponse, result)
     }
 
     @Test
     fun `get lobby`() = runBlocking {
-        val lobbyId = UUID.randomUUID()
+        val lobbyId = UUID.generateUUID(Random)
         val lobby = getMockLobby()
         val user = getMockUser()
         whenever(lobby.creator).thenReturn(user)
-        val date = mock<Date>().toString()
+        val date = mock<LocalDateTime>().toString()
         val lobbyResponse = LobbyResponse(
             lobbyId.toString(),
             date,
@@ -70,13 +74,13 @@ class LobbyCrudUseCaseTest {
 
     @Test
     fun `list lobbies`() = runBlocking {
-        val lobbyId = UUID.randomUUID()
+        val lobbyId = UUID.generateUUID(Random)
         val lobby = getMockLobby()
         val lobby2 = getMockLobby()
         val user = getMockUser()
         whenever(lobby.creator).thenReturn(user)
-        val date = mock<Date>().toString()
-        val date2 = Mockito.mock<Date>().toString()
+        val date = mock<LocalDateTime>().toString()
+        val date2 = Mockito.mock<LocalDateTime>().toString()
         val lobbyResponse1 = LobbyResponse(
             lobbyId.toString(),
             date,
@@ -84,7 +88,7 @@ class LobbyCrudUseCaseTest {
         )
         val lobbyResponse2 =
             LobbyResponse(
-                UUID.randomUUID().toString(),
+                UUID.generateUUID(Random).toString(),
                 date2,
                 user.id.toString(),
             )
@@ -98,7 +102,7 @@ class LobbyCrudUseCaseTest {
 
     @Test
     fun `delete lobby`() = runBlocking {
-        val lobbyId = UUID.randomUUID()
+        val lobbyId = UUID.generateUUID(Random)
 
         lobbyCrudUseCase.delete(lobbyId)
 

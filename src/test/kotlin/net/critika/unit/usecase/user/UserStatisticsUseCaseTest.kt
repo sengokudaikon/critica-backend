@@ -1,13 +1,15 @@
 package net.critika.unit.usecase.user
 
 import kotlinx.coroutines.runBlocking
-import net.critika.domain.PlayerRole
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.application.user.usecase.UserStatisticsUseCase
+import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.RoleStatistic
 import net.critika.domain.user.model.UserRating
-import net.critika.domain.user.repository.UserRatingRepository
+import net.critika.domain.user.repository.UserRatingRepositoryPort
 import net.critika.unit.Helpers.getMockUser
 import net.critika.unit.Helpers.getMockUserRating
-import net.critika.usecase.user.UserStatisticsUseCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -17,10 +19,10 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.util.*
+import kotlin.random.Random
 
 class UserStatisticsUseCaseTest {
-    private lateinit var userRatingRepository: UserRatingRepository
+    private lateinit var userRatingRepository: UserRatingRepositoryPort
     private lateinit var userStatisticsUseCase: UserStatisticsUseCase
 
     @BeforeEach
@@ -31,7 +33,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `create user rating`() = runBlocking {
-        val userIdMock = UUID.randomUUID()
+        val userIdMock = UUID.generateUUID(Random)
         val user = getMockUser()
         val userRating = getMockUserRating()
         whenever(userRating.userId).doReturn(user)
@@ -45,7 +47,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `get user rating`() = runBlocking {
-        val userRatingId = UUID.randomUUID()
+        val userRatingId = UUID.generateUUID(Random)
         val user = getMockUser()
         val userRating = getMockUserRating()
         whenever(userRating.userId).doReturn(user)
@@ -59,7 +61,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `update user rating`(): Unit = runBlocking {
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val userRating = mock<UserRating>().apply {
             this.bonusPoints = 130
             this.bestMovePoints = 10
@@ -74,7 +76,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `delete user rating`(): Unit = runBlocking {
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
 
         userStatisticsUseCase.deleteUserRating(userId)
 
@@ -83,7 +85,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `create role statistic`() = runBlocking {
-        val userRatingId = UUID.randomUUID()
+        val userRatingId = UUID.generateUUID(Random)
         val userRating = getMockUserRating()
         val roleStatistic = mock<RoleStatistic> {
             on { id } doReturn mock<EntityID<UUID>>()
@@ -103,7 +105,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `get role statistics by user rating id`() = runBlocking {
-        val userRatingId = UUID.randomUUID()
+        val userRatingId = UUID.generateUUID(Random)
         val userRating = getMockUserRating()
         val roleStatistic1 = mock<RoleStatistic> {
             on { id } doReturn mock<EntityID<UUID>>()
@@ -132,8 +134,8 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `update role statistic`(): Unit = runBlocking {
-        val roleStatisticId = UUID.randomUUID()
-        val userRatingId = UUID.randomUUID()
+        val roleStatisticId = UUID.generateUUID(Random)
+        val userRatingId = UUID.generateUUID(Random)
         val userRating = getMockUserRating()
         val roleStatistic = mock<RoleStatistic> {
             on { id } doReturn mock<EntityID<UUID>>()
@@ -151,7 +153,7 @@ class UserStatisticsUseCaseTest {
 
     @Test
     fun `delete role statistic`(): Unit = runBlocking {
-        val roleStatisticId = UUID.randomUUID()
+        val roleStatisticId = UUID.generateUUID(Random)
 
         userStatisticsUseCase.deleteRoleStatistic(roleStatisticId)
 

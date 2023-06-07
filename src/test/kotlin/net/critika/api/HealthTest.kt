@@ -14,7 +14,7 @@ class HealthTest {
         application {
             main()
         }
-        client.get("/health").apply {
+        client.get("/api/health").apply {
             assertEquals(HttpStatusCode.OK, this.status)
         }
     }

@@ -1,16 +1,19 @@
 package net.critika.unit.usecase.user
 
 import kotlinx.coroutines.runBlocking
-import net.critika.domain.Language
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.application.user.command.UserSettingsCommand
+import net.critika.application.user.usecase.UserSettingsUseCase
+import net.critika.domain.user.model.Language
 import net.critika.domain.user.model.UserSetting
-import net.critika.domain.user.repository.UserRepository
-import net.critika.domain.user.repository.UserSettingsRepository
+import net.critika.domain.user.repository.UserRepositoryPort
+import net.critika.domain.user.repository.UserSettingsRepositoryPort
 import net.critika.domain.user.repository.UserVerificationCodeRepository
 import net.critika.infrastructure.Argon2PasswordEncoder
-import net.critika.persistence.db.UserSettings
-import net.critika.persistence.db.Users
+import net.critika.persistence.user.entity.UserSettings
+import net.critika.persistence.user.entity.Users
 import net.critika.unit.Helpers.getMockUser
-import net.critika.usecase.user.UserSettingsUseCase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -27,15 +30,15 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import org.testng.annotations.BeforeTest
-import java.util.*
+import kotlin.random.Random
 
 @Testcontainers
 class UserSettingsUseCaseTest {
 
-    private lateinit var userRepository: UserRepository
+    private lateinit var userRepository: UserRepositoryPort
     private lateinit var passwordEncoder: Argon2PasswordEncoder
     private lateinit var verificationCodeRepository: UserVerificationCodeRepository
-    private lateinit var userSettingsRepository: UserSettingsRepository
+    private lateinit var userSettingsRepository: UserSettingsRepositoryPort
 
     private lateinit var userSettingsUseCase: UserSettingsUseCase
 
@@ -81,7 +84,7 @@ class UserSettingsUseCaseTest {
     @Test
     fun `createUserSettings successfully`() = runBlocking {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val language = "English"
         val expectedUserSetting: UserSetting = mock<UserSetting>().apply {
             this.language = Language.ENGLISH
@@ -90,21 +93,21 @@ class UserSettingsUseCaseTest {
         whenever(userSettingsRepository.createUserSettings(userId, language)).thenReturn(expectedUserSetting)
 
         // When
-        val result = userSettingsUseCase.createUserSettings(userId, language)
+        val result = userSettingsUseCase.create(UserSettingsCommand.Create(userId, language)).getOrNull()
 
         // Then
         verify(userSettingsRepository).createUserSettings(userId, language)
-        assertEquals(expectedUserSetting, result)
+        assertEquals(expectedUserSetting.toResponse(), result)
     }
 
     @Test
     fun `changeUsername successfully`() = runBlocking {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val newUsername = "newUsername"
 
         // When
-        userSettingsUseCase.changeUsername(userId, newUsername)
+        userSettingsUseCase.update(UserSettingsCommand.Update.Username(userId, newUsername))
 
         // Then
         verify(userRepository).updateUsername(userId, newUsername)
@@ -113,7 +116,7 @@ class UserSettingsUseCaseTest {
     @Test
     fun `changePassword successfully`() = runBlocking {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val newPassword = "newPassword"
         val newEncodedPassword = "new_encoded_password"
         val user = getMockUser()
@@ -123,7 +126,7 @@ class UserSettingsUseCaseTest {
         whenever(passwordEncoder.encode(newPassword)).thenReturn(newEncodedPassword)
 
         // When
-        userSettingsUseCase.changePassword(userId, newPassword)
+        userSettingsUseCase.update(UserSettingsCommand.Update.Password(userId, newPassword))
 
         // Then
         verify(userRepository).findById(userId)
@@ -135,14 +138,14 @@ class UserSettingsUseCaseTest {
     @Test
     fun `changeLanguage successfully`() = runBlocking {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val newLanguage = "es"
         val user = getMockUser()
 
         whenever(userRepository.findById(userId)).thenReturn(user)
 
         // When
-        userSettingsUseCase.changeLanguage(userId, newLanguage)
+        userSettingsUseCase.update(UserSettingsCommand.Update.Language(userId, newLanguage))
 
         // Then
         verify(userRepository).findById(userId)
@@ -152,14 +155,14 @@ class UserSettingsUseCaseTest {
     @Test
     fun `changePushNotifications successfully`() = runBlocking {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val pushNotifications = true
         val user = getMockUser()
 
         whenever(userRepository.findById(userId)).thenReturn(user)
 
         // When
-        userSettingsUseCase.changePushNotifications(userId, pushNotifications)
+        userSettingsUseCase.update(UserSettingsCommand.Update.PushNotification(userId, pushNotifications))
 
         // Then
         verify(userRepository).findById(userId)
@@ -169,14 +172,14 @@ class UserSettingsUseCaseTest {
     @Test
     fun `changePublicVisibility successfully`() = runBlocking {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.generateUUID(Random)
         val publicVisibility = true
         val user = getMockUser()
 
         whenever(userRepository.findById(userId)).thenReturn(user)
 
         // When
-        userSettingsUseCase.changePublicVisibility(userId, publicVisibility)
+        userSettingsUseCase.update(UserSettingsCommand.Update.PublicVisibility(userId, publicVisibility))
 
         // Then
         verify(userRepository).findById(userId)
@@ -196,13 +199,13 @@ class UserSettingsUseCaseTest {
             on { promotion } doReturn true
         }
 
-        val userIdMock = UUID.randomUUID()
+        val userIdMock = UUID.generateUUID(Random)
 
         whenever(userRepository.findById(userIdMock)).thenReturn(user)
         whenever(userSettingsRepository.getUserSettingsByUserId(userIdMock)).thenReturn(userSetting)
 
         // When
-        val result = userSettingsUseCase.getUserSettings(userIdMock)
+        val result = userSettingsUseCase.get(userIdMock)
 
         // Then
         verify(userRepository).findById(userIdMock)

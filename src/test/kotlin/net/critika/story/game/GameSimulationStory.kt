@@ -5,7 +5,9 @@ package net.critika.story.game
 import io.qameta.allure.Feature
 import io.qameta.allure.Story
 import kotlinx.coroutines.runBlocking
-import net.critika.domain.PlayerRole
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.story.game.steps.GameSteps
 import net.critika.story.game.steps.LobbySteps
 import net.critika.story.game.steps.UserSteps
@@ -14,7 +16,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.*
+import kotlin.random.Random
 
 @Feature("Game Simulation")
 class GameSimulationStory : KoinComponent {
@@ -26,6 +28,7 @@ class GameSimulationStory : KoinComponent {
     @Story("Simulate game process")
     @Test
     fun `simulate game process`() = runBlocking {
+        val clubId = UUID.generateUUID(Random)
         // 1) user1 registers
         val user1 = userSteps.register("test@mail.ru", "user1", "playerName", "password").getOrNull()
         if (user1 == null) {
@@ -39,13 +42,13 @@ class GameSimulationStory : KoinComponent {
             assert(false)
             return@runBlocking
         }
-        val lobby = lobbySteps.create(userAdmin.id.value)
+        val lobby = lobbySteps.create(userAdmin.id.value, clubId)
 
         // 3) user1 joins lobby
-        lobbySteps.addPlayer(UUID.fromString(lobby.id), user1.username)
+        lobbySteps.addPlayer(UUID(lobby.id), user1.username)
 
         // 4) user-admin creates game
-        lobbySteps.addGame(lobby.id, "user-admin")
+        lobbySteps.addGame(UUID(lobby.id), userAdmin.id.value)
 
         val game = lobby.games.firstOrNull() ?: run {
             assert(false)
@@ -53,7 +56,7 @@ class GameSimulationStory : KoinComponent {
         }
 
         // 5) user1 joining said game
-        gameSteps.joinGame(user1.id.value, UUID.fromString(game.id))
+        gameSteps.joinGame(user1.id.value, UUID(game.id))
 
         // 6) fixtured users (9) are added to the game by user-admin
         val users = listOf(
@@ -64,13 +67,13 @@ class GameSimulationStory : KoinComponent {
 
         users.forEach { username ->
             userSteps.register("$username@mail.ru", username, username, "password")
-            lobbySteps.addPlayer(UUID.fromString(lobby.id), username)
+            lobbySteps.addPlayer(UUID(lobby.id), username)
             val user = userSteps.login(null, username, "password").getOrNull() ?: return@forEach
-            gameSteps.joinGame(user.id.value, UUID.fromString(game.id))
+            gameSteps.joinGame(user.id.value, UUID(game.id))
         }
 
         // 7) user-admin starts the game when there are enough players (10)
-        gameSteps.startGame(UUID.fromString(game.id))
+        gameSteps.startGame(UUID(game.id))
 
         // 8) some time passes, user-admin finishes the game, random 3 players were mafia and have won the game,
         // statistics for them is recorded
@@ -85,7 +88,7 @@ class GameSimulationStory : KoinComponent {
 
         // 9) the end result should be the result of GameUseCase.finish
         // which is a map of winningRole to List<PlayerResponse>
-        val result = gameSteps.finish(UUID.fromString(game.id), winningRole)
+        val result = gameSteps.finish(UUID(game.id), winningRole)
         val winners = result[winningRole]
 
         assertEquals(mafiaCount, winners?.size)

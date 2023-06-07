@@ -1,15 +1,15 @@
 package net.critika.domain.user.model
 
-import net.critika.persistence.db.UserTokens
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import kotlinx.uuid.UUID
+import kotlinx.uuid.exposed.KotlinxUUIDEntity
+import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
+import net.critika.persistence.user.entity.UserTokens
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
 
 class UserToken(
     id: EntityID<UUID>,
-) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<UserToken>(UserTokens)
+) : KotlinxUUIDEntity(id) {
+    companion object : KotlinxUUIDEntityClass<UserToken>(UserTokens)
     var token by UserTokens.token
     var userId by User referencedOn UserTokens.userId
     var createdAt by UserTokens.createdAt

@@ -1,9 +1,10 @@
 package net.critika.unit
 
-import net.critika.domain.Game
-import net.critika.domain.GameStatus
-import net.critika.domain.Lobby
-import net.critika.domain.Player
+import kotlinx.uuid.UUID
+import net.critika.domain.club.model.Game
+import net.critika.domain.club.model.GameStatus
+import net.critika.domain.club.model.Lobby
+import net.critika.domain.gameprocess.model.Player
 import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.model.UserRole
@@ -13,7 +14,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
-import java.util.*
 
 object Helpers {
 
@@ -40,7 +40,7 @@ object Helpers {
     }
 
     fun getMockLobby(): Lobby {
-        val date = mock<Date>().toString()
+        val date = mock<LocalDateTime>().toString()
         return mock<Lobby> {
             on { date } doReturn date
             on { id } doReturn mock<EntityID<UUID>>()

@@ -11,7 +11,7 @@ class FirebaseConfig(name: String?) : AuthenticationProvider.Config(name) {
         { call -> call.request.parseAuthorizationHeaderOrNull() }
 
     var firebaseAuthenticationFunction: AuthenticationFunction<FirebaseToken> = {
-        throw NotImplementedError("Firebase  auth validate function is not specified, use firebase { validate { ... } } to fix this")
+        throw NotImplementedError("Firebase  user validate function is not specified, use firebase { validate { ... } } to fix this")
     }
 
     fun validate(validate: suspend ApplicationCall.(FirebaseToken) -> FirebasePrincipal?) {

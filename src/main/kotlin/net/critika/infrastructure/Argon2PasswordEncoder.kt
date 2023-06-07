@@ -4,7 +4,8 @@ import org.bouncycastle.crypto.generators.Argon2BytesGenerator
 import org.bouncycastle.crypto.params.Argon2Parameters
 import org.koin.core.annotation.Single
 import java.security.SecureRandom
-import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Single
 class Argon2PasswordEncoder {
@@ -13,6 +14,7 @@ class Argon2PasswordEncoder {
         private const val HASH_LENGTH = 32
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun encode(plainPassword: String): String {
         val salt = ByteArray(SALT_LENGTH).also { SecureRandom().nextBytes(it) }
         val hash = ByteArray(HASH_LENGTH)
@@ -28,11 +30,12 @@ class Argon2PasswordEncoder {
         generator.init(params)
         generator.generateBytes(plainPassword.toByteArray(), hash)
 
-        return Base64.getEncoder().encodeToString(salt + hash)
+        return Base64.encode(salt + hash)
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun verify(plainPassword: String, encodedPassword: String): Boolean {
-        val decoded = Base64.getDecoder().decode(encodedPassword)
+        val decoded = Base64.decode(encodedPassword)
         val salt = decoded.copyOfRange(0, SALT_LENGTH)
         val storedHash = decoded.copyOfRange(SALT_LENGTH, SALT_LENGTH + HASH_LENGTH)
 

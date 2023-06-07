@@ -1,14 +1,13 @@
 package net.critika.application.player.response
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import net.critika.domain.PlayerRole
-import net.critika.domain.PlayerStatus
-import java.util.UUID
+import kotlinx.uuid.UUID
+import net.critika.domain.gameprocess.model.PlayerRole
+import net.critika.domain.gameprocess.model.PlayerStatus
 
 @Serializable
 data class PlayerResponse(
-    @Contextual val id: UUID,
+    val id: UUID,
     val seat: Int,
     val name: String,
     var role: PlayerRole?,

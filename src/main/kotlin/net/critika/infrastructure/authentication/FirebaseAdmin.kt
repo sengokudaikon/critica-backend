@@ -8,15 +8,17 @@ import com.google.firebase.auth.UserRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
-import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 object FirebaseAdmin {
+    @OptIn(ExperimentalEncodingApi::class)
     fun init(): FirebaseApp {
         var serviceAccountStream: InputStream? =
             this::class.java.classLoader.getResourceAsStream("adminsdk.json")
 
         if (serviceAccountStream == null) {
-            val serviceAccountContent = Base64.getDecoder().decode(System.getenv("FIREBASE_SERVICE_ACCOUNT"))
+            val serviceAccountContent = Base64.decode(System.getenv("FIREBASE_SERVICE_ACCOUNT"))
             if (serviceAccountContent != null) {
                 serviceAccountStream = serviceAccountContent.inputStream()
             } else {

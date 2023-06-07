@@ -10,7 +10,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
-import io.ktor.server.http.content.*
 import io.ktor.server.metrics.dropwizard.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cachingheaders.*
@@ -29,14 +28,14 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import kotlinx.serialization.json.Json
-import net.critika.config.AppConfig
-import net.critika.di.MainModule
-import net.critika.infrastructure.DatabaseFactory
-import net.critika.infrastructure.Security
+import net.critika.infrastructure.MainModule
 import net.critika.infrastructure.authentication.FirebaseAdmin
 import net.critika.infrastructure.authentication.FirebasePrincipal
 import net.critika.infrastructure.authentication.firebase
-import net.critika.infrastructure.handleErrors
+import net.critika.infrastructure.config.AppConfig
+import net.critika.infrastructure.config.DatabaseFactory
+import net.critika.infrastructure.config.Security
+import net.critika.infrastructure.config.handleErrors
 import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin

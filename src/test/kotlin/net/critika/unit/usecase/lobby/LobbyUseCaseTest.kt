@@ -4,21 +4,24 @@ import arrow.core.Either
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
-import net.critika.domain.Game
-import net.critika.domain.GameStatus
-import net.critika.domain.Lobby
-import net.critika.domain.Player
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.application.lobby.usecase.LobbyUseCase
+import net.critika.application.player.command.PlayerCommand
+import net.critika.domain.club.model.Game
+import net.critika.domain.club.model.GameStatus
+import net.critika.domain.club.model.Lobby
+import net.critika.domain.gameprocess.model.Player
 import net.critika.domain.user.model.User
-import net.critika.persistence.repository.GameRepository
-import net.critika.persistence.repository.LobbyRepository
-import net.critika.persistence.repository.PlayerRepository
-import net.critika.persistence.repository.UserRepositoryImpl
+import net.critika.persistence.club.repository.GameRepository
+import net.critika.persistence.club.repository.LobbyRepository
+import net.critika.persistence.club.repository.PlayerRepository
+import net.critika.persistence.user.repository.UserRepository
 import net.critika.unit.Helpers.getMockGame
 import net.critika.unit.Helpers.getMockLobby
 import net.critika.unit.Helpers.getMockLobbyWithPlayer
 import net.critika.unit.Helpers.getMockPlayer
 import net.critika.unit.Helpers.getMockUser
-import net.critika.usecase.lobby.LobbyUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
@@ -26,12 +29,12 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.time.LocalTime
-import java.util.*
+import kotlin.random.Random
 
 class LobbyUseCaseTest {
 
     private lateinit var lobbyRepository: LobbyRepository
-    private lateinit var userRepository: UserRepositoryImpl
+    private lateinit var userRepository: UserRepository
     private lateinit var gameRepository: GameRepository
     private lateinit var playerRepository: PlayerRepository
     private lateinit var lobbyUseCase: LobbyUseCase
@@ -60,9 +63,9 @@ class LobbyUseCaseTest {
     @Test
     fun `addGame success`(): Unit = runBlocking {
         // Given
-        val id = UUID.randomUUID()
+        val id = UUID.generateUUID(Random)
         val time = LocalTime.now()
-        val host = "Test Host"
+        val host = UUID.generateUUID(Random)
         val lobby = getMockLobby()
         val game = getMockGame()
         whenever(lobby.creator).thenReturn(mockUser)
@@ -86,8 +89,8 @@ class LobbyUseCaseTest {
     @Test
     fun `removeGame success`(): Unit = runBlocking {
         // Given
-        val id = UUID.randomUUID()
-        val gameId = UUID.randomUUID()
+        val id = UUID.generateUUID(Random)
+        val gameId = UUID.generateUUID(Random)
         val lobby = getMockLobby()
         val game = getMockGame().apply { status = GameStatus.WAITING }
         lobby.apply { games.plus(game) }
@@ -107,7 +110,7 @@ class LobbyUseCaseTest {
     @Test
     fun `addPlayer success`(): Unit = runBlocking {
         // Given
-        val id = UUID.randomUUID()
+        val id = UUID.generateUUID(Random)
         val playerName = "TestPlayer"
         val lobby = getMockLobby()
         val user = getMockUser().apply { username = playerName }
@@ -117,7 +120,7 @@ class LobbyUseCaseTest {
             lobby
         }
         whenever(userRepository.findByUsername(playerName)).thenReturn(user)
-        whenever(playerRepository.create(user)).thenReturn(player)
+        whenever(playerRepository.create(PlayerCommand.Create(any(), any(), any(), any()))).thenReturn(player)
 
         // When
         val result = lobbyUseCase.addPlayer(id, playerName)
@@ -125,7 +128,7 @@ class LobbyUseCaseTest {
         // Then
         verify(lobbyRepository, times(1)).get(id)
         verify(userRepository, times(1)).findByUsername(playerName)
-        verify(playerRepository, times(1)).create(user)
+        verify(playerRepository, times(1)).create((PlayerCommand.Create(user,"Test player", lobby.id.value, null)))
         result.shouldBe(Either.Right(lobby.toResponse()))
         result.getOrNull()?.players?.contains(player.toResponse())?.shouldBe(true)
     }
@@ -133,7 +136,7 @@ class LobbyUseCaseTest {
     @Test
     fun `addTemporaryPlayer success`(): Unit = runBlocking {
         // Given
-        val id = UUID.randomUUID()
+        val id = UUID.generateUUID(Random)
         val playerName = "TestPlayer"
         val lobby = getMockLobby()
         val tempPlayer = getMockPlayer().apply { name = playerName }
@@ -156,7 +159,7 @@ class LobbyUseCaseTest {
     @Test
     fun `removePlayer success`(): Unit = runBlocking {
         // Given
-        val id = UUID.randomUUID()
+        val id = UUID.generateUUID(Random)
         val playerName = "TestPlayer"
         val lobby = getMockLobby()
         val player = getMockPlayer().apply { name = playerName }
@@ -178,8 +181,8 @@ class LobbyUseCaseTest {
     @Test
     fun `removePlayerById success`(): Unit = runBlocking {
         // Given
-        val id = UUID.randomUUID()
-        val playerId = UUID.randomUUID()
+        val id = UUID.generateUUID(Random)
+        val playerId = UUID.generateUUID(Random)
         val lobby = getMockLobbyWithPlayer()
         val player = getMockPlayer()
         whenever(lobbyRepository.get(id)).thenReturn(lobby)

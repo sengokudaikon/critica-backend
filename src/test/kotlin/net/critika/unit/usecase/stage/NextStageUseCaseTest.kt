@@ -5,21 +5,26 @@ import io.kotest.matchers.shouldBe
 import io.qameta.allure.Description
 import io.qameta.allure.Feature
 import kotlinx.coroutines.runBlocking
-import net.critika.application.stage.DayStageResponse
+import kotlinx.uuid.UUID
+import kotlinx.uuid.generateUUID
+import net.critika.application.stage.response.DayStageResponse
+import net.critika.application.stage.usecase.StageUseCase
 import net.critika.domain.*
-import net.critika.domain.events.model.DayEvent
-import net.critika.domain.events.model.DayStage
-import net.critika.domain.events.model.DayVote
-import net.critika.domain.events.repository.EventRepository
+import net.critika.domain.club.model.Game
+import net.critika.domain.club.model.Lobby
+import net.critika.domain.gameprocess.model.DayEvent
+import net.critika.domain.gameprocess.model.DayStage
+import net.critika.domain.gameprocess.model.DayVote
+import net.critika.domain.gameprocess.model.Player
+import net.critika.domain.gameprocess.repository.EventRepositoryPort
 import net.critika.domain.user.model.User
-import net.critika.persistence.db.Games
-import net.critika.persistence.repository.GameRepository
-import net.critika.persistence.repository.PlayerRepository
+import net.critika.persistence.club.entity.Games
+import net.critika.persistence.club.repository.GameRepository
+import net.critika.persistence.club.repository.PlayerRepository
 import net.critika.unit.Helpers.getMockGame
 import net.critika.unit.Helpers.getMockLobby
 import net.critika.unit.Helpers.getMockPlayer
 import net.critika.unit.Helpers.getMockUser
-import net.critika.usecase.stage.StageUseCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.emptySized
@@ -31,7 +36,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import java.util.*
+import kotlin.random.Random
 
 class NextStageUseCaseTest {
 
@@ -41,7 +46,7 @@ class NextStageUseCaseTest {
     @Mock
     private var playerRepository: PlayerRepository = mock()
 
-    private var eventRepository: EventRepository = mock()
+    private var eventRepository: EventRepositoryPort = mock()
 
     private lateinit var stageUseCase: StageUseCase
 
@@ -65,8 +70,8 @@ class NextStageUseCaseTest {
     @Test
     fun `nextStage success`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
-        val stageId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
+        val stageId = UUID.generateUUID(Random)
         val stageEntityID = mock<EntityID<UUID>> {
             on { value } doReturn stageId
         }
@@ -86,7 +91,7 @@ class NextStageUseCaseTest {
         `when`(mockGame.getCurrentStage()).thenReturn(dayEvent)
 
         // When
-        val dayResult = stageUseCase.nextStage(gameId, stageId)
+        val dayResult = stageUseCase.nextStage(stageId)
 
         // Then
         assertTrue(dayResult.currentStage is DayStageResponse)
@@ -100,8 +105,8 @@ class NextStageUseCaseTest {
     @Test
     fun `dayStageVote goes to end`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
-        val stageId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
+        val stageId = UUID.generateUUID(Random)
 
         val currentStage = mock<DayEvent> {
             on { id.value } doReturn stageId
@@ -114,7 +119,7 @@ class NextStageUseCaseTest {
         val voterPlayer = getMockPlayer()
 
         val dayVote = mock<DayVote> {
-            on { id.value } doReturn UUID.randomUUID()
+            on { id.value } doReturn UUID.generateUUID(Random)
             on { day } doReturn currentStage
             on { voter } doReturn voterPlayer
             on { target } doReturn targetPlayer
@@ -129,7 +134,7 @@ class NextStageUseCaseTest {
         `when`(gameRepository.get(gameId)).thenReturn(mockGame)
 
         // When
-        val result = stageUseCase.nextStage(gameId, stageId)
+        val result = stageUseCase.nextStage(stageId)
 
         // Then
         assertTrue(result.currentStage is DayStageResponse)
@@ -143,8 +148,8 @@ class NextStageUseCaseTest {
     @Test
     fun `dayStageVote goes to rediscuss`(): Unit = runBlocking {
         // Given
-        val gameId = UUID.randomUUID()
-        val stageId = UUID.randomUUID()
+        val gameId = UUID.generateUUID(Random)
+        val stageId = UUID.generateUUID(Random)
 
         val currentStage = mock<DayEvent> {
             on { id.value } doReturn stageId
@@ -157,7 +162,7 @@ class NextStageUseCaseTest {
         val voterPlayer = getMockPlayer()
 
         val dayVote = mock<DayVote> {
-            on { id.value } doReturn UUID.randomUUID()
+            on { id.value } doReturn UUID.generateUUID(Random)
             on { day } doReturn currentStage
             on { voter } doReturn voterPlayer
             on { target } doReturn targetPlayer
@@ -167,7 +172,7 @@ class NextStageUseCaseTest {
         val voterPlayer2 = getMockPlayer()
 
         val dayVote2 = mock<DayVote> {
-            on { id.value } doReturn UUID.randomUUID()
+            on { id.value } doReturn UUID.generateUUID(Random)
             on { day } doReturn currentStage
             on { voter } doReturn voterPlayer2
             on { target } doReturn targetPlayer2
@@ -185,7 +190,7 @@ class NextStageUseCaseTest {
         `when`(gameRepository.get(gameId)).thenReturn(mockGame)
 
         // When
-        val result = stageUseCase.nextStage(gameId, stageId)
+        val result = stageUseCase.nextStage(stageId)
 
         // Then
         assertTrue(result.currentStage is DayStageResponse)

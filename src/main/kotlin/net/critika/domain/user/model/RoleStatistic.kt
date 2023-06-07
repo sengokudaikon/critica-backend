@@ -1,13 +1,13 @@
 package net.critika.domain.user.model
 
+import kotlinx.uuid.exposed.KotlinxUUIDEntity
+import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
 import net.critika.application.user.response.RoleResponse
-import net.critika.persistence.db.RoleStatistics
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import net.critika.persistence.user.entity.RoleStatistics
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import kotlinx.uuid.UUID
 
-class RoleStatistic(id: EntityID<UUID>) : UUIDEntity(id) {
+class RoleStatistic(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
     fun toResponse(): RoleResponse {
         return RoleResponse(
             id = this.id.value.toString(),
@@ -18,7 +18,7 @@ class RoleStatistic(id: EntityID<UUID>) : UUIDEntity(id) {
         )
     }
 
-    companion object : UUIDEntityClass<RoleStatistic>(RoleStatistics)
+    companion object : KotlinxUUIDEntityClass<RoleStatistic>(RoleStatistics)
     var userRatingId by UserRating referencedOn RoleStatistics.userRatingId
     var role by RoleStatistics.role
     var gamesWon by RoleStatistics.gamesWon

@@ -138,6 +138,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization-jvm:2.3.0")
     implementation("io.ktor:ktor-client-encoding-jvm:2.3.0")
     implementation("io.ktor:ktor-client-okhttp-jvm:2.3.0")
+    implementation("app.softwork:kotlinx-uuid-exposed:0.0.17")
     testImplementation("io.ktor:ktor-server-test-host-jvm:2.3.0")
     testImplementation("io.ktor:ktor-server-tests-jvm:2.3.0")
 

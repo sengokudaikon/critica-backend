@@ -1,14 +1,14 @@
 package net.critika.domain.user.model
 
+import kotlinx.uuid.UUID
+import kotlinx.uuid.exposed.KotlinxUUIDEntity
+import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
 import net.critika.application.user.response.RatingResponse
-import net.critika.persistence.db.RoleStatistics
-import net.critika.persistence.db.UserRatings
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import net.critika.persistence.user.entity.RoleStatistics
+import net.critika.persistence.user.entity.UserRatings
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
 
-class UserRating(id: EntityID<UUID>) : UUIDEntity(id) {
+class UserRating(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
     fun toResponse(): RatingResponse {
         return RatingResponse(
             id = id.value.toString(),
@@ -21,7 +21,7 @@ class UserRating(id: EntityID<UUID>) : UUIDEntity(id) {
         )
     }
 
-    companion object : UUIDEntityClass<UserRating>(UserRatings)
+    companion object : KotlinxUUIDEntityClass<UserRating>(UserRatings)
 
     var userId by User referencedOn UserRatings.userId
     var totalPoints by UserRatings.totalPoints

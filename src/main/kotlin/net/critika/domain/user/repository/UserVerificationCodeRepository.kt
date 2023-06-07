@@ -1,7 +1,7 @@
 package net.critika.domain.user.repository
 
 import net.critika.domain.user.model.VerificationCode
-import java.util.*
+import kotlinx.uuid.UUID
 
 interface UserVerificationCodeRepository {
     suspend fun createVerificationCode(userId: UUID, code: String)

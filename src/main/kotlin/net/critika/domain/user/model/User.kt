@@ -1,20 +1,20 @@
 package net.critika.domain.user.model
 
+import kotlinx.uuid.UUID
+import kotlinx.uuid.exposed.KotlinxUUIDEntity
+import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
 import net.critika.application.user.response.UserResponse
-import net.critika.domain.Player
-import net.critika.persistence.db.UserDeviceTokens
-import net.critika.persistence.db.UserSettings
-import net.critika.persistence.db.UserTokens
-import net.critika.persistence.db.Users
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import net.critika.domain.gameprocess.model.Player
+import net.critika.persistence.user.entity.UserDeviceTokens
+import net.critika.persistence.user.entity.UserSettings
+import net.critika.persistence.user.entity.UserTokens
+import net.critika.persistence.user.entity.Users
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
 
 class User(
     id: EntityID<UUID>,
 
-) : UUIDEntity(id) {
+) : KotlinxUUIDEntity(id) {
     fun toPlayer(): Player? {
         return Player.findById(this.id)
     }
@@ -27,9 +27,10 @@ class User(
         )
     }
 
-    companion object : UUIDEntityClass<User>(Users)
+    companion object : KotlinxUUIDEntityClass<User>(Users)
 
     var uid by Users.uid
+    var clubId by Users.clubId
     var username by Users.username
     var playerName by Users.playerName
     var email by Users.email
