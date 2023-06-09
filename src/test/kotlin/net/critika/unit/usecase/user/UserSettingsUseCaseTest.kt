@@ -9,8 +9,6 @@ import net.critika.domain.user.model.Language
 import net.critika.domain.user.model.UserSetting
 import net.critika.domain.user.repository.UserRepositoryPort
 import net.critika.domain.user.repository.UserSettingsRepositoryPort
-import net.critika.domain.user.repository.UserVerificationCodeRepository
-import net.critika.infrastructure.Argon2PasswordEncoder
 import net.critika.persistence.user.entity.UserSettings
 import net.critika.persistence.user.entity.Users
 import net.critika.unit.Helpers.getMockUser
@@ -36,8 +34,6 @@ import kotlin.random.Random
 class UserSettingsUseCaseTest {
 
     private lateinit var userRepository: UserRepositoryPort
-    private lateinit var passwordEncoder: Argon2PasswordEncoder
-    private lateinit var verificationCodeRepository: UserVerificationCodeRepository
     private lateinit var userSettingsRepository: UserSettingsRepositoryPort
 
     private lateinit var userSettingsUseCase: UserSettingsUseCase
@@ -69,14 +65,10 @@ class UserSettingsUseCaseTest {
     @BeforeEach
     fun setUp() {
         userRepository = mock()
-        passwordEncoder = mock()
-        verificationCodeRepository = mock()
         userSettingsRepository = mock()
 
         userSettingsUseCase = UserSettingsUseCase(
             userRepository,
-            passwordEncoder,
-            verificationCodeRepository,
             userSettingsRepository,
         )
     }
@@ -98,41 +90,6 @@ class UserSettingsUseCaseTest {
         // Then
         verify(userSettingsRepository).createUserSettings(userId, language)
         assertEquals(expectedUserSetting.toResponse(), result)
-    }
-
-    @Test
-    fun `changeUsername successfully`() = runBlocking {
-        // Given
-        val userId = UUID.generateUUID(Random)
-        val newUsername = "newUsername"
-
-        // When
-        userSettingsUseCase.update(UserSettingsCommand.Update.Username(userId, newUsername))
-
-        // Then
-        verify(userRepository).updateUsername(userId, newUsername)
-    }
-
-    @Test
-    fun `changePassword successfully`() = runBlocking {
-        // Given
-        val userId = UUID.generateUUID(Random)
-        val newPassword = "newPassword"
-        val newEncodedPassword = "new_encoded_password"
-        val user = getMockUser()
-
-        whenever(userRepository.findById(userId)).thenReturn(user)
-        whenever(passwordEncoder.verify(newPassword, user.password)).thenReturn(false)
-        whenever(passwordEncoder.encode(newPassword)).thenReturn(newEncodedPassword)
-
-        // When
-        userSettingsUseCase.update(UserSettingsCommand.Update.Password(userId, newPassword))
-
-        // Then
-        verify(userRepository).findById(userId)
-        verify(passwordEncoder).verify(newPassword, user.password)
-        verify(passwordEncoder).encode(newPassword)
-        verify(userRepository).updatePassword(userId, newEncodedPassword)
     }
 
     @Test
@@ -213,7 +170,6 @@ class UserSettingsUseCaseTest {
         result.fold(
             { fail("Expecting a right value, got left: $it") },
             {
-                assertEquals("username", it.username)
                 assertEquals(true, it.emailConfirmed)
                 assertEquals(true, it.publicVisibility)
                 assertEquals(true, it.pushNotificationsEnabled)

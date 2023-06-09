@@ -25,7 +25,7 @@ class Lobby(
         return LobbyResponse(
             id = this.id.value.toString(),
             date = this.date.toString(),
-            creator = this.creator.username,
+            creator = this.creator.playerName,
             games = this.games.map { it.toResponse() },
         )
     }

@@ -24,6 +24,7 @@ import net.critika.ports.game.GamePort
 import org.koin.core.annotation.Single
 
 private const val MAX_PLAYERS: Int = 10
+
 @Single
 class GameUseCase(
     private val repository: GameRepository,
@@ -31,13 +32,14 @@ class GameUseCase(
     private val playerRepository: PlayerRepository,
     private val userRepository: UserRepositoryPort,
     private val userStatisticsUseCase: UserStatisticsUseCase,
-): GamePort {
-    override suspend fun assignHost(gameId: UUID, hostId: UUID) {
+) : GamePort {
+    override suspend fun assignHost(gameId: UUID, hostId: UUID): GameResponse {
         val game = repository.get(gameId)
         val host = userRepository.findById(hostId) ?: throw UserException.NotFound("User not found")
         require(host.role == UserRole.HOST) { "Player is not host" }
         game.host = host
         repository.update(GameCommand.Update(game, status = GameStatus.WAITING))
+        return game.toResponse()
     }
 
     override suspend fun get(id: UUID): GameResponse {

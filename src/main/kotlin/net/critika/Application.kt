@@ -7,7 +7,6 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.metrics.dropwizard.*
@@ -25,7 +24,6 @@ import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
-import io.ktor.websocket.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import kotlinx.serialization.json.Json
 import net.critika.infrastructure.MainModule
@@ -34,7 +32,6 @@ import net.critika.infrastructure.authentication.FirebasePrincipal
 import net.critika.infrastructure.authentication.firebase
 import net.critika.infrastructure.config.AppConfig
 import net.critika.infrastructure.config.DatabaseFactory
-import net.critika.infrastructure.config.Security
 import net.critika.infrastructure.config.handleErrors
 import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
@@ -61,7 +58,6 @@ fun Application.main() {
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
     DatabaseFactory.init(runMigrations = runMigrations, dbConfig = config.dbConfig())
-    val security: Security by inject()
     FirebaseAdmin.init()
     install(Authentication) {
         firebase {
@@ -69,18 +65,6 @@ fun Application.main() {
                 val userId = firebaseToken.uid
                 if (userId != null) {
                     FirebasePrincipal(userId)
-                } else {
-                    null
-                }
-            }
-        }
-        jwt("jwt") {
-            verifier(security.configureSecurity())
-            realm = "critica.io"
-            validate { credential ->
-                val userId = credential.payload.subject
-                if (userId != null) {
-                    JWTPrincipal(credential.payload)
                 } else {
                     null
                 }
@@ -97,17 +81,6 @@ fun Application.main() {
 private fun Application.configRouting() {
     install(Resources)
     routing {
-        webSocket("/ws") { // websocketSession
-            for (frame in incoming) {
-                if (frame is Frame.Text) {
-                    val text = frame.readText()
-                    outgoing.send(Frame.Text("YOU SAID: $text"))
-                    if (text.equals("bye", ignoreCase = true)) {
-                        close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
-                    }
-                }
-            }
-        }
         swaggerUI(path = "/api/docs", swaggerFile = "openapi/documentation.yaml") {
             version = "4.15.5"
             configLoaders

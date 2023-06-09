@@ -26,7 +26,7 @@ class LobbyController(
     private val lobbyGame: LobbyGamePort,
     private val crud: LobbyCrudPort,
 ) : Controller() {
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/lobby/{lobbyId}/players")
     suspend fun getPlayers(call: ApplicationCall) {
         val id = call.receive<LobbyQuery>()
@@ -34,7 +34,7 @@ class LobbyController(
         call.respond(players)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/lobby/{lobbyId}")
     suspend fun getLobby(call: ApplicationCall) {
         val id = call.receive<LobbyQuery>()
@@ -42,14 +42,14 @@ class LobbyController(
         call.respond(lobby)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/lobby/list")
     suspend fun listLobbies(call: ApplicationCall) {
         val lobbies = crud.list()
         call.respond(lobbies)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/lobby/{lobbyId}/games")
     suspend fun getGames(call: ApplicationCall) {
         val id = call.receive<LobbyQuery>()
@@ -57,7 +57,7 @@ class LobbyController(
         call.respond(games)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/delete")
     suspend fun deleteLobby(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
@@ -68,7 +68,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/addGame")
     suspend fun addGame(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -86,7 +86,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/removeGame/{gameId}")
     suspend fun removeGame(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -100,7 +100,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -116,7 +116,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/addTemporaryPlayer")
     suspend fun addTemporaryPlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
@@ -133,7 +133,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -145,7 +145,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/removePlayer")
     suspend fun removePlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -161,7 +161,7 @@ class LobbyController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/lobby/{lobbyId}/removePlayer/{playerId}")
     suspend fun removePlayerById(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {

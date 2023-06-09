@@ -25,6 +25,6 @@ class AdminUseCase(
 
     override suspend fun rejectPromotion(userId: UUID) {
         val user = userRepository.findById(userId) ?: throw UserException.NotFound("User not found")
-        userSettingsRepository.updatePromotion(userId, false)
+        userSettingsRepository.updatePromotion(user.id.value, false)
     }
 }

@@ -27,7 +27,6 @@ class UserSetting(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
             language = language.name,
             promoted = promotion,
             emailConfirmed = emailVerified,
-            username = userId.username,
         )
     }
 }

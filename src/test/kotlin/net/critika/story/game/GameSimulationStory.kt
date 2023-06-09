@@ -45,7 +45,7 @@ class GameSimulationStory : KoinComponent {
         val lobby = lobbySteps.create(userAdmin.id.value, clubId)
 
         // 3) user1 joins lobby
-        lobbySteps.addPlayer(UUID(lobby.id), user1.username)
+        lobbySteps.addPlayer(UUID(lobby.id), user1.playerName)
 
         // 4) user-admin creates game
         lobbySteps.addGame(UUID(lobby.id), userAdmin.id.value)

@@ -3,10 +3,6 @@ package net.critika.infrastructure.authentication
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserRecord
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.InputStream
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -31,19 +27,5 @@ object FirebaseAdmin {
                 .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
                 .build(),
         )
-    }
-
-    suspend fun createUserWithEmailAndPassword(email: String, username: String, password: String): UserRecord {
-        return withContext(Dispatchers.IO) {
-            FirebaseAuth.getInstance().createUser(
-                UserRecord
-                    .CreateRequest()
-                    .setEmail(email)
-                    .setPassword(password)
-                    .setEmailVerified(false)
-                    .setDisplayName(username)
-                    .setDisabled(false),
-            )
-        }
     }
 }

@@ -21,11 +21,11 @@ open class UserSteps : KoinComponent {
         playerName: String,
         password: String,
     ): Either<Exception, User> {
-        return userUseCase.register(UUID.generateUUID(Random).toString(), UserCommand.Create(email, password, username, playerName))
+        return userUseCase.register(UUID.generateUUID(Random).toString(), UserCommand.Create(email, playerName))
     }
 
     @Step("Login user {username}")
     open suspend fun login(email: String?, username: String?, password: String): Either<Exception, User> {
-        return userUseCase.signIn(UUID.generateUUID(Random).toString(), email, username, password)
+        return userUseCase.signIn(UUID.generateUUID(Random).toString(), email)
     }
 }

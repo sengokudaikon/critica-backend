@@ -20,8 +20,7 @@ object Helpers {
     fun getMockUser(): User {
         val user = mock<User> {
             on { id } doReturn mock<EntityID<UUID>>()
-            on { username } doReturn "username"
-            on { password } doReturn "encoded_password"
+            on { playerName } doReturn "username"
             on { email } doReturn "email@example.com"
             on { role } doReturn UserRole.USER
         }

@@ -11,16 +11,16 @@ import net.critika.ports.club.RatingPort
 class StatisticsController(
     private val statisticsUseCase: RatingPort,
 ) {
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{id}/rating")
     suspend fun getRatingInRange(call: ApplicationCall) {
-        val from = call.request.queryParameters["from"]?.toString() ?: return
-        val to = call.request.queryParameters["to"]?.toString() ?: return
+        val from = call.request.queryParameters["from"] ?: return
+        val to = call.request.queryParameters["to"] ?: return
         val rating = statisticsUseCase.getRatingInRange(from, to)
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{id}/rating/week/{week}")
     suspend fun getRatingForWeek(call: ApplicationCall) {
         val week = call.parameters["week"]?.toIntOrNull() ?: return
@@ -28,7 +28,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{id}/rating/day/{day}")
     suspend fun getRatingForDay(call: ApplicationCall) {
         val day = call.parameters["day"]?.toIntOrNull() ?: return
@@ -36,7 +36,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{id}/rating/year/{year}")
     suspend fun getRatingForYear(call: ApplicationCall) {
         val year = call.parameters["year"]?.toIntOrNull() ?: return
@@ -44,7 +44,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{id}/rating/month/{month}")
     suspend fun getRatingForMonth(call: ApplicationCall) {
         val month = call.parameters["month"]?.toIntOrNull() ?: return
@@ -52,7 +52,7 @@ class StatisticsController(
         call.respond(rating)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{id}/rating/season")
     suspend fun getRatingForSeason(call: ApplicationCall) {
         val rating = statisticsUseCase.getRatingForSeason()

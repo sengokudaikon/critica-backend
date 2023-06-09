@@ -68,8 +68,7 @@ class LobbyUseCase(
         return try {
             val lobby = repository.get(id)
 
-            val user =
-                userRepository.findByUsername(playerName) ?: return LobbyException.NotFound("User not found").left()
+            val user = userRepository.findByPlayerName(playerName)
             val result = playerRepository.create(PlayerCommand.Create(user, playerName, lobby.id.value, null))
             require(!lobby.players.contains(result)) { "Player is already in lobby" }
             lobby.players.plus(result)
@@ -122,7 +121,6 @@ class LobbyUseCase(
         return try {
             val lobby = repository.get(id)
             val player = playerRepository.get(playerId)
-            require(player != null) { "Player not found" }
             lobby.players.minus(player)
             lobby.toResponse().right()
         } catch (e: Exception) {

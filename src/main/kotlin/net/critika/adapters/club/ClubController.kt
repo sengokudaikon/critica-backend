@@ -5,7 +5,6 @@ import com.github.dimitark.ktorannotations.annotations.Post
 import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.Put
 import com.github.dimitark.ktorannotations.annotations.RouteController
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -16,7 +15,6 @@ import net.critika.application.club.query.ClubMembershipQuery
 import net.critika.application.club.query.ClubQuery
 import net.critika.application.lobby.command.LobbyCommand
 import net.critika.domain.user.model.UserRole
-import net.critika.infrastructure.authentication.getUserId
 import net.critika.ports.club.ClubCrudPort
 import net.critika.ports.club.ClubLobbyPort
 import net.critika.ports.club.ClubMemberPort
@@ -31,7 +29,7 @@ class ClubController(
     private val clubCrud: ClubCrudPort,
     private val lobbyCrud: LobbyCrudPort,
 ) : Controller() {
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{clubId}/members")
     suspend fun getPlayers(call: ApplicationCall) {
         val id = call.receive<ClubQuery>()
@@ -39,7 +37,7 @@ class ClubController(
         call.respond(players)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{clubId}")
     suspend fun getClub(call: ApplicationCall) {
         val id = call.receive<ClubQuery>()
@@ -47,14 +45,14 @@ class ClubController(
         call.respond(club)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/list")
     suspend fun listClubs(call: ApplicationCall) {
         val clubs = clubCrud.list()
         call.respond(clubs)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{clubId}/lobbies")
     suspend fun listLobbies(call: ApplicationCall) {
         val id = call.receive<ClubQuery>()
@@ -62,7 +60,7 @@ class ClubController(
         call.respond(lobbies)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("api/club/{clubId}/games")
     suspend fun listGames(call: ApplicationCall) {
         val id = call.receive<ClubQuery>()
@@ -70,24 +68,20 @@ class ClubController(
         call.respond(games)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Post("api/club/{clubId}/createLobby")
     suspend fun createLobby(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
             val request = call.receive<ClubQuery>()
             val date = LocalDateTime.parse(call.receiveParameters()["date"])
-            val creator = call.getUserId()
-            if (creator != null) {
-                val lobby = lobbyCrud.create(LobbyCommand.Create(creator, date.toString(), request.id))
+            val creator = fromUid(call)
+            val lobby = lobbyCrud.create(LobbyCommand.Create(creator, date.toString(), request.id))
 
-                call.respond(lobby)
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "User not found")
-            }
+            call.respond(lobby)
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("api/club/{clubId}/update")
     suspend fun updateClub(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
@@ -97,7 +91,7 @@ class ClubController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/club/{clubId}/join")
     suspend fun joinClub(call: ApplicationCall) {
         val club = call.receive<ClubQuery>()
@@ -106,7 +100,7 @@ class ClubController(
         call.respond(response)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/club/{clubId}/leave")
     suspend fun leaveClub(call: ApplicationCall) {
         authorize(call, listOf(UserRole.USER, UserRole.HOST)) {
@@ -117,7 +111,7 @@ class ClubController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Post("/api/club/create")
     suspend fun createClub(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {

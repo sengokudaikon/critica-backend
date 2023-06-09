@@ -113,13 +113,13 @@ class LobbyUseCaseTest {
         val id = UUID.generateUUID(Random)
         val playerName = "TestPlayer"
         val lobby = getMockLobby()
-        val user = getMockUser().apply { username = playerName }
+        val user = getMockUser()
         val player = getMockPlayer().apply { name = playerName }
         `when`(lobbyRepository.get(id)).thenAnswer {
             lobby.players.shouldBeEmpty()
             lobby
         }
-        whenever(userRepository.findByUsername(playerName)).thenReturn(user)
+        whenever(userRepository.findByPlayerName(playerName)).thenReturn(user)
         whenever(playerRepository.create(PlayerCommand.Create(any(), any(), any(), any()))).thenReturn(player)
 
         // When
@@ -127,8 +127,8 @@ class LobbyUseCaseTest {
 
         // Then
         verify(lobbyRepository, times(1)).get(id)
-        verify(userRepository, times(1)).findByUsername(playerName)
-        verify(playerRepository, times(1)).create((PlayerCommand.Create(user,"Test player", lobby.id.value, null)))
+        verify(userRepository, times(1)).findByPlayerName(playerName)
+        verify(playerRepository, times(1)).create((PlayerCommand.Create(user, "Test player", lobby.id.value, null)))
         result.shouldBe(Either.Right(lobby.toResponse()))
         result.getOrNull()?.players?.contains(player.toResponse())?.shouldBe(true)
     }

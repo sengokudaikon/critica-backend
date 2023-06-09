@@ -31,10 +31,8 @@ class User(
 
     var uid by Users.uid
     var clubId by Users.clubId
-    var username by Users.username
     var playerName by Users.playerName
     var email by Users.email
-    var password by Users.hashedPassword
     var role by Users.role
     val tokens by UserToken referrersOn UserTokens.userId
     val deviceTokens by UserDeviceToken referrersOn UserDeviceTokens.userId

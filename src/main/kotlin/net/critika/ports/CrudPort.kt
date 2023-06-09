@@ -2,7 +2,6 @@ package net.critika.ports
 
 import kotlinx.uuid.UUID
 
-
 interface CrudPort<T, R> {
     suspend fun create(command: T): R
     suspend fun update(command: T): R

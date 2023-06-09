@@ -4,98 +4,12 @@ info:
   description: "critica_backend API"
   version: "1.0.0"
 servers:
-  - url: "http://localhost:8080"
-  - url: "https://seahorse-app-qs7ri.ondigitalocean.app"
-  - url: "https://critika.net"
+- url: "https://critica_backend"
 paths:
-  /:
-    get:
-      description: ""
-      responses:
-        "200":
-          description: "OK <br> Redirect"
-          content:
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "/static/index.html"
   /api/health:
     get:
-      description: ""
+      description: "Healthy application"
       responses:
-        "200":
-          description: "OK"
-          content:
-            text/plain:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Healthy"
-  /ws:
-    get:
-      description: ""
-      parameters:
-        - name: "Connection"
-          in: "header"
-          required: true
-          description: "Websocket Connection parameter"
-          schema:
-            type: "string"
-        - name: "Upgrade"
-          in: "header"
-          required: true
-          description: "Websocket Upgrade parameter"
-          schema:
-            type: "string"
-        - name: "Sec-WebSocket-Key"
-          in: "header"
-          required: true
-          description: "Websocket Sec-WebSocket-Key parameter"
-          schema:
-            type: "string"
-      responses:
-        "101":
-          description: "Switching Protocols"
-          headers:
-            Connection:
-              required: true
-              schema:
-                type: "string"
-            Upgrade:
-              required: true
-              schema:
-                type: "string"
-            Sec-WebSocket-Accept:
-              required: true
-              schema:
-                type: "string"
-  /api/admin/users/{userId}/promote:
-    post:
-      tags:
-        - "Admin"
-      security:
-        - AccessToken: [ ]
-      description: "Promotes a player to admin"
-      parameters:
-        - name: "userId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -104,31 +18,38 @@ paths:
                 type: "string"
               examples:
                 Example#1:
-                  value: "User promoted to admin"
+                  value: "Healthy"
+  /api/admin/users/{userId}/promote:
+    post:
+      description: "Promote user to host"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "User promoted to host"
   /api/admin/users/{userId}/reject:
     post:
-      tags:
-        - "Admin"
-      security:
-        - AccessToken: [ ]
-      description: "Rejects a player's promotion"
+      description: "Reject user promotion"
       parameters:
-        - name: "userId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        
         "200":
           description: "OK"
           content:
@@ -140,22 +61,9 @@ paths:
                   value: "User promotion rejected"
   /api/admin/users/requesting-promotion:
     get:
-      tags:
-        - "Admin"
-      security:
-        - AccessToken: [ ]
-      description: "Owner can check a list of players who applied to become admins"
+      description: "See users requesting promotion"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        
         "200":
           description: "OK"
           content:
@@ -164,20 +72,59 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/UserResponse"
-  /api/club/{clubId}:
-    get:
-      description: ""
-      tags:
-        - "Club"
-      parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+  /api/auth/register:
+    post:
+      description: "Register a new user"
       requestBody:
         content:
-          '*/*':
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create"
+        required: true
+  /api/auth/signIn:
+    post:
+      description: "Sign in as a user"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignIn"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+  /api/auth/userExists:
+    post:
+      description: "Check if user exists"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Exists"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+  /api/club/{clubId}:
+    get:
+      description: "Get club by id"
+      parameters:
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
             schema:
               $ref: "#/components/schemas/ClubQuery"
         required: true
@@ -185,103 +132,40 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/createLobby:
     post:
-      description: ""
-      tags:
-        - "Club"
+      description: "Create a lobby in a club"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/ClubQuery"
         required: true
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-  /api/club/create:
-    post:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: "Creates a new club"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                name:
-                  type: "string"
-                description:
-                  type: "string"
-                country:
-                  type: "string"
-                city:
-                  type: "string"
-                address:
-                  type: "string"
-                creatorId:
-                  type: "string"
-                logo:
-                  type: "string"
-                ruleSet:
-                  type: "string"
-        required: true
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "201":
-          description: "Created"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/games:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "Get games in a club"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
           application/json:
@@ -299,17 +183,13 @@ paths:
                   $ref: "#/components/schemas/GameResponse"
   /api/club/{clubId}/join:
     put:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "Join a club"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
           application/json:
@@ -325,17 +205,13 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/leave:
     put:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "Leave a club"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
           application/json:
@@ -351,17 +227,13 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/lobbies:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See lobbies in a club"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
           application/json:
@@ -379,17 +251,13 @@ paths:
                   $ref: "#/components/schemas/LobbyResponse"
   /api/club/{clubId}/members:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See members in a club"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
           application/json:
@@ -407,27 +275,13 @@ paths:
                   $ref: "#/components/schemas/UserResponse"
   /api/club/{id}/rating:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See club rating"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "from"
-          in: "query"
-          required: false
-          schema:
-            type: "string"
-        - name: "to"
-          in: "query"
-          required: false
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -439,22 +293,18 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/day/{day}:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See club rating for a day"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "day"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "day"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -466,22 +316,18 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/month/{month}:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See club rating for a month"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "month"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "month"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -493,17 +339,13 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/season:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See club rating for a season"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -515,22 +357,18 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/week/{week}:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See club rating for a week"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "week"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "week"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -542,22 +380,18 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/year/{year}:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "See club rating for a year"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "year"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "year"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -569,17 +403,13 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{clubId}/update:
     put:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "Update club info"
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "clubId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       requestBody:
         content:
           application/json:
@@ -587,26 +417,22 @@ paths:
               $ref: "#/components/schemas/Update"
         required: true
       responses:
-        "401":
-          description: "Unauthorized"
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You must be authenticated to access this resource."
-                Example#2:
-                  value: "No user id found"
-        "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "You do not have the required role to access this resource."
+                $ref: "#/components/schemas/ClubResponse"
+  /api/club/create:
+    post:
+      description: "Create a club"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create"
+        required: true
+      responses:
         "200":
           description: "OK"
           content:
@@ -615,11 +441,7 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/list:
     get:
-      tags:
-        - "Club"
-      security:
-        - AccessToken: [ ]
-      description: ""
+      description: "Get list of clubs"
       responses:
         "200":
           description: "OK"
@@ -629,410 +451,16 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/ClubResponse"
-  /api/auth/refresh:
-    post:
-      tags:
-        - "Auth"
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Refresh the authentication token"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RefreshToken"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  accessToken:
-                    type: string
-  /api/auth/register:
-    post:
-      tags:
-        - "Auth"
-        - "User"
-      description: "Register a new user"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAccount"
-        required: true
-      responses:
-        "201":
-          description: "Created"
-          content:
-            application/json:
-              schema:
-                type: string
-                example: "OK"
-  /api/auth/userExists:
-    post:
-      description: "Check if user exists in the database"
-      tags:
-        - "Auth"
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              type: "object"
-              properties:
-                email:
-                  type: "string"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            'application/json':
-              schema:
-                type: "boolean"
-  /api/auth/register-firebase:
-    post:
-      tags:
-        - "Auth"
-        - "User"
-      security:
-        - FirebaseToken: [ ]
-      description: "Register a new user with Firebase token"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAccount"
-        required: true
-      responses:
-        "201":
-          description: "Created"
-          content:
-            application/json:
-              schema:
-                type: string
-                example: "OK"
-  /api/auth/signIn:
-    post:
-      tags:
-        - "Auth"
-        - "User"
-      security:
-        - FirebaseToken: []
-      description: "Log in to the application"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SignIn"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserAuthToken"
-  /api/auth/signout:
-    post:
-      tags:
-        - "Auth"
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Log out of the application"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SignOut"
-        required: true
-      responses:
-        "204":
-          description: "No Content"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NoContent"
-  /api/game/{id}/bestMove/{seat}:
-    put:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Host can give the first killed player bonus points, if he guessed the correct roles out of 3 players he named"
+  /api/game/{id}:
+    get:
+      description: "Get game by id"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "bestMove"
-          in: "query"
-          required: false
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{dayId}/nominate/{candidate}:
-    put:
-      tags:
-        - "Stage"
-      security:
-        - AccessToken: [ ]
-      description: "During the day, each player can nominate another player for the voting phase. The nominated player will be among the candidates for the voting phase."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "dayId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "candidate"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{dayId}/remove/{candidate}:
-    put:
-      tags:
-        - "Stage"
-      security:
-        - AccessToken: [ ]
-      description: "Remove candidate from the current vote. Note: This should not be used in most cases, only if a manual error occured."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "dayId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "candidate"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{dayId}/vote:
-    put:
-      tags:
-        - "Stage"
-      security:
-        - AccessToken: [ ]
-      description: "During the day, record the player's vote against a nominated player"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "dayId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Vote"
+      - name: "id"
+        in: "path"
         required: true
+        schema:
+          type: "string"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{nightId}/detective/{seat}:
-    put:
-      tags:
-        - "Stage"
-      security:
-        - AccessToken: [ ]
-      description: "During the night, the detective can choose a player to investigate. The role will not be revealed in the api. The detective will be notified of the role."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "nightId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{nightId}/don/{seat}:
-    put:
-      tags:
-        - "Stage"
-      description: "During the night, the Don can check the role of one player. For now, the information about the role is not returned."
-      security:
-        - AccessToken: [ ]
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "nightId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{nightId}/shot/{seat}:
-    put:
-      tags:
-        - "Stage"
-      description: "During the night, mafia shoots one player. If the mafia misses, this endpoint should not be called."
-      security:
-        - AccessToken: [ ]
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "nightId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1041,33 +469,19 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/addBonus/{seat}:
     put:
-      tags:
-        - "Game"
-      description: "Add bonus to player"
-      security:
-        - AccessToken: [ ]
+      description: "Add bonus to player by seat"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1076,33 +490,19 @@ paths:
                 type: "object"
   /api/game/{id}/addFoul/{seat}:
     put:
-      tags:
-        - "Game"
-      description: "Adds a foul to the player. On 4 fouls the player is removed from the game."
-      security:
-        - AccessToken: [ ]
+      description: "Add foul to player by seat"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1111,157 +511,18 @@ paths:
                 type: "object"
   /api/game/{id}/addOPW/{seat}:
     put:
-      tags:
-        - "Game"
-      description: "Creates Opposite Party Win for the game, indicts the player in the seat and ends the game"
-      security:
-        - AccessToken: [ ]
+      description: "Add opposite party win to game by seat"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "seat"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{stageId}/finish:
-    put:
-      tags:
-        - "Stage"
-      description: "Finish the stage by id"
-      security:
-        - AccessToken: [ ]
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "stageId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{stageId}/next:
-    put:
-      tags:
-        - "Stage"
-      description: "Go to next stage"
-      security:
-        - AccessToken: [ ]
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "stageId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/stage/{stageId}/prev:
-    put:
-      tags:
-        - "Stage"
-      description: "Cycle back to the previous stage"
-      security:
-        - AccessToken: [ ]
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "stageId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}:
-    get:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Get game by id"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1269,100 +530,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
   /api/game/{id}/addPlayer:
     put:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Add player by name to the game"
+      description: "Add player to game by name"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "string"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "playerName"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
   /api/game/{id}/addPlayer/{playerId}:
     put:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Add player to game"
+      description: "Add player to game by id"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "playerId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "string"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "playerId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
   /api/game/{id}/finish:
     post:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Finishes the current game"
+      description: "Finish game by id"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: "string"
+      - name: "id"
+        in: "path"
         required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1370,80 +574,77 @@ paths:
             application/json:
               schema:
                 type: "string"
-                format: "uuid"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/game/{id}/removePlayer:
+                enum:
+                - "CITIZEN"
+                - "MAFIA"
+                - "DON"
+                - "DETECTIVE"
+  /api/game/{id}/host/{hostId}:
     put:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Removes a player from the game"
+      description: "Assign host to game by id"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "hostId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Invalid ID"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+                $ref: "#/components/schemas/GameResponse"
+  /api/game/{id}/removePlayer/{playerId}:
+    put:
+      description: "Remove player from game by id"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "playerId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+  /api/game/{id}/start:
+    post:
+      description: "Start game"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
   /api/game/{id}/startDay/{day}:
     put:
-      tags:
-        - "Game"
-        - "Stage"
-      description: "Starts the day stage of the game"
-      security:
-        - AccessToken: [ ]
+      description: "Start day"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "day"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "day"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -1452,119 +653,18 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/startNight/{night}:
     put:
-      tags:
-        - "Game"
-        - "Stage"
-      description: "Start night stage in game"
-      security:
-        - AccessToken: [ ]
+      description: "Start night"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "night"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/host:
-    post:
-      tags:
-        - "Game"
-      description: "Assign a host to a hostless game. Note that the host must be an admin."
-      security:
-        - AccessToken: [ ]
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-            pattern: uuid
-        - name: "hostId"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GameResponse"
-  /api/game/{id}/start:
-    post:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Starts the game. Note: This endpoint is for testing purposes only. In production, all endpoints for games would be called from the lobby."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "object"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/game/create:
-    post:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Create a new game. Note: This endpoint is for testing purposes only."
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: "string"
+      - name: "id"
+        in: "path"
         required: true
+        schema:
+          type: "string"
+      - name: "night"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1572,23 +672,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
   /api/game/list:
     get:
-      tags:
-        - "Game"
-      security:
-        - AccessToken: [ ]
-      description: "Get all games. Note: This endpoint is for testing purposes only."
+      description: "Get all games"
       responses:
         "200":
           description: "OK"
@@ -1598,29 +684,15 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/GameResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}:
+  /api/lobby/{lobbyId}:
     get:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
       description: "Get lobby by id"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1628,34 +700,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/addGame:
+  /api/lobby/{lobbyId}/addGame:
     put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Add game"
+      description: "Add game to lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "time"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1663,29 +716,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/addPlayer:
+  /api/lobby/{lobbyId}/addPlayer:
     put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Add player by name"
+      description: "Add player by name to lobby"
       parameters:
-        - name: "name"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "playerName"
+        in: "query"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1693,34 +737,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/addPlayer/{playerId}:
+  /api/lobby/{lobbyId}/addPlayer/{playerId}:
     put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Add player to lobby by id"
+      description: "Add player to lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "playerId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "playerId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1728,29 +758,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/addTemporaryPlayer:
+  /api/lobby/{lobbyId}/addTemporaryPlayer:
     put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Add player without user registration. Note: This endpoint is not secure and should only be used for testing purposes."
+      description: "Add temporary player"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "playerName"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1758,29 +779,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/delete:
+  /api/lobby/{lobbyId}/delete:
     put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Delete a lobby"
+      description: "Delete lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
         "204":
           description: "No Content"
@@ -1788,29 +795,15 @@ paths:
             application/json:
               schema:
                 type: "object"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/games:
+  /api/lobby/{lobbyId}/games:
     get:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Get all games in a lobby"
+      description: "Get games in lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1820,29 +813,15 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/GameResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/players:
+  /api/lobby/{lobbyId}/players:
     get:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Get players that are currently in the lobby"
+      description: "Get players in lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1852,129 +831,20 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/PlayerResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/removeGame/{gameId}:
+  /api/lobby/{lobbyId}/removeGame/{gameId}:
     put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Removes a game from the lobby. If the game is not in the lobby, nothing happens."
+      description: "Remove game from lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "gameId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/removePlayer:
-    put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Remove player by name. Only the lobby owner can remove players."
-      parameters:
-        - name: "name"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/{id}/removePlayer/{playerId}:
-    put:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Remove a player from a lobby. Only the lobby owner can remove players."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-        - name: "playerId"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /api/lobby/create:
-    post:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: [ ]
-      description: "Create a new lobby, only Owner can do this"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateLobby"
+      - name: "lobbyId"
+        in: "path"
         required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "gameId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1982,23 +852,51 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+  /api/lobby/{lobbyId}/removePlayer:
+    put:
+      description: "Remove player from lobby"
+      parameters:
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "playerName"
+        in: "query"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LobbyResponse"
+  /api/lobby/{lobbyId}/removePlayer/{playerId}:
+    put:
+      description: "Remove player from lobby"
+      parameters:
+      - name: "lobbyId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "playerId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/list:
     get:
-      tags:
-        - "Lobby"
-      security:
-        - AccessToken: []
-      description: "Get list of lobbies"
+      description: "Get all lobbies"
       responses:
         "200":
           description: "OK"
@@ -2010,11 +908,7 @@ paths:
                   $ref: "#/components/schemas/LobbyResponse"
   /api/player:
     get:
-      tags:
-        - "Player"
-      security:
-        - AccessToken: [ ]
-      description: "Get current player"
+      description: "Get current player info"
       responses:
         "200":
           description: "OK"
@@ -2022,41 +916,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
   /api/player/{id}:
     get:
-      tags:
-        - "Player"
       description: "Get player by id"
-      security:
-        - AccessToken: [ ]
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                  example: 123e4567-e89b-12d3-a456-426614174000
+      - name: "id"
+        in: "path"
         required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -2064,38 +932,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
   /api/player/{name}:
     get:
-      tags:
-        - "Player"
       description: "Get player by name"
-      security:
-        - AccessToken: [ ]
       parameters:
-        - name: "name"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
+      - name: "name"
+        in: "path"
         required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -2103,41 +948,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PlayerResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
   /api/player/enterGame/{id}:
     get:
-      tags:
-        - "Player"
       description: "Enter game"
-      security:
-        - AccessToken: [ ]
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2146,28 +966,14 @@ paths:
                 type: "object"
   /api/player/enterLobby/{id}:
     get:
-      tags:
-        - "Player"
       description: "Enter lobby"
-      security:
-        - AccessToken: [ ]
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
@@ -2176,11 +982,13 @@ paths:
                 type: "object"
   /api/player/leaveGame:
     get:
-      tags:
-        - "Player"
-      description: "Quit game"
-      security:
-        - AccessToken: [ ]
+      description: "Leave current game"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyQuery"
+        required: true
       responses:
         "200":
           description: "OK"
@@ -2190,64 +998,282 @@ paths:
                 type: "object"
   /api/player/leaveLobby/{id}:
     get:
-      tags:
-        - "Player"
-      description: "Quit lobby"
-      security:
-        - AccessToken: [ ]
+      description: "Leave lobby"
       parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyQuery"
+        required: true
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
                 type: "object"
+  /api/stage/{id}/bestMove/{seat}:
+    put:
+      description: "Assign best move to player"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{nightId}/detective/{seat}:
+    put:
+      description: "Detective checks"
+      parameters:
+      - name: "nightId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{nightId}/don/{seat}:
+    put:
+      description: "Don checks for detective"
+      parameters:
+      - name: "nightId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{stageId}/finish:
+    put:
+      description: "Finish stage"
+      parameters:
+      - name: "stageId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{stageId}/next:
+    put:
+      description: "Next stage"
+      parameters:
+      - name: "stageId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{dayId}/nominate/{candidate}:
+    put:
+      description: "Nominate candidate for voting"
+      parameters:
+      - name: "dayId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "candidate"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{stageId}/prev:
+    put:
+      description: "Previous stage"
+      parameters:
+      - name: "stageId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{dayId}/remove/{candidate}:
+    put:
+      description: "Remove candidate from voting"
+      parameters:
+      - name: "dayId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "candidate"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{nightId}/shot/{seat}:
+    put:
+      description: "Shot candidate"
+      parameters:
+      - name: "nightId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "seat"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageQuery"
+        required: true
+      responses:
+        
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /api/stage/{dayId}/vote:
+    put:
+      description: "Vote for candidate"
+      parameters:
+      - name: "dayId"
+        in: "path"
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: "candidate"
+        in: "query"
+        required: true
+        schema:
+          type: "integer"
+          format: "int32"
+      - name: "voter"
+        in: "query"
+        required: true
+        schema:
+          type: "integer"
+          format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
   /api/user/settings:
     get:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
       description: "Get user settings"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/change-language:
     post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
       description: "Change language"
       requestBody:
         content:
@@ -2256,53 +1282,15 @@ paths:
               type: "string"
         required: true
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "object"
-  /api/user/settings/change-password:
-    post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Change password"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "object"
+                $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/change-public-visibility:
     post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Change public visibility settings"
+      description: "Change public visibility"
       requestBody:
         content:
           application/json:
@@ -2310,29 +1298,15 @@ paths:
               type: "boolean"
         required: true
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/change-push-notifications:
     post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Change push notification settings"
+      description: "Change push notifications settings"
       requestBody:
         content:
           application/json:
@@ -2340,149 +1314,187 @@ paths:
               type: "boolean"
         required: true
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "object"
-  /api/user/settings/change-username:
-    post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Change username"
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "object"
+                $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/request-promotion:
     post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Request promotion to admin"
+      description: "Request promotion to host"
       responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: string
-  /api/user/settings/verify-email:
-    post:
-      tags:
-        - "User"
-      security:
-        - AccessToken: [ ]
-      description: "Verify user email"
-      requestBody:
-        content:
-          text/plain:
-            schema:
-              type: "string"
-        required: true
-      responses:
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "object"
+                $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/statistics:
     get:
-      tags:
-        - "User"
-      description: "Get personal rating"
-      security:
-        - AccessToken: [ ]
+      description: "Get user statistics"
       responses:
-        "401":
-          description: "Unauthorized"
-          content:
-            application/json:
-              schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "No user id found"
-        "404":
-          description: "Not Found"
-          content:
-            application/json:
-              schema:
-                type: "object"
         "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/RatingResponse"
-
 components:
   securitySchemes:
-    AccessToken:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
     FirebaseToken:
       type: http
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    UUID:
+    UserResponse:
       type: "object"
-      properties: { }
+      properties:
+        id:
+          type: "string"
+        playerName:
+          type: "string"
+        email:
+          type: "string"
+    Create:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        country:
+          type: "string"
+        city:
+          type: "string"
+        address:
+          type: "string"
+        creatorId:
+          $ref: "#/components/schemas/UUID"
+        ruleSet:
+          type: "string"
+        logo:
+          type: "string"
+    SignIn:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+    Exists:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+    UUID:
+      type: "string"
     ClubQuery:
       type: "object"
       properties:
         id:
           $ref: "#/components/schemas/UUID"
+    PlayerResponse:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        seat:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        role:
+          type: "string"
+          enum:
+          - "CITIZEN"
+          - "MAFIA"
+          - "DON"
+          - "DETECTIVE"
+        status:
+          type: "string"
+          enum:
+          - "WAITING"
+          - "INGAME"
+          - "ALIVE"
+          - "DEAD"
+          - "REMOVED"
+          - "OPW"
+        inGame:
+          type: "boolean"
+        bestMove:
+          type: "integer"
+          format: "int32"
+        bonusPoints:
+          type: "integer"
+          format: "int32"
+    StageResponse:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+    DayVoteResponse:
+      type: "object"
+      properties:
+        dayNumber:
+          type: "integer"
+          format: "int32"
+        target:
+          $ref: "#/components/schemas/PlayerResponse"
+        player:
+          $ref: "#/components/schemas/PlayerResponse"
+    GameResponse:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        date:
+          type: "string"
+        host:
+          $ref: "#/components/schemas/PlayerResponse"
+        players:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+        currentStage:
+          $ref: "#/components/schemas/StageResponse"
+        nominates:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+        votes:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/DayVoteResponse"
+        mafiaShot:
+          $ref: "#/components/schemas/PlayerResponse"
+        detectiveCheck:
+          $ref: "#/components/schemas/PlayerResponse"
+        donCheck:
+          $ref: "#/components/schemas/PlayerResponse"
+        playersEliminated:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+        bestMove:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+    LobbyResponse:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        date:
+          type: "string"
+        creator:
+          type: "string"
+        games:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GameResponse"
+        players:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
     ClubResponse:
       type: "object"
       properties:
@@ -2525,34 +1537,8 @@ components:
       properties:
         userId:
           $ref: "#/components/schemas/UUID"
-    Update:
-      type: "object"
-      properties:
-        id:
-          $ref: "#/components/schemas/UUID"
-        name:
-          type: "string"
-        description:
-          type: "string"
-        country:
-          type: "string"
-        city:
-          type: "string"
-        address:
-          type: "string"
-        ruleSet:
-          type: "string"
-        logo:
-          type: "string"
-    Vote:
-      type: object
-      properties:
-        candidate:
-          type: "string"
-        voter:
-          type: "string"
     RoleResponse:
-      type: object
+      type: "object"
       properties:
         id:
           type: "string"
@@ -2568,7 +1554,7 @@ components:
           type: "integer"
           format: "int32"
     RatingResponse:
-      type: object
+      type: "object"
       properties:
         id:
           type: "string"
@@ -2590,233 +1576,83 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/RoleResponse"
-    UserResponse:
-      description: "User response"
-      type: object
+    Update:
+      type: "object"
       properties:
         id:
-          type: string
-          example: "5f8b0a7b9d6b2b0017a9e6b1"
-        email:
-          type: string
-          example: "test@mail.ru"
+          $ref: "#/components/schemas/UUID"
         name:
-          type: string
-          example: "John Doe"
-    UserAuthToken:
-      description: "User user token response"
-      type: object
+          type: "string"
+        description:
+          type: "string"
+        country:
+          type: "string"
+        city:
+          type: "string"
+        address:
+          type: "string"
+        ruleSet:
+          type: "string"
+        logo:
+          type: "string"
+    GameQuery:
+      type: "object"
       properties:
-        token:
-          type: string
-          example: "JWT_TOKEN"
-        refresh_token:
-          type: string
-          example: "JWT_TOKEN"
-    RefreshToken:
-      type: object
+        hostId:
+          $ref: "#/components/schemas/UUID"
+        gameId:
+          $ref: "#/components/schemas/UUID"
+    PlayerQuery:
+      type: "object"
       properties:
-        id:
-          type: "string"
-        refreshToken:
-          type: "string"
-    CreateAccount:
-      type: object
+        playerId:
+          $ref: "#/components/schemas/UUID"
+    LobbyQuery:
+      type: "object"
       properties:
-        email:
-          type: "string"
-          format: "email"
-          example: "johndoe@example.com"
-        username:
-          type: "string"
-          pattern: "^[A-Za-z0-9]*$"
-          example: "asfgasfgasfg"
-        password:
-          type: "string"
-          pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
-          example: "p@ssw0rd123!"
+        lobbyId:
+          $ref: "#/components/schemas/UUID"
+    PlayerNameQuery:
+      type: "object"
+      properties:
         playerName:
           type: "string"
-          pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
-          example: "John Doe"
-    SignIn:
-      type: object
+    StackTraceElement:
+      type: "object"
       properties:
-        email:
+        classLoaderName:
           type: "string"
-          format: "email"
-          example: "johndoe@example.com"
-        username:
+        moduleName:
           type: "string"
-          pattern: "^[A-Za-z0-9]*$"
-          example: "asjfhasfjhasf"
-        password:
+        moduleVersion:
           type: "string"
-          pattern: "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{8,}$"
-          example: "p@ssw0rd123!"
-        playerName:
+        methodName:
           type: "string"
-          pattern: "^[A-Za-zА-Яа-я0-9]+(?: [A-Za-zА-Яа-я0-9]+)*$"
-          example: "John Doe"
-    SignOut:
-      type: object
+        fileName:
+          type: "string"
+        lineNumber:
+          type: "integer"
+          format: "int32"
+    StageQuery:
+      type: "object"
       properties:
         id:
-          type: "string"
-        refreshToken:
-          type: "string"
-    PlayerResponse:
+          $ref: "#/components/schemas/UUID"
+    UserSettingsResponse:
       type: "object"
       properties:
         id:
           type: "string"
-          format: "uuid"
-        seat:
-          type: "integer"
-          format: "int32"
-        name:
-          type: "string"
-        role:
-          type: "string"
-          enum:
-            - "CITIZEN"
-            - "MAFIOSO"
-            - "DON"
-            - "DETECTIVE"
-        status:
-          type: "string"
-          enum:
-            - "INGAME"
-            - "ALIVE"
-            - "DEAD"
-            - "REMOVED"
-            - "OPW"
-        inGame:
+        emailConfirmed:
           type: "boolean"
-        bonusPoints:
-          type: "integer"
-          format: "int32"
-    StageResponse:
-      type: "object"
-      properties:
-        type:
+        publicVisibility:
+          type: "boolean"
+        pushNotificationsEnabled:
+          type: "boolean"
+        language:
           type: "string"
-    DayVoteResponse:
-      type: "object"
-      properties:
-        dayNumber:
-          type: "integer"
-          format: "int32"
-        target:
-          $ref: "#/components/schemas/PlayerResponse"
-        player:
-          $ref: "#/components/schemas/PlayerResponse"
-    DayStageResponse:
-      type: "object"
-      properties:
-        type:
-          type: "string"
-          enum:
-            - "DAY"
-        dayNumber:
-          type: "integer"
-          format: "int32"
-        candidates:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/PlayerResponse"
-        votes:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/DayVoteResponse"
-    NightStageResponse:
-      type: "object"
-      properties:
-        dayNumber:
-          type: "integer"
-          format: "int32"
-        mafiaShot:
-          $ref: "#/components/schemas/PlayerResponse"
-        detectiveCheck:
-          $ref: "#/components/schemas/PlayerResponse"
-        donCheck:
-          $ref: "#/components/schemas/PlayerResponse"
-    GameResponse:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        date:
-          type: "string"
-        players:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/PlayerResponse"
-        currentStage:
-          anyOf:
-            - title: "DayStageResponse"
-              $ref: "#/components/schemas/DayStageResponse"
-            - title: "NightStageResponse"
-              $ref: "#/components/schemas/NightStageResponse"
-        nominates:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/PlayerResponse"
-        votes:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/DayVoteResponse"
-        mafiaShot:
-          $ref: "#/components/schemas/PlayerResponse"
-        detectiveCheck:
-          $ref: "#/components/schemas/PlayerResponse"
-        donCheck:
-          $ref: "#/components/schemas/PlayerResponse"
-        playersEliminated:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/PlayerResponse"
-    LobbyResponse:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        date:
-          type: "string"
-        name:
-          type: "string"
-        creator:
-          type: "string"
-    CreateLobby:
-      type: "object"
-      properties:
-        date:
-          type: "string"
-        name:
-          type: "string"
-    Created:
-      type: "object"
-      properties:
-        status:
-          type: "integer"
-          format: "int32"
-          example: 201
-        message:
-          type: "string"
-          description: "A description of the successful creation."
-          example: "OK"
-      required:
-        - "status"
-        - "message"
-    NoContent:
-      type: "object"
-      properties:
-        status:
-          type: "integer"
-          format: "int32"
-          example: 204
-      required:
-        - "status"
+        promoted:
+          type: "boolean"
     Error:
       type: "object"
       properties:
@@ -2832,23 +1668,50 @@ components:
         - "status"
         - "message"
   responses:
-    BadRequest:
+    201:
+      description: "The resource was successfully created"
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "integer"
+            format: "int32"
+            example: 201
+          message:
+            type: "string"
+            description: "A description of the successful creation."
+            example: "OK"
+        required:
+          - "status"
+          - "message"
+    204:
+      description: "The resource was successfully updated"
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "integer"
+            format: "int32"
+            example: 204
+        required:
+          - "status"
+    400:
       description: "Malformed data or otherwise invalid request"
       schema:
         $ref: "#/components/schemas/Error"
-    NotFound:
+    404:
       description: "The requested component was not found"
       schema:
         $ref: "#/components/schemas/Error"
-    InternalServerError:
+    500:
       description: "An internal server error occurred"
       schema:
         $ref: "#/components/schemas/Error"
-    Forbidden:
+    403:
       description: "The user does not have the required permissions to access this resource"
       schema:
         $ref: "#/components/schemas/Error"
-    Unauthorized:
+    401:
       description: "The user is not authenticated"
       schema:
         $ref: "#/components/schemas/Error"

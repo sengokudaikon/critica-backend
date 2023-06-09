@@ -14,7 +14,6 @@ import net.critika.adapters.Controller
 import net.critika.application.game.query.GameQuery
 import net.critika.application.player.query.PlayerNameQuery
 import net.critika.application.player.query.PlayerQuery
-import net.critika.application.user.query.UserQuery
 import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.UserRole
 import net.critika.infrastructure.validation.validate
@@ -31,15 +30,13 @@ class GameController(
         call.respond(games)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/host/{hostId}")
     suspend fun setHost(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
             val gameId = call.receive<GameQuery>()
-            val hostId = call.receive<UserQuery>()
             validate(gameId)
-            validate(hostId)
-            val game = gameUseCase.assignHost(gameId.gameId, hostId.id)
+            val game = gameUseCase.assignHost(gameId.gameId, gameId.hostId)
             call.respond(game)
         }
     }
@@ -52,7 +49,7 @@ class GameController(
         call.respond(game)
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Post("/api/game/{id}/start")
     suspend fun startGame(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -62,7 +59,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -75,7 +72,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -89,7 +86,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/removePlayer/{playerId}")
     suspend fun removePlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -101,7 +98,7 @@ class GameController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Post("/api/game/{id}/finish")
     suspend fun finishGame(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {

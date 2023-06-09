@@ -10,7 +10,7 @@ import net.critika.domain.gameprocess.model.PlayerRole
 interface GamePort {
     suspend fun get(id: UUID): GameResponse
     suspend fun list(): List<GameResponse>
-    suspend fun assignHost(gameId: UUID, hostId: UUID)
+    suspend fun assignHost(gameId: UUID, hostId: UUID): GameResponse
     suspend fun start(gameId: UUID): Either<Exception, Game>
     suspend fun addPlayerById(gameId: UUID, playerId: UUID): Either<Exception, Player>
     suspend fun addPlayerByName(gameId: UUID, playerName: String): Either<Exception, Player>

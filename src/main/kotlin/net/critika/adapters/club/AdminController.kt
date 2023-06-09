@@ -6,13 +6,10 @@ import com.github.dimitark.ktorannotations.annotations.ProtectedRoute
 import com.github.dimitark.ktorannotations.annotations.RouteController
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
 import net.critika.adapters.Controller
-import net.critika.application.user.query.UserQuery
 import net.critika.domain.user.model.UserRole
-import net.critika.infrastructure.validation.validate
 import net.critika.ports.user.AdminPort
 
 @RouteController
@@ -21,7 +18,7 @@ class AdminController(
     private val adminUseCase: AdminPort,
 ) : Controller() {
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Get("/api/admin/users/requesting-promotion")
     suspend fun listUsersRequestingPromotion(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
@@ -30,24 +27,22 @@ class AdminController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Post("/api/admin/users/{userId}/promote")
     suspend fun promoteUserToHost(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
-            val userId = call.receive<UserQuery>()
-            validate(userId)
-            adminUseCase.promoteUserToHost(userId.id)
+            val userId = fromUid(call)
+            adminUseCase.promoteUserToHost(userId)
             call.respond(HttpStatusCode.OK, "User promoted to host")
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Post("/api/admin/users/{userId}/reject")
     suspend fun rejectPromotion(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
-            val userId = call.receive<UserQuery>()
-            validate(userId)
-            adminUseCase.rejectPromotion(userId.id)
+            val userId = fromUid(call)
+            adminUseCase.rejectPromotion(userId)
             call.respond(HttpStatusCode.OK, "User promotion rejected")
         }
     }

@@ -6,5 +6,6 @@ import net.critika.infrastructure.validation.constraints.ValidUUID
 
 @Serializable
 data class GameQuery(
+    @ValidUUID val hostId: UUID,
     @ValidUUID val gameId: UUID,
 )

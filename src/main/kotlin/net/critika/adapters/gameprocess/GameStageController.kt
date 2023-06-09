@@ -18,7 +18,7 @@ import net.critika.ports.stage.StagePort
 class GameStageController(
     private val stageUseCase: StagePort,
 ) : Controller() {
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/addFoul/{seat}")
     suspend fun addFoul(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -30,7 +30,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/addBonus/{seat}")
     suspend fun addBonus(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -42,7 +42,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/addOPW/{seat}")
     suspend fun addOPW(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -54,7 +54,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/startDay/{day}")
     suspend fun startDay(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -66,7 +66,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/game/{id}/startNight/{night}")
     suspend fun startNight(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -78,45 +78,45 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{id}/bestMove/{seat}")
     suspend fun bestMove(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<StageQuery>()
-            validate(gameId)
+            val stage = call.receive<StageQuery>()
+            validate(stage)
             val seat = call.receiveParameters()["seat"]?.toInt() ?: 0
 
             val bestMoveParam = call.receiveParameters()["bestMove"] ?: ""
             val bestMove = bestMoveParam.split(",").mapNotNull { it.toIntOrNull() }
 
-            val game = stageUseCase.firstShot(gameId.id, seat, bestMove)
+            val game = stageUseCase.firstShot(stage.id, seat, bestMove)
             call.respond(game)
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{nightId}/shot/{seat}")
     suspend fun shot(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val nightId = call.receive<StageQuery>()
+            val stage = call.receive<StageQuery>()
             val shot = call.receiveParameters()["shot"]?.toInt() ?: 0
-            val game = stageUseCase.setShot(nightId.id, shot)
+            val game = stageUseCase.setShot(stage.id, shot)
             call.respond(game)
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{nightId}/detective/{seat}")
     suspend fun detective(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val nightId = call.receive<StageQuery>()
+            val stage = call.receive<StageQuery>()
             val detective = call.receiveParameters()["detective"]?.toInt() ?: 0
-            val game = stageUseCase.setCheck(nightId.id, detective)
+            val game = stageUseCase.setCheck(stage.id, detective)
             call.respond(game)
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{nightId}/don/{seat}")
     suspend fun don(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -127,7 +127,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{dayId}/nominate/{candidate}")
     suspend fun addCandidate(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -138,7 +138,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{dayId}/remove/{candidate}")
     suspend fun removeCandidate(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -152,7 +152,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{dayId}/vote")
     suspend fun addVote(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -169,7 +169,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{stageId}/next")
     suspend fun nextStage(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -180,7 +180,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{stageId}/finish")
     suspend fun finishStage(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
@@ -191,7 +191,7 @@ class GameStageController(
         }
     }
 
-    @ProtectedRoute("jwt")
+    @ProtectedRoute("firebase")
     @Put("/api/stage/{stageId}/prev")
     suspend fun prevStage(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
