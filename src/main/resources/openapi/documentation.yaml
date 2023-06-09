@@ -4,7 +4,10 @@ info:
   description: "critica_backend API"
   version: "1.0.0"
 servers:
-- url: "https://critica_backend"
+- url: "https://critika.net"
+  description: "Production server"
+- url: "http://localhost:8080"
+  description: "Development server"
 paths:
   /api/health:
     get:
