@@ -34,7 +34,6 @@ import net.critika.infrastructure.config.DatabaseFactory
 import net.critika.infrastructure.config.DbConfig
 import net.critika.infrastructure.config.handleErrors
 import org.koin.ksp.generated.module
-import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 import java.time.Duration
@@ -54,7 +53,12 @@ fun Application.main() {
         modules(MainModule().module)
     }
     val dotenv = dotenv()
-    val config: DbConfig by inject()
+    val config = DbConfig(
+        driver = dotenv["DB_DRIVER"],
+        url = dotenv["DB_URL"],
+        username = dotenv["DB_USER"],
+        password = dotenv["DB_PASSWORD"],
+    )
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
     DatabaseFactory.init(runMigrations = runMigrations, dbConfig = config)
