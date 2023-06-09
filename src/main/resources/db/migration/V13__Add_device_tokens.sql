@@ -1,7 +1,0 @@
-CREATE TABLE IF NOT EXISTS user_device_tokens (
-    id uuid PRIMARY KEY,
-    user_id uuid NOT NULL unique REFERENCES users(id) ON DELETE CASCADE,
-    token VARCHAR(1000) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP+INTERVAL '1 year'
-)

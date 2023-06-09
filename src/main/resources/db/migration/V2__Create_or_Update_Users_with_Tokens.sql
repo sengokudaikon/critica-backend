@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
     id uuid PRIMARY KEY,
     uid VARCHAR(255) UNIQUE NOT NULL,
+    club_id uuid references clubs(id) ON DELETE CASCADE ON UPDATE CASCADE,
     email VARCHAR(255) UNIQUE NOT NULL,
-    hashed_password VARCHAR(255) NOT NULL,
-    username VARCHAR(255) UNIQUE NOT NULL,
     player_name VARCHAR(255),
     role INTEGER NOT NULL DEFAULT 0,
     created_at date NOT NULL DEFAULT NOW(),

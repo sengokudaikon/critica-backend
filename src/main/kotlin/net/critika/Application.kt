@@ -30,8 +30,8 @@ import net.critika.infrastructure.MainModule
 import net.critika.infrastructure.authentication.FirebaseAdmin
 import net.critika.infrastructure.authentication.FirebasePrincipal
 import net.critika.infrastructure.authentication.firebase
-import net.critika.infrastructure.config.AppConfig
 import net.critika.infrastructure.config.DatabaseFactory
+import net.critika.infrastructure.config.DbConfig
 import net.critika.infrastructure.config.handleErrors
 import org.koin.ksp.generated.module
 import org.koin.ktor.ext.inject
@@ -54,10 +54,10 @@ fun Application.main() {
         modules(MainModule().module)
     }
     val dotenv = dotenv()
-    val config: AppConfig by inject()
+    val config: DbConfig by inject()
     val runMigrations = dotenv["RUN_MIGRATIONS"]?.toBoolean() ?: false
 
-    DatabaseFactory.init(runMigrations = runMigrations, dbConfig = config.dbConfig())
+    DatabaseFactory.init(runMigrations = runMigrations, dbConfig = config)
     FirebaseAdmin.init()
     install(Authentication) {
         firebase {

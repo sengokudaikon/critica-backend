@@ -31,11 +31,6 @@ class UserSettingsUseCase(
                 return get(command.uid)
             }
 
-            is UserSettingsCommand.Update.DeviceToken -> {
-                userRepository.addDeviceToken(command.uid, command.deviceToken)
-                return get(command.uid)
-            }
-
             is UserSettingsCommand.Update.PushNotification -> {
                 userSettingsRepository.updatePushNotifications(command.uid, command.pushNotification)
                 return get(command.uid)

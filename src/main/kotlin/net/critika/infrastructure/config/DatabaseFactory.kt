@@ -23,7 +23,7 @@ object DatabaseFactory {
             this.password = dbConfig.password
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-            maximumPoolSize = 3
+            maximumPoolSize = 5
             idleTimeout = 10000
             connectionTimeout = 10000
             validate()

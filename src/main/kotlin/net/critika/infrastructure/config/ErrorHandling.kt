@@ -12,15 +12,15 @@ fun Application.handleErrors() {
     install(StatusPages) {
         exception<InternalError> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
-            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
+            call.respondText(text = "500: ${cause.localizedMessage}", status = HttpStatusCode.InternalServerError)
         }
         exception<Throwable> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
-            call.respond(HttpStatusCode.InternalServerError, "500: An unexpected error occurred")
+            call.respond(HttpStatusCode.InternalServerError, "500: ${cause.localizedMessage}")
         }
         exception<IllegalArgumentException> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+            call.respondText(text = "400: ${cause.localizedMessage}", status = HttpStatusCode.BadRequest)
         }
         exception<BadRequestException> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
@@ -28,15 +28,15 @@ fun Application.handleErrors() {
         }
         exception<NotFoundException> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
-            call.respondText(text = "404: $cause", status = HttpStatusCode.NotFound)
+            call.respondText(text = "404: ${cause.localizedMessage}", status = HttpStatusCode.NotFound)
         }
         exception<GameException> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+            call.respondText(text = "400: ${cause.localizedMessage}", status = HttpStatusCode.BadRequest)
         }
         exception<LobbyException> { call, cause ->
             this@handleErrors.log.error(cause.localizedMessage)
-            call.respondText(text = "400: $cause", status = HttpStatusCode.BadRequest)
+            call.respondText(text = "400: ${cause.localizedMessage}", status = HttpStatusCode.BadRequest)
         }
     }
 }

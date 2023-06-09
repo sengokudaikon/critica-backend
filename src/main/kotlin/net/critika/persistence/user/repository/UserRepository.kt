@@ -2,7 +2,6 @@ package net.critika.persistence.user.repository
 
 import kotlinx.uuid.UUID
 import net.critika.domain.user.model.User
-import net.critika.domain.user.model.UserDeviceToken
 import net.critika.domain.user.model.UserRole
 import net.critika.domain.user.repository.UserRepositoryPort
 import net.critika.infrastructure.exception.UserException
@@ -71,23 +70,6 @@ class UserRepository : UserRepositoryPort {
             User.find { Users.uid eq uid }.firstOrNull()
         }.await()
     }
-
-    override suspend fun addDeviceToken(userId: UUID, deviceToken: String) {
-        suspendedTransactionAsync {
-            val user = User.findById(userId) ?: throw UserException.NotFound("User not found")
-            user.deviceTokens.plus(
-                UserDeviceToken.new {
-                    this.userId = user
-                    this.token = deviceToken
-                    this.createdAt = LocalDateTime.now()
-                    this.expiresAt = LocalDateTime.now().plusYears(1)
-                },
-            )
-            user.updated = LocalDateTime.now()
-            user
-        }.await()
-    }
-
     override suspend fun findByPlayerName(playerName: String): User {
         return suspendedTransactionAsync {
             User.find { Users.playerName eq playerName }.firstOrNull()

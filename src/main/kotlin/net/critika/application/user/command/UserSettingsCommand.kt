@@ -9,31 +9,11 @@ interface UserSettingsCommand {
         val language: String = Language.ENGLISH.name,
     ) : UserSettingsCommand
 
-    sealed class Update(userId: UUID) : UserSettingsCommand {
-
-        data class Username(
-            val uid: UUID,
-            val username: String,
-        ) : Update(uid)
-
-        data class Password(
-            val uid: UUID,
-            val password: String,
-        ) : Update(uid)
-
-        data class Email(
-            val uid: UUID,
-            val email: String,
-        ) : Update(uid)
+    sealed class Update(uid: UUID) : UserSettingsCommand {
 
         data class PlayerName(
             val uid: UUID,
             val playerName: String,
-        ) : Update(uid)
-
-        data class DeviceToken(
-            val uid: UUID,
-            val deviceToken: String,
         ) : Update(uid)
 
         data class Language(

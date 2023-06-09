@@ -11,6 +11,5 @@ interface UserRepositoryPort {
     suspend fun promoteToHost(user: User): User
     suspend fun updatePlayerName(userId: UUID, playerName: String): User
     suspend fun findByUid(uid: String): User?
-    suspend fun addDeviceToken(userId: UUID, deviceToken: String)
     suspend fun findByPlayerName(playerName: String): User
 }
