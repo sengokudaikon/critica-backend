@@ -21,6 +21,10 @@ paths:
                   value: "Healthy"
   /api/admin/users/{userId}/promote:
     post:
+      security:
+        - bearerAuth: []
+      tags:
+        - "Admin"
       description: "Promote user to host"
       parameters:
       - name: "userId"
@@ -29,7 +33,6 @@ paths:
         schema:
           type: "string"
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -41,6 +44,10 @@ paths:
                   value: "User promoted to host"
   /api/admin/users/{userId}/reject:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Admin"
       description: "Reject user promotion"
       parameters:
       - name: "userId"
@@ -49,7 +56,6 @@ paths:
         schema:
           type: "string"
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -61,9 +67,12 @@ paths:
                   value: "User promotion rejected"
   /api/admin/users/requesting-promotion:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Admin"
       description: "See users requesting promotion"
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -74,6 +83,10 @@ paths:
                   $ref: "#/components/schemas/UserResponse"
   /api/auth/register:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Auth"
       description: "Register a new user"
       requestBody:
         content:
@@ -83,6 +96,10 @@ paths:
         required: true
   /api/auth/signIn:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Auth"
       description: "Sign in as a user"
       requestBody:
         content:
@@ -99,6 +116,10 @@ paths:
                 $ref: "#/components/schemas/UserResponse"
   /api/auth/userExists:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Auth"
       description: "Check if user exists"
       requestBody:
         content:
@@ -115,6 +136,10 @@ paths:
                 type: "string"
   /api/club/{clubId}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Get club by id"
       parameters:
       - name: "clubId"
@@ -137,6 +162,10 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/createLobby:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Create a lobby in a club"
       parameters:
       - name: "clubId"
@@ -159,6 +188,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/club/{clubId}/games:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Get games in a club"
       parameters:
       - name: "clubId"
@@ -183,6 +216,10 @@ paths:
                   $ref: "#/components/schemas/GameResponse"
   /api/club/{clubId}/join:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Join a club"
       parameters:
       - name: "clubId"
@@ -205,6 +242,10 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/leave:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Leave a club"
       parameters:
       - name: "clubId"
@@ -227,6 +268,10 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/{clubId}/lobbies:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See lobbies in a club"
       parameters:
       - name: "clubId"
@@ -251,6 +296,10 @@ paths:
                   $ref: "#/components/schemas/LobbyResponse"
   /api/club/{clubId}/members:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See members in a club"
       parameters:
       - name: "clubId"
@@ -275,6 +324,10 @@ paths:
                   $ref: "#/components/schemas/UserResponse"
   /api/club/{id}/rating:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See club rating"
       parameters:
       - name: "id"
@@ -293,6 +346,10 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/day/{day}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See club rating for a day"
       parameters:
       - name: "id"
@@ -316,6 +373,10 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/month/{month}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See club rating for a month"
       parameters:
       - name: "id"
@@ -339,6 +400,10 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/season:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See club rating for a season"
       parameters:
       - name: "id"
@@ -357,6 +422,10 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/week/{week}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See club rating for a week"
       parameters:
       - name: "id"
@@ -380,6 +449,10 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/year/{year}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "See club rating for a year"
       parameters:
       - name: "id"
@@ -403,6 +476,10 @@ paths:
                   $ref: "#/components/schemas/RatingResponse"
   /api/club/{clubId}/update:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Update club info"
       parameters:
       - name: "clubId"
@@ -425,6 +502,10 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/create:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Create a club"
       requestBody:
         content:
@@ -441,6 +522,10 @@ paths:
                 $ref: "#/components/schemas/ClubResponse"
   /api/club/list:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Club"
       description: "Get list of clubs"
       responses:
         "200":
@@ -453,6 +538,10 @@ paths:
                   $ref: "#/components/schemas/ClubResponse"
   /api/game/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Get game by id"
       parameters:
       - name: "id"
@@ -469,6 +558,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/addBonus/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Add bonus to player by seat"
       parameters:
       - name: "id"
@@ -490,6 +583,10 @@ paths:
                 type: "object"
   /api/game/{id}/addFoul/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Add foul to player by seat"
       parameters:
       - name: "id"
@@ -511,6 +608,10 @@ paths:
                 type: "object"
   /api/game/{id}/addOPW/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Add opposite party win to game by seat"
       parameters:
       - name: "id"
@@ -532,6 +633,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/addPlayer:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Add player to game by name"
       parameters:
       - name: "id"
@@ -546,6 +651,10 @@ paths:
           type: "string"
   /api/game/{id}/addPlayer/{playerId}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Add player to game by id"
       parameters:
       - name: "id"
@@ -560,6 +669,10 @@ paths:
           type: "string"
   /api/game/{id}/finish:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Finish game by id"
       parameters:
       - name: "id"
@@ -581,6 +694,10 @@ paths:
                 - "DETECTIVE"
   /api/game/{id}/host/{hostId}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Assign host to game by id"
       parameters:
       - name: "id"
@@ -602,6 +719,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/removePlayer/{playerId}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Remove player from game by id"
       parameters:
       - name: "id"
@@ -616,6 +737,10 @@ paths:
           type: "string"
   /api/game/{id}/start:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Start game"
       parameters:
       - name: "id"
@@ -632,6 +757,10 @@ paths:
                 type: "object"
   /api/game/{id}/startDay/{day}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Start day"
       parameters:
       - name: "id"
@@ -653,6 +782,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/{id}/startNight/{night}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Start night"
       parameters:
       - name: "id"
@@ -674,6 +807,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/game/list:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Game"
       description: "Get all games"
       responses:
         "200":
@@ -686,6 +823,10 @@ paths:
                   $ref: "#/components/schemas/GameResponse"
   /api/lobby/{lobbyId}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Get lobby by id"
       parameters:
       - name: "lobbyId"
@@ -702,6 +843,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/addGame:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Add game to lobby"
       parameters:
       - name: "lobbyId"
@@ -718,6 +863,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/addPlayer:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Add player by name to lobby"
       parameters:
       - name: "lobbyId"
@@ -739,6 +888,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/addPlayer/{playerId}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Add player to lobby"
       parameters:
       - name: "lobbyId"
@@ -760,6 +913,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/addTemporaryPlayer:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Add temporary player"
       parameters:
       - name: "lobbyId"
@@ -781,6 +938,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/delete:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Delete lobby"
       parameters:
       - name: "lobbyId"
@@ -797,6 +958,10 @@ paths:
                 type: "object"
   /api/lobby/{lobbyId}/games:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Get games in lobby"
       parameters:
       - name: "lobbyId"
@@ -815,6 +980,10 @@ paths:
                   $ref: "#/components/schemas/GameResponse"
   /api/lobby/{lobbyId}/players:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Get players in lobby"
       parameters:
       - name: "lobbyId"
@@ -833,6 +1002,10 @@ paths:
                   $ref: "#/components/schemas/PlayerResponse"
   /api/lobby/{lobbyId}/removeGame/{gameId}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Remove game from lobby"
       parameters:
       - name: "lobbyId"
@@ -854,6 +1027,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/removePlayer:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Remove player from lobby"
       parameters:
       - name: "lobbyId"
@@ -875,6 +1052,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/{lobbyId}/removePlayer/{playerId}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Remove player from lobby"
       parameters:
       - name: "lobbyId"
@@ -896,6 +1077,10 @@ paths:
                 $ref: "#/components/schemas/LobbyResponse"
   /api/lobby/list:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Lobby"
       description: "Get all lobbies"
       responses:
         "200":
@@ -908,6 +1093,10 @@ paths:
                   $ref: "#/components/schemas/LobbyResponse"
   /api/player:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Get current player info"
       responses:
         "200":
@@ -918,6 +1107,10 @@ paths:
                 $ref: "#/components/schemas/PlayerResponse"
   /api/player/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Get player by id"
       parameters:
       - name: "id"
@@ -934,6 +1127,10 @@ paths:
                 $ref: "#/components/schemas/PlayerResponse"
   /api/player/{name}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Get player by name"
       parameters:
       - name: "name"
@@ -950,6 +1147,10 @@ paths:
                 $ref: "#/components/schemas/PlayerResponse"
   /api/player/enterGame/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Enter game"
       parameters:
       - name: "id"
@@ -966,6 +1167,10 @@ paths:
                 type: "object"
   /api/player/enterLobby/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Enter lobby"
       parameters:
       - name: "id"
@@ -982,6 +1187,10 @@ paths:
                 type: "object"
   /api/player/leaveGame:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Leave current game"
       requestBody:
         content:
@@ -998,6 +1207,10 @@ paths:
                 type: "object"
   /api/player/leaveLobby/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Player"
       description: "Leave lobby"
       parameters:
       - name: "id"
@@ -1020,6 +1233,10 @@ paths:
                 type: "object"
   /api/stage/{id}/bestMove/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Assign best move to player"
       parameters:
       - name: "id"
@@ -1041,6 +1258,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{nightId}/detective/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Detective checks"
       parameters:
       - name: "nightId"
@@ -1068,6 +1289,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{nightId}/don/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Don checks for detective"
       parameters:
       - name: "nightId"
@@ -1096,6 +1321,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{stageId}/finish:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Finish stage"
       parameters:
       - name: "stageId"
@@ -1113,6 +1342,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{stageId}/next:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Next stage"
       parameters:
       - name: "stageId"
@@ -1129,6 +1362,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{dayId}/nominate/{candidate}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Nominate candidate for voting"
       parameters:
       - name: "dayId"
@@ -1158,6 +1395,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{stageId}/prev:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Previous stage"
       parameters:
       - name: "stageId"
@@ -1172,7 +1413,6 @@ paths:
               $ref: "#/components/schemas/StageQuery"
         required: true
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -1181,6 +1421,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{dayId}/remove/{candidate}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Remove candidate from voting"
       parameters:
       - name: "dayId"
@@ -1208,6 +1452,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{nightId}/shot/{seat}:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Shot candidate"
       parameters:
       - name: "nightId"
@@ -1236,6 +1484,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/stage/{dayId}/vote:
     put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "GameProcess"
       description: "Vote for candidate"
       parameters:
       - name: "dayId"
@@ -1264,6 +1516,10 @@ paths:
                 $ref: "#/components/schemas/GameResponse"
   /api/user/settings:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
       description: "Get user settings"
       responses:
         "200":
@@ -1274,6 +1530,10 @@ paths:
                 $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/change-language:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
       description: "Change language"
       requestBody:
         content:
@@ -1290,6 +1550,10 @@ paths:
                 $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/change-public-visibility:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
       description: "Change public visibility"
       requestBody:
         content:
@@ -1306,6 +1570,10 @@ paths:
                 $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/change-push-notifications:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
       description: "Change push notifications settings"
       requestBody:
         content:
@@ -1322,6 +1590,10 @@ paths:
                 $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/settings/request-promotion:
     post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
       description: "Request promotion to host"
       responses:
         "200":
@@ -1332,6 +1604,10 @@ paths:
                 $ref: "#/components/schemas/UserSettingsResponse"
   /api/user/statistics:
     get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
       description: "Get user statistics"
       responses:
         "200":
@@ -1340,9 +1616,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RatingResponse"
+  /api/user/role:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
+      description: "Get user role"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: string
 components:
   securitySchemes:
-    FirebaseToken:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT

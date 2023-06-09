@@ -63,6 +63,11 @@ class UserSettingsUseCase(
         userSettingsRepository.deleteUserSettings(id)
     }
 
+    override suspend fun getUserRole(userId: UUID): Either<UserException, String> {
+        val user = userRepository.findById(userId)
+        return user?.role?.toString()?.right() ?: UserException.NotFound("User not found").left()
+    }
+
     override suspend fun requestPromotion(userId: UUID): Either<UserException, UserSettingsResponse> {
         val user = userRepository.findById(userId)
         return if (user != null) {

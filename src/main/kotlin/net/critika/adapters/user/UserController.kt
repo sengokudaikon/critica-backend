@@ -20,6 +20,23 @@ class UserController(
     private val userSettingsUseCase: UserSettingsPort,
     private val userStatisticsUseCase: UserRatingPort,
 ) : Controller() {
+
+    @ProtectedRoute("firebase")
+    @Get("/api/user/role")
+    suspend fun getUserRole(call: ApplicationCall) {
+        val userId = fromUid(call)
+        userSettingsUseCase.getUserRole(userId).fold(
+            { call.respond(it) },
+            {
+                call.respond(
+                    mapOf(
+                        "role" to it,
+                    ),
+                )
+            },
+        )
+    }
+
     @ProtectedRoute("firebase")
     @Get("/api/user/statistics")
     suspend fun getStatistics(call: ApplicationCall) {
