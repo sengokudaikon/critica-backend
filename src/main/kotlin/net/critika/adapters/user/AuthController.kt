@@ -44,7 +44,6 @@ class AuthController(
                 call.respond(
                     HttpStatusCode.Created,
                     message = mapOf(
-                        "message" to "User created successfully, verify your email to sign in",
                         "uid" to uid,
                     ),
                 )

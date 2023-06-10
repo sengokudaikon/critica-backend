@@ -8,8 +8,8 @@ import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.RoleStatistic
 import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.repository.UserRatingRepositoryPort
-import net.critika.unit.Helpers.getMockUser
-import net.critika.unit.Helpers.getMockUserRating
+import net.critika.helpers.Helpers.getMockUser
+import net.critika.helpers.Helpers.getMockUserRating
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

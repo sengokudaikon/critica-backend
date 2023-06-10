@@ -34,7 +34,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -57,7 +57,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -95,7 +95,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Create"
+              $ref: "#/components/schemas/CreateUser"
         required: true
   /api/auth/signIn:
     post:
@@ -147,13 +147,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubQuery"
-        required: true
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -173,7 +167,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -199,13 +193,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubQuery"
-        required: true
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -227,7 +215,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -253,7 +241,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -279,13 +267,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubQuery"
-        required: true
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -307,13 +289,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubQuery"
-        required: true
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -335,7 +311,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -357,12 +333,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "day"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -384,12 +360,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "month"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -411,7 +387,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -433,12 +409,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "week"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -460,12 +436,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "year"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -487,7 +463,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -512,7 +488,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Create"
+              $ref: "#/components/schemas/CreateClub"
         required: true
       responses:
         "200":
@@ -549,7 +525,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -569,12 +545,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "seat"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -594,12 +570,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "seat"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -619,12 +595,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "seat"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -644,7 +620,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "playerName"
         in: "path"
         required: true
@@ -662,12 +638,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
   /api/game/{id}/finish:
     post:
       security:
@@ -680,7 +656,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -705,12 +681,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "hostId"
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -730,12 +706,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
   /api/game/{id}/start:
     post:
       security:
@@ -748,7 +724,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -768,12 +744,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "day"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -793,12 +769,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "night"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "OK"
@@ -834,7 +810,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -854,7 +830,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1038,7 +1014,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "playerName"
         in: "query"
         required: true
@@ -1063,12 +1039,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1269,12 +1245,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "seat"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       requestBody:
         content:
           application/json:
@@ -1332,7 +1308,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         
         "200":
@@ -1353,7 +1329,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       responses:
         "200":
           description: "OK"
@@ -1406,7 +1382,7 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -1432,12 +1408,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "candidate"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       requestBody:
         content:
           application/json:
@@ -1463,12 +1439,12 @@ paths:
         in: "path"
         required: true
         schema:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
       - name: "seat"
         in: "path"
         required: true
         schema:
-          type: "string"
+          type: "integer"
       requestBody:
         content:
           application/json:
@@ -1538,7 +1514,7 @@ paths:
       description: "Change language"
       requestBody:
         content:
-          text/plain:
+          application/json:
             schema:
               type: "string"
         required: true
@@ -1642,12 +1618,19 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         playerName:
           type: "string"
         email:
           type: "string"
-    Create:
+    CreateUser:
+      type: "object"
+      properties:
+        playerName:
+          type: "string"
+        email:
+          type: "string"
+    CreateClub:
       type: "object"
       properties:
         name:
@@ -1719,9 +1702,39 @@ components:
           format: "int32"
     StageResponse:
       type: "object"
+      anyOf:
+        - $ref: "#/components/schemas/DayStageResponse"
+        - $ref: "#/components/schemas/NightStageResponse"
+    DayStageResponse:
+      type: "object"
       properties:
         type:
           type: "string"
+          enum:
+            - "DAY"
+        dayNumber:
+          type: "integer"
+          format: "int32"
+        candidates:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+        votes:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/DayVoteResponse"
+    NightStageResponse:
+      type: "object"
+      properties:
+        dayNumber:
+          type: "integer"
+          format: "int32"
+        mafiaShot:
+          $ref: "#/components/schemas/PlayerResponse"
+        detectiveCheck:
+          $ref: "#/components/schemas/PlayerResponse"
+        donCheck:
+          $ref: "#/components/schemas/PlayerResponse"
     DayVoteResponse:
       type: "object"
       properties:
@@ -1736,7 +1749,7 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         date:
           type: "string"
         host:
@@ -1773,7 +1786,7 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         date:
           type: "string"
         creator:
@@ -1790,7 +1803,7 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         name:
           type: "string"
         creator:
@@ -1832,7 +1845,7 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         role:
           type: "string"
         gamesWon:
@@ -1848,7 +1861,7 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         userId:
           type: "string"
         totalPoints:
@@ -1933,7 +1946,7 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          $ref: "#/components/schemas/UUID"
         emailConfirmed:
           type: "boolean"
         publicVisibility:

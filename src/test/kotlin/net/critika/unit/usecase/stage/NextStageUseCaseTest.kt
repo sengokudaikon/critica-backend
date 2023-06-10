@@ -18,13 +18,13 @@ import net.critika.domain.gameprocess.model.DayVote
 import net.critika.domain.gameprocess.model.Player
 import net.critika.domain.gameprocess.repository.EventRepositoryPort
 import net.critika.domain.user.model.User
+import net.critika.helpers.Helpers.getMockGame
+import net.critika.helpers.Helpers.getMockLobby
+import net.critika.helpers.Helpers.getMockPlayer
+import net.critika.helpers.Helpers.getMockUser
 import net.critika.persistence.club.entity.Games
 import net.critika.persistence.club.repository.GameRepository
 import net.critika.persistence.club.repository.PlayerRepository
-import net.critika.unit.Helpers.getMockGame
-import net.critika.unit.Helpers.getMockLobby
-import net.critika.unit.Helpers.getMockPlayer
-import net.critika.unit.Helpers.getMockUser
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.emptySized

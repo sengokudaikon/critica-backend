@@ -6,9 +6,9 @@ import kotlinx.uuid.generateUUID
 import net.critika.application.lobby.command.LobbyCommand
 import net.critika.application.lobby.response.LobbyResponse
 import net.critika.application.lobby.usecase.LobbyCrudUseCase
+import net.critika.helpers.Helpers.getMockLobby
+import net.critika.helpers.Helpers.getMockUser
 import net.critika.persistence.club.repository.LobbyRepository
-import net.critika.unit.Helpers.getMockLobby
-import net.critika.unit.Helpers.getMockUser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

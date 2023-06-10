@@ -1,4 +1,4 @@
-package net.critika.e2e
+package net.critika.helpers
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord

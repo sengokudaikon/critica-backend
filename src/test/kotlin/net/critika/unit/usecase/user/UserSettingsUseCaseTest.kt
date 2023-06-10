@@ -9,9 +9,9 @@ import net.critika.domain.user.model.Language
 import net.critika.domain.user.model.UserSetting
 import net.critika.domain.user.repository.UserRepositoryPort
 import net.critika.domain.user.repository.UserSettingsRepositoryPort
+import net.critika.helpers.Helpers.getMockUser
 import net.critika.persistence.user.entity.UserSettings
 import net.critika.persistence.user.entity.Users
-import net.critika.unit.Helpers.getMockUser
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction

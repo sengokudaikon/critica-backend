@@ -139,6 +139,7 @@ dependencies {
     implementation("io.ktor:ktor-client-encoding:2.3.0")
     implementation("io.ktor:ktor-client-okhttp:2.3.0")
     implementation("app.softwork:kotlinx-uuid-exposed:0.0.17")
+    implementation("io.github.serpro69:kotlin-faker:1.14.0-rc.2")
     testImplementation("io.ktor:ktor-server-test-host:2.3.0")
     testImplementation("io.ktor:ktor-server-tests:2.3.0")
 

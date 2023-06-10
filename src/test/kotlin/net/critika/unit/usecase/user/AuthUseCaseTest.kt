@@ -13,8 +13,8 @@ import net.critika.application.user.usecase.UserStatisticsUseCase
 import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.model.UserSetting
 import net.critika.domain.user.repository.UserRepositoryPort
+import net.critika.helpers.Helpers.getMockUser
 import net.critika.persistence.user.repository.UserSettingsRepository
-import net.critika.unit.Helpers.getMockUser
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach

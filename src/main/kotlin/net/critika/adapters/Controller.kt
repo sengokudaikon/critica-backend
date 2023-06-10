@@ -24,7 +24,7 @@ abstract class Controller : KoinComponent {
         return authorization.getUserId(call)
     }
 
-    protected fun uid(call: ApplicationCall): String {
+    fun uid(call: ApplicationCall): String {
         return call.principal<FirebasePrincipal>()?.uid ?: throw UserException.Unauthorized("Unauthorized Firebase user")
     }
 }

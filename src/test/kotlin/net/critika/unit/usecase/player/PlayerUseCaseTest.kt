@@ -8,13 +8,13 @@ import net.critika.application.game.command.GameCommand
 import net.critika.application.lobby.command.LobbyCommand
 import net.critika.application.player.command.PlayerCommand
 import net.critika.application.player.usecase.PlayerUseCase
+import net.critika.helpers.Helpers.getMockGame
+import net.critika.helpers.Helpers.getMockLobby
+import net.critika.helpers.Helpers.getMockPlayer
 import net.critika.infrastructure.exception.LobbyException
 import net.critika.persistence.club.repository.GameRepository
 import net.critika.persistence.club.repository.LobbyRepository
 import net.critika.persistence.club.repository.PlayerRepository
-import net.critika.unit.Helpers.getMockGame
-import net.critika.unit.Helpers.getMockLobby
-import net.critika.unit.Helpers.getMockPlayer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock

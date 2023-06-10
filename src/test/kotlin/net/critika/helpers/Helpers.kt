@@ -1,4 +1,4 @@
-package net.critika.unit
+package net.critika.helpers
 
 import kotlinx.uuid.UUID
 import net.critika.domain.club.model.Game
