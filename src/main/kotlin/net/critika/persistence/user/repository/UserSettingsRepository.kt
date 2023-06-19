@@ -1,7 +1,5 @@
 package net.critika.persistence.user.repository
 
-import arrow.core.Either
-import arrow.core.right
 import kotlinx.uuid.UUID
 import net.critika.domain.user.model.Language
 import net.critika.domain.user.model.User
@@ -14,15 +12,6 @@ import org.koin.core.annotation.Single
 
 @Single
 class UserSettingsRepository : UserSettingsRepositoryPort {
-    override suspend fun updateEmailVerificationStatus(userId: UUID, emailVerified: Boolean) {
-        suspendedTransactionAsync {
-            val user = User.findById(userId) ?: return@suspendedTransactionAsync
-            val userSettings = user.settings.singleOrNull() ?: return@suspendedTransactionAsync
-            userSettings.emailVerified = emailVerified
-            userSettings.updatedAt = DateTime.now().millis
-        }.await()
-    }
-
     override suspend fun updatePromotion(userId: UUID, b: Boolean?) {
         suspendedTransactionAsync {
             val user = User.findById(userId) ?: return@suspendedTransactionAsync
@@ -68,16 +57,6 @@ class UserSettingsRepository : UserSettingsRepositoryPort {
         }.await()
     }
 
-    override suspend fun isEmailVerified(userId: UUID): Either<Throwable, Boolean> {
-        suspendedTransactionAsync {
-            val user = User.findById(userId) ?: return@suspendedTransactionAsync
-            val userSettings = user.settings.singleOrNull() ?: return@suspendedTransactionAsync
-            userSettings.emailVerified.right()
-        }.await()
-
-        return Either.Left(UserException.NotFound("User not found"))
-    }
-
     override suspend fun getUserSettingsByUserId(userId: UUID): UserSetting {
         return suspendedTransactionAsync {
             val user = User.findById(userId) ?: throw UserException.NotFound("User not found")
@@ -89,7 +68,6 @@ class UserSettingsRepository : UserSettingsRepositoryPort {
         return suspendedTransactionAsync {
             val userSetting = UserSetting.new {
                 this.userId = User.findById(userId) ?: throw UserException.NotFound("User not found")
-                this.emailVerified = false
                 this.publicVisibility = false
                 this.pushNotifications = false
                 this.language = language?.let { Language.valueOf(it) } ?: Language.ENGLISH

@@ -5,11 +5,10 @@ import net.critika.application.club.command.ClubCommand
 import net.critika.application.club.response.ClubResponse
 import net.critika.application.game.response.GameResponse
 import net.critika.application.lobby.response.LobbyResponse
+import net.critika.application.user.response.RatingResponse
 import net.critika.application.user.response.UserResponse
 import net.critika.domain.club.repository.ClubRepositoryPort
-import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.repository.UserRatingRepositoryPort
-import net.critika.infrastructure.exception.ClubException
 import net.critika.ports.club.ClubCrudPort
 import net.critika.ports.club.ClubLobbyPort
 import net.critika.ports.club.ClubMemberPort
@@ -23,10 +22,10 @@ class ClubUseCase(
     override suspend fun list(): List<ClubResponse> {
         return clubRepository.list().map { it.toResponse() }
     }
-    override suspend fun getClubRating(clubId: UUID): List<UserRating> {
+    override suspend fun getClubRating(clubId: UUID): List<RatingResponse> {
         val club = clubRepository.get(clubId)
 
-        return userRatingRepository.findByClubId(club.id.value)
+        return userRatingRepository.findByClubId(club.id.value).map { it.toResponse() }
     }
 
     override suspend fun get(id: UUID): ClubResponse {

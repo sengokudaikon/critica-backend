@@ -9,10 +9,9 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.uuid.UUID
 import net.critika.adapters.Controller
 import net.critika.application.club.command.ClubCommand
-import net.critika.application.club.query.ClubMembershipQuery
-import net.critika.application.club.query.ClubQuery
 import net.critika.application.lobby.command.LobbyCommand
 import net.critika.domain.user.model.UserRole
 import net.critika.ports.club.ClubCrudPort
@@ -30,18 +29,18 @@ class ClubController(
     private val lobbyCrud: LobbyCrudPort,
 ) : Controller() {
     @ProtectedRoute("firebase")
-    @Get("api/club/{clubId}/members")
+    @Get("api/club/{id}/members")
     suspend fun getPlayers(call: ApplicationCall) {
-        val id = call.receive<ClubQuery>()
-        val players = clubMember.listMembers(id.id)
+        val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+        val players = clubMember.listMembers(id)
         call.respond(players)
     }
 
     @ProtectedRoute("firebase")
-    @Get("api/club/{clubId}")
+    @Get("api/club/{id}")
     suspend fun getClub(call: ApplicationCall) {
-        val id = call.receive<ClubQuery>()
-        val club = clubCrud.get(id.id)
+        val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+        val club = clubCrud.get(id)
         call.respond(club)
     }
 
@@ -53,60 +52,61 @@ class ClubController(
     }
 
     @ProtectedRoute("firebase")
-    @Get("api/club/{clubId}/lobbies")
+    @Get("api/club/{id}/lobbies")
     suspend fun listLobbies(call: ApplicationCall) {
-        val id = call.receive<ClubQuery>()
-        val lobbies = clubLobby.listLobbies(id.id)
+        val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+        val lobbies = clubLobby.listLobbies(id)
         call.respond(lobbies)
     }
 
     @ProtectedRoute("firebase")
-    @Get("api/club/{clubId}/games")
+    @Get("api/club/{id}/games")
     suspend fun listGames(call: ApplicationCall) {
-        val id = call.receive<ClubQuery>()
-        val games = clubLobby.listGames(id.id)
+        val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+        val games = clubLobby.listGames(id)
         call.respond(games)
     }
 
     @ProtectedRoute("firebase")
-    @Post("api/club/{clubId}/createLobby")
+    @Post("api/club/{id}/createLobby")
     suspend fun createLobby(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
-            val request = call.receive<ClubQuery>()
-            val date = LocalDateTime.parse(call.receiveParameters()["date"])
+            val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+            val date = LocalDateTime.parse(call.request.queryParameters["date"])
             val creator = fromUid(call)
-            val lobby = lobbyCrud.create(LobbyCommand.Create(creator, date.toString(), request.id))
+            val lobby = lobbyCrud.create(LobbyCommand.Create(creator, date.toString(), id))
 
             call.respond(lobby)
         }
     }
 
     @ProtectedRoute("firebase")
-    @Put("api/club/{clubId}/update")
+    @Put("api/club/{id}/update")
     suspend fun updateClub(call: ApplicationCall) {
         authorize(call, listOf(UserRole.OWNER)) {
-            val request = call.receive<ClubCommand.Update>()
+            val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+            val request = call.receive<ClubCommand.Update>().copy(id = id)
             val club = clubCrud.update(request)
             call.respond(club)
         }
     }
 
     @ProtectedRoute("firebase")
-    @Put("/api/club/{clubId}/join")
+    @Put("/api/club/{id}/join")
     suspend fun joinClub(call: ApplicationCall) {
-        val club = call.receive<ClubQuery>()
-        val member = call.receive<ClubMembershipQuery>()
-        val response = clubMember.enterClub(member.userId, club.id)
+        val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+        val member = fromUid(call)
+        val response = clubMember.enterClub(member, id)
         call.respond(response)
     }
 
     @ProtectedRoute("firebase")
-    @Put("/api/club/{clubId}/leave")
+    @Put("/api/club/{id}/leave")
     suspend fun leaveClub(call: ApplicationCall) {
         authorize(call, listOf(UserRole.USER, UserRole.HOST)) {
-            val club = call.receive<ClubQuery>()
-            val member = call.receive<ClubMembershipQuery>()
-            val response = clubMember.leaveClub(member.userId, club.id)
+            val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("clubId is required")
+            val member = fromUid(call)
+            val response = clubMember.leaveClub(member, id)
             call.respond(response)
         }
     }

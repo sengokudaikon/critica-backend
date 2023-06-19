@@ -18,11 +18,7 @@ interface LobbyCommand {
         val creator: UUID,
         val date: String,
         val clubId: UUID,
-    ) : LobbyCommand
-
-    @Serializable
-    data class Delete(
-        @ValidUUID val id: UUID,
+        val tournamentId: UUID? = null,
     ) : LobbyCommand
 
     data class Save(

@@ -7,7 +7,6 @@ import kotlinx.uuid.UUID
 import kotlinx.uuid.generateUUID
 import net.critika.application.game.command.GameCommand
 import net.critika.application.game.usecase.GameUseCase
-import net.critika.application.user.usecase.UserStatisticsUseCase
 import net.critika.domain.*
 import net.critika.domain.club.model.Game
 import net.critika.domain.club.model.GameStatus
@@ -16,7 +15,9 @@ import net.critika.domain.gameprocess.model.Player
 import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.User
 import net.critika.domain.user.model.UserRole
+import net.critika.domain.user.repository.UserRatingRepositoryPort
 import net.critika.domain.user.repository.UserRepositoryPort
+import net.critika.domain.user.repository.UserRoleStatisticRepositoryPort
 import net.critika.helpers.Helpers.getMockGame
 import net.critika.helpers.Helpers.getMockLobby
 import net.critika.helpers.Helpers.getMockPlayer
@@ -57,9 +58,9 @@ class GameUseCaseTest {
     private var playerRepository: PlayerRepository = mock()
 
     @Mock
-    private var userStatisticsUseCase: UserStatisticsUseCase = mock()
+    private var userRatingRepository: UserRatingRepositoryPort = mock()
     private var userRepository: UserRepositoryPort = mock()
-
+    private var userRoleStatisticRepository: UserRoleStatisticRepositoryPort = mock()
     private lateinit var gameUseCase: GameUseCase
 
     private lateinit var mockGame: Game
@@ -98,7 +99,7 @@ class GameUseCaseTest {
         mockLobby = getMockLobby()
         mockPlayer = getMockPlayer()
         mockUser = getMockUser()
-        gameUseCase = GameUseCase(repository, lobbyRepository, playerRepository, userRepository, userStatisticsUseCase)
+        gameUseCase = GameUseCase(repository, lobbyRepository, playerRepository, userRepository, userRatingRepository, userRoleStatisticRepository)
     }
 
     @Feature("Assign Host")
@@ -150,7 +151,7 @@ class GameUseCaseTest {
         val result = gameUseCase.list()
 
         // Then
-        assertEquals(games, result)
+        assertEquals(games.map { it.toResponse() }, result)
         Mockito.verify(repository, Mockito.times(1)).list()
     }
 

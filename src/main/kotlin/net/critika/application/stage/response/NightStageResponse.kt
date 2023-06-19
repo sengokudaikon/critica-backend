@@ -7,4 +7,4 @@ data class NightStageResponse(
     val mafiaShot: PlayerResponse?,
     val detectiveCheck: PlayerResponse?,
     val donCheck: PlayerResponse?,
-) : StageResponse("night")
+) : StageResponse()

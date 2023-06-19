@@ -2,11 +2,10 @@ package net.critika.ports.club
 
 import net.critika.application.user.response.RatingResponse
 
-interface RatingPort {
-    suspend fun getRatingInRange(from: String, to: String): List<RatingResponse>
-    suspend fun getRatingForMonth(month: Int): List<RatingResponse>
-    suspend fun getRatingForWeek(week: Int): List<RatingResponse>
-    suspend fun getRatingForDay(day: Int): List<RatingResponse>
-    suspend fun getRatingForYear(year: Int): List<RatingResponse>
-    suspend fun getRatingForSeason(): List<RatingResponse>
+interface RatingPort<U> {
+    suspend fun getRatingInRange(uuid: U, from: String, to: String): RatingResponse
+    suspend fun getRatingForMonth(uuid: U, month: Int): RatingResponse
+    suspend fun getRatingForDay(uuid: U, day: Int): RatingResponse
+    suspend fun getRatingForYear(uuid: U, year: Int): RatingResponse
+    suspend fun getRatingForSeason(uuid: U): RatingResponse
 }

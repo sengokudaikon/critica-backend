@@ -11,7 +11,6 @@ class UserSetting(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
     companion object : KotlinxUUIDEntityClass<UserSetting>(UserSettings)
 
     var userId by User referencedOn UserSettings.userId
-    var emailVerified by UserSettings.emailVerified
     var publicVisibility by UserSettings.publicVisibility
     var pushNotifications by UserSettings.pushNotifications
     var language by UserSettings.language
@@ -26,7 +25,6 @@ class UserSetting(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
             pushNotificationsEnabled = this.pushNotifications,
             language = language.name,
             promoted = promotion,
-            emailConfirmed = emailVerified,
         )
     }
 }

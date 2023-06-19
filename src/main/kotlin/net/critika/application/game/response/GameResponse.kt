@@ -1,6 +1,7 @@
 package net.critika.application.game.response
 
 import kotlinx.serialization.Serializable
+import net.critika.application.Response
 import net.critika.application.player.response.PlayerResponse
 import net.critika.application.stage.response.StageResponse
 import net.critika.application.vote.DayVoteResponse
@@ -19,4 +20,4 @@ data class GameResponse(
     val donCheck: PlayerResponse? = null,
     val playersEliminated: List<PlayerResponse> = listOf(),
     val bestMove: List<PlayerResponse>? = listOf(),
-)
+) : Response

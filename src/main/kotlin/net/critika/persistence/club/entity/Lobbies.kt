@@ -7,5 +7,6 @@ import org.jetbrains.exposed.sql.javatime.datetime
 object Lobbies : KotlinxUUIDTable(name = "lobbies") {
     val clubId = reference("club_id", Clubs)
     val creator = reference("creator", Users)
+    val tournamentId = reference("tournament_id", Tournaments).nullable()
     val date = datetime("date")
 }

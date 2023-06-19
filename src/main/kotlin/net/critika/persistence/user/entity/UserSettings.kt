@@ -6,7 +6,6 @@ import org.joda.time.DateTime
 
 object UserSettings : KotlinxUUIDTable("user_settings") {
     val userId = reference("user_id", Users).uniqueIndex()
-    val emailVerified = bool("email_verified").default(false)
     val publicVisibility = bool("public_visibility").default(false)
     val pushNotifications = bool("push_notifications").default(false)
     val language = enumerationByName("language", 10, Language::class).default(Language.ENGLISH)

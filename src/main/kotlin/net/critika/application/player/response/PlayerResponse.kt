@@ -2,6 +2,7 @@ package net.critika.application.player.response
 
 import kotlinx.serialization.Serializable
 import kotlinx.uuid.UUID
+import net.critika.application.Response
 import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.gameprocess.model.PlayerStatus
 
@@ -11,8 +12,8 @@ data class PlayerResponse(
     val seat: Int,
     val name: String,
     var role: PlayerRole?,
-    val status: PlayerStatus,
+    val status: PlayerStatus?,
     val inGame: Boolean,
-    val bestMove: Int,
-    val bonusPoints: Int,
-)
+    val bestMove: Int?,
+    val bonusPoints: Int?,
+) : Response

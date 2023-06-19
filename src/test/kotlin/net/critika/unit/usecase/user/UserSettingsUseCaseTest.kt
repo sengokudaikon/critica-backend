@@ -149,7 +149,6 @@ class UserSettingsUseCaseTest {
         val user = getMockUser()
         val userSetting = mock<UserSetting> {
             on { userId } doReturn user
-            on { emailVerified } doReturn true
             on { publicVisibility } doReturn true
             on { pushNotifications } doReturn true
             on { language } doReturn Language.ENGLISH
@@ -170,7 +169,6 @@ class UserSettingsUseCaseTest {
         result.fold(
             { fail("Expecting a right value, got left: $it") },
             {
-                assertEquals(true, it.emailConfirmed)
                 assertEquals(true, it.publicVisibility)
                 assertEquals(true, it.pushNotificationsEnabled)
                 assertEquals("ENGLISH", it.language)

@@ -9,4 +9,4 @@ data class DayStageResponse(
     val dayNumber: Int,
     val candidates: List<PlayerResponse>,
     val votes: List<DayVoteResponse>,
-) : StageResponse("day")
+) : StageResponse()

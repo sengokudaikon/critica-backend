@@ -1,12 +1,10 @@
 package net.critika.ports.user
 
 import kotlinx.uuid.UUID
-import net.critika.domain.gameprocess.model.PlayerRole
+import net.critika.application.user.command.UserRoleStatisticsCommand
 import net.critika.domain.user.model.RoleStatistic
+import net.critika.ports.CrudPort
 
-interface UserRoleStatisticPort {
-    suspend fun createRoleStatistic(userRatingId: UUID, role: PlayerRole): RoleStatistic
-    suspend fun getRoleStatisticsByUserRatingId(userRatingId: UUID): List<RoleStatistic>
-    suspend fun updateRoleStatistic(roleStatistic: RoleStatistic)
-    suspend fun deleteRoleStatistic(id: UUID)
+interface UserRoleStatisticPort : CrudPort<UserRoleStatisticsCommand, RoleStatistic> {
+    suspend fun list(id: UUID): List<RoleStatistic>
 }

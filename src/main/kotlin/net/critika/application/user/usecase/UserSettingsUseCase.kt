@@ -40,10 +40,6 @@ class UserSettingsUseCase(
                 userSettingsRepository.updateLanguage(command.uid, command.language)
                 return get(command.uid)
             }
-            is UserSettingsCommand.Update.EmailVerification -> {
-                userSettingsRepository.updateEmailVerificationStatus(command.uid, command.emailVerification)
-                return get(command.uid)
-            }
 
             is UserSettingsCommand.Update.PublicVisibility -> {
                 userSettingsRepository.updatePublicVisibility(command.uid, command.publicVisibility)
@@ -81,7 +77,6 @@ class UserSettingsUseCase(
             val settings = userSettingsRepository.getUserSettingsByUserId(id)
             return UserSettingsResponse(
                 settings.userId.id.toString(),
-                settings.emailVerified,
                 settings.publicVisibility,
                 settings.pushNotifications,
                 settings.language.toString(),
@@ -96,7 +91,6 @@ class UserSettingsUseCase(
             val settings = userSettingsRepository.getUserSettingsByUserId(user.id.value)
             UserSettingsResponse(
                 settings.userId.id.toString(),
-                settings.emailVerified,
                 settings.publicVisibility,
                 settings.pushNotifications,
                 settings.language.toString(),

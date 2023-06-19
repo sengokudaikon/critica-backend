@@ -14,11 +14,15 @@ interface PlayerCommand {
 
     data class Update(
         val id: UUID,
-        val playerName: String,
-    ) : PlayerCommand
-
-    data class Delete(
-        val id: UUID,
+        val playerName: String?,
+        val lobbyId: UUID?,
+        val gameId: UUID?,
+        val seat: Int?,
+        val role: String?,
+        val status: String?,
+        val bestMove: Int?,
+        val bonusPoints: Int?,
+        val foulPoints: Int?,
     ) : PlayerCommand
 
     data class Save(

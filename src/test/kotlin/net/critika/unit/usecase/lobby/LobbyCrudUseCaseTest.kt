@@ -1,5 +1,6 @@
 package net.critika.unit.usecase.lobby
 
+import io.github.serpro69.kfaker.Faker
 import kotlinx.coroutines.runBlocking
 import kotlinx.uuid.UUID
 import kotlinx.uuid.generateUUID
@@ -32,7 +33,7 @@ class LobbyCrudUseCaseTest {
 
     @Test
     fun `create lobby`() = runBlocking {
-        val clubId = UUID.generateUUID(Random)
+        val clubId = Faker().cowboyBebop.character()
         val lobbyId = UUID.generateUUID(Random)
         val user = getMockUser()
         val dateM = mock<LocalDateTime>().toString()
@@ -40,14 +41,15 @@ class LobbyCrudUseCaseTest {
         whenever(lobby.creator).thenReturn(user)
 
         val lobbyResponse = LobbyResponse(
-            lobbyId.toString(),
+            lobbyId,
+            clubId,
             dateM,
-            user.id.toString(),
+            user.toResponse(),
         )
 
         whenever(lobbyRepository.create(any())).thenReturn(lobby)
 
-        val result = lobbyCrudUseCase.create(LobbyCommand.Create(user.id.value, dateM, clubId))
+        val result = lobbyCrudUseCase.create(LobbyCommand.Create(user.id.value, dateM, UUID.generateUUID(Random), null))
 
         assertEquals(lobbyResponse, result)
     }
@@ -60,9 +62,10 @@ class LobbyCrudUseCaseTest {
         whenever(lobby.creator).thenReturn(user)
         val date = mock<LocalDateTime>().toString()
         val lobbyResponse = LobbyResponse(
-            lobbyId.toString(),
+            lobbyId,
+            Faker().cowboyBebop.character(),
             date,
-            user.id.toString(),
+            user.toResponse(),
         )
 
         whenever(lobbyRepository.get(any())).thenReturn(lobby)
@@ -74,6 +77,7 @@ class LobbyCrudUseCaseTest {
 
     @Test
     fun `list lobbies`() = runBlocking {
+        val clubName = Faker().cowboyBebop.character()
         val lobbyId = UUID.generateUUID(Random)
         val lobby = getMockLobby()
         val lobby2 = getMockLobby()
@@ -82,15 +86,17 @@ class LobbyCrudUseCaseTest {
         val date = mock<LocalDateTime>().toString()
         val date2 = Mockito.mock<LocalDateTime>().toString()
         val lobbyResponse1 = LobbyResponse(
-            lobbyId.toString(),
+            lobbyId,
+            clubName,
             date,
-            user.id.toString(),
+            user.toResponse(),
         )
         val lobbyResponse2 =
             LobbyResponse(
-                UUID.generateUUID(Random).toString(),
+                UUID.generateUUID(Random),
+                clubName,
                 date2,
-                user.id.toString(),
+                user.toResponse(),
             )
         val lobbies = listOf(lobby, lobby2)
 

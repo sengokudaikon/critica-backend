@@ -45,10 +45,10 @@ class GameSimulationStory : KoinComponent {
         val lobby = lobbySteps.create(userAdmin.id.value, clubId)
 
         // 3) user1 joins lobby
-        lobbySteps.addPlayer(UUID(lobby.id), user1.playerName)
+        lobbySteps.addPlayer(lobby.id, user1.playerName)
 
         // 4) user-admin creates game
-        lobbySteps.addGame(UUID(lobby.id), userAdmin.id.value)
+        lobbySteps.addGame(lobby.id, userAdmin.id.value)
 
         val game = lobby.games.firstOrNull() ?: run {
             assert(false)
@@ -67,7 +67,7 @@ class GameSimulationStory : KoinComponent {
 
         users.forEach { username ->
             userSteps.register("$username@mail.ru", username, username, "password")
-            lobbySteps.addPlayer(UUID(lobby.id), username)
+            lobbySteps.addPlayer(lobby.id, username)
             val user = userSteps.login(null, username, "password").getOrNull() ?: return@forEach
             gameSteps.joinGame(user.id.value, UUID(game.id))
         }

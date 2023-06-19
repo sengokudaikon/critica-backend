@@ -50,8 +50,6 @@ class AuthControllerTest : FunSpec() {
         application {
             main()
         }
-        val mockUser = getMockUser().right()
-        whenever(mockAuthUseCase.register(anyString(), any())).thenReturn(mockUser)
 
         val command = createCommand()
         val call = client.post("/api/auth/register") {

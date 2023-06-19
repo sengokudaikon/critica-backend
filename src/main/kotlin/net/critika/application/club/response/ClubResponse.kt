@@ -1,5 +1,6 @@
 package net.critika.application.club.response
 
+import net.critika.application.Response
 import net.critika.application.game.response.GameResponse
 import net.critika.application.lobby.response.LobbyResponse
 import net.critika.application.user.response.UserResponse
@@ -19,4 +20,4 @@ data class ClubResponse(
     val logo: String,
     val description: String,
     val ruleSet: String,
-)
+) : Response

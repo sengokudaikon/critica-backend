@@ -41,8 +41,8 @@ class UserController(
     @Get("/api/user/statistics")
     suspend fun getStatistics(call: ApplicationCall) {
         val userId = fromUid(call)
-        val statistics = userStatisticsUseCase.getUserRating(userId) ?: return call.respond(HttpStatusCode.NotFound)
-        call.respond(statistics.toResponse())
+        val statistics = userStatisticsUseCase.get(userId)
+        call.respond(statistics)
     }
 
     @ProtectedRoute("firebase")

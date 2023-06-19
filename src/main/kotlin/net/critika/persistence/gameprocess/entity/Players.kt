@@ -5,11 +5,13 @@ import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.gameprocess.model.PlayerStatus
 import net.critika.persistence.club.entity.Games
 import net.critika.persistence.club.entity.Lobbies
+import net.critika.persistence.club.entity.Tournaments
 import net.critika.persistence.user.entity.Users
 
 object Players : KotlinxUUIDTable(name = "players") {
     val userId = reference("user_id", Users).nullable()
     val lobbyId = reference("lobby_id", Lobbies).nullable()
+    val tournamentId = reference("tournament_id", Tournaments).nullable()
     val gameId = reference("game_id", Games).nullable()
     val name = varchar("name", 255)
     val status = varchar("status", 255).default(PlayerStatus.WAITING.name)

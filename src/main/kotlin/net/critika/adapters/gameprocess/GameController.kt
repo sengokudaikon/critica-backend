@@ -10,10 +10,9 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.uuid.UUID
 import net.critika.adapters.Controller
-import net.critika.application.game.query.GameQuery
 import net.critika.application.player.query.PlayerNameQuery
-import net.critika.application.player.query.PlayerQuery
 import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.UserRole
 import net.critika.infrastructure.validation.validate
@@ -34,18 +33,19 @@ class GameController(
     @Put("/api/game/{id}/host/{hostId}")
     suspend fun setHost(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<GameQuery>()
-            validate(gameId)
-            val game = gameUseCase.assignHost(gameId.gameId, gameId.hostId)
-            call.respond(game)
+            val game = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
+            val host = call.receiveParameters()["hostId"]?.let { UUID(it) } ?: throw IllegalArgumentException("hostId is required")
+
+            val response = gameUseCase.assignHost(game, host)
+            call.respond(response)
         }
     }
 
     @Get("/api/game/{id}")
     suspend fun getGame(call: ApplicationCall) {
-        val id = call.receive<GameQuery>()
+        val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
 
-        val game = gameUseCase.get(id.gameId)
+        val game = gameUseCase.get(id)
         call.respond(game)
     }
 
@@ -53,8 +53,8 @@ class GameController(
     @Post("/api/game/{id}/start")
     suspend fun startGame(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<GameQuery>()
-            val game = gameUseCase.start(gameId.gameId)
+            val id = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
+            val game = gameUseCase.start(id)
             call.respond(game)
         }
     }
@@ -63,10 +63,10 @@ class GameController(
     @Put("/api/game/{id}/addPlayer")
     suspend fun addPlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<GameQuery>()
+            val gameId = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
             val playerName = call.receiveParameters()["playerName"].toString()
             validate(PlayerNameQuery(playerName))
-            gameUseCase.addPlayerByName(gameId.gameId, playerName)
+            gameUseCase.addPlayerByName(gameId, playerName)
 
             call.respondNullable(HttpStatusCode.NoContent)
         }
@@ -76,11 +76,9 @@ class GameController(
     @Put("/api/game/{id}/addPlayer/{playerId}")
     suspend fun addPlayerById(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<GameQuery>()
-            validate(gameId)
-            val playerId = call.receive<PlayerQuery>()
-            validate(playerId)
-            gameUseCase.addPlayerById(gameId.gameId, playerId.playerId)
+            val gameId = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
+            val playerId = call.receiveParameters()["playerId"]?.let { UUID(it) } ?: throw IllegalArgumentException("playerId is required")
+            gameUseCase.addPlayerById(gameId, playerId)
 
             call.respondNullable(HttpStatusCode.NoContent)
         }
@@ -90,9 +88,9 @@ class GameController(
     @Put("/api/game/{id}/removePlayer/{playerId}")
     suspend fun removePlayer(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<GameQuery>()
-            val playerId = call.receive<PlayerQuery>()
-            gameUseCase.removePlayerById(gameId.gameId, playerId.playerId)
+            val gameId = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
+            val playerId = call.receiveParameters()["playerId"]?.let { UUID(it) } ?: throw IllegalArgumentException("playerId is required")
+            gameUseCase.removePlayerById(gameId, playerId)
 
             call.respondNullable(HttpStatusCode.NoContent)
         }
@@ -102,9 +100,9 @@ class GameController(
     @Post("/api/game/{id}/finish")
     suspend fun finishGame(call: ApplicationCall) {
         authorize(call, listOf(UserRole.HOST, UserRole.OWNER)) {
-            val gameId = call.receive<GameQuery>()
-            val winner = call.receive<String>()
-            val game = gameUseCase.finish(gameId.gameId, PlayerRole.valueOf(winner))
+            val gameId = call.receiveParameters()["id"]?.let { UUID(it) } ?: throw IllegalArgumentException("lobbyId is required")
+            val winner = call.request.queryParameters["winner"] ?: throw IllegalArgumentException("winner is required")
+            val game = gameUseCase.finish(gameId, PlayerRole.valueOf(winner))
             call.respond(game)
         }
     }

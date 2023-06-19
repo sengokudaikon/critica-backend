@@ -7,19 +7,23 @@ import io.ktor.server.plugins.*
 import kotlinx.uuid.UUID
 import net.critika.application.game.command.GameCommand
 import net.critika.application.game.response.GameResponse
-import net.critika.application.user.usecase.UserStatisticsUseCase
+import net.critika.application.player.command.PlayerCommand
+import net.critika.application.user.command.UserRatingCommand
+import net.critika.application.user.command.UserRoleStatisticsCommand
 import net.critika.domain.club.model.Game
 import net.critika.domain.club.model.GameStatus
+import net.critika.domain.club.repository.GameRepositoryPort
+import net.critika.domain.club.repository.LobbyRepositoryPort
 import net.critika.domain.gameprocess.model.Player
 import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.gameprocess.model.PlayerStatus
+import net.critika.domain.gameprocess.repository.PlayerRepositoryPort
 import net.critika.domain.user.model.UserRole
+import net.critika.domain.user.repository.UserRatingRepositoryPort
 import net.critika.domain.user.repository.UserRepositoryPort
+import net.critika.domain.user.repository.UserRoleStatisticRepositoryPort
 import net.critika.infrastructure.exception.PlayerException
 import net.critika.infrastructure.exception.UserException
-import net.critika.persistence.club.repository.GameRepository
-import net.critika.persistence.club.repository.LobbyRepository
-import net.critika.persistence.club.repository.PlayerRepository
 import net.critika.ports.game.GamePort
 import org.koin.core.annotation.Single
 
@@ -27,11 +31,12 @@ private const val MAX_PLAYERS: Int = 10
 
 @Single
 class GameUseCase(
-    private val repository: GameRepository,
-    private val lobbyRepository: LobbyRepository,
-    private val playerRepository: PlayerRepository,
+    private val repository: GameRepositoryPort,
+    private val lobbyRepository: LobbyRepositoryPort,
+    private val playerRepository: PlayerRepositoryPort,
     private val userRepository: UserRepositoryPort,
-    private val userStatisticsUseCase: UserStatisticsUseCase,
+    private val userRatingRepositoryPort: UserRatingRepositoryPort,
+    private val userRoleStatisticRepositoryPort: UserRoleStatisticRepositoryPort,
 ) : GamePort {
     override suspend fun assignHost(gameId: UUID, hostId: UUID): GameResponse {
         val game = repository.get(gameId)
@@ -134,18 +139,18 @@ class GameUseCase(
         }
     }
 
-    @Suppress("NestedBlockDepth")
     override suspend fun finish(gameId: UUID, winningTeam: PlayerRole): Map<PlayerRole, MutableList<Player>> {
         val game = repository.get(gameId)
-        repository.update(GameCommand.Update(game, status = GameStatus.FINISHED, winner = winningTeam))
-
         val winningPlayers = mutableListOf<Player>()
+        recordGameRating(game, winningTeam, winningPlayers)
+        repository.update(GameCommand.Update(game, status = GameStatus.FINISHED, winner = winningTeam))
+        return mapOf(winningTeam to winningPlayers)
+    }
 
+    private suspend fun recordGameRating(game: Game, winningTeam: PlayerRole, winningPlayers: List<Player>) {
         game.players.forEach {
             if (it.user != null) {
-                val userRating = userStatisticsUseCase.getUserRating(it.user!!.id.value) ?: throw IllegalStateException(
-                    "User rating not found",
-                )
+                val userRating = userRatingRepositoryPort.get(it.user?.id?.value ?: throw IllegalStateException("User rating not found"))
                 val roleStatistic = userRating.roleStatistics.find { it.role.toTeam() == winningTeam }
                     ?: throw IllegalStateException("Role statistic not found")
 
@@ -171,23 +176,28 @@ class GameUseCase(
                         roleStatistic.gamesWon += 1
                         roleStatistic.gamesTotal += 1
                         roleStatistic.bonusPoints += it.bonusPoints
-                        winningPlayers.add(it)
+                        winningPlayers.plus(it)
                     }
                 }
 
-                userStatisticsUseCase.updateUserRating(userRating)
-                userStatisticsUseCase.updateRoleStatistic(roleStatistic)
+                userRatingRepositoryPort.update(UserRatingCommand.Update(userRating))
+                userRoleStatisticRepositoryPort.update(UserRoleStatisticsCommand.Update(roleStatistic))
             }
             game.lobby.players.plus(it)
-            it.seat = 0
-            it.game = null
-            it.role = null
-            it.status = PlayerStatus.WAITING.name
-            it.bestMove = 0
-            it.bonusPoints = 0
-            it.foulPoints = 0
+            playerRepository.update(
+                PlayerCommand.Update(
+                    it.id.value,
+                    lobbyId = game.lobby.id.value,
+                    playerName = it.name,
+                    gameId = null,
+                    role = null,
+                    seat = 0,
+                    status = PlayerStatus.WAITING.name,
+                    bestMove = 0,
+                    bonusPoints = 0,
+                    foulPoints = 0,
+                ),
+            )
         }
-
-        return mapOf(winningTeam to winningPlayers)
     }
 }

@@ -7,6 +7,7 @@ import net.critika.application.player.command.PlayerCommand
 import net.critika.domain.club.model.Game
 import net.critika.domain.club.model.Lobby
 import net.critika.domain.gameprocess.model.Player
+import net.critika.domain.gameprocess.model.PlayerStatus
 import net.critika.domain.gameprocess.repository.PlayerRepositoryPort
 import net.critika.persistence.gameprocess.entity.Players
 import org.jetbrains.exposed.sql.and
@@ -98,7 +99,15 @@ class PlayerRepository : PlayerRepositoryPort {
         command as PlayerCommand.Update
         return suspendedTransactionAsync {
             val player = Player[command.id]
-            player.name = command.playerName
+            player.name = command.playerName ?: player.name
+            player.lobby = command.lobbyId?.let { Lobby[it] } ?: player.lobby
+            player.game = command.gameId?.let { Game[it] } ?: player.game
+            player.seat = command.seat ?: 0
+            player.role = command.role
+            player.status = command.status ?: PlayerStatus.WAITING.name
+            player.bestMove = command.bestMove ?: player.bestMove
+            player.bonusPoints = command.bonusPoints ?: player.bonusPoints
+            player.foulPoints = command.foulPoints ?: player.foulPoints
             player.flush()
             player
         }.await()

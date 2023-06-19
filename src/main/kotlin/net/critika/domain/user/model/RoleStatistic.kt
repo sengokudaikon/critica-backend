@@ -1,16 +1,15 @@
 package net.critika.domain.user.model
 
+import kotlinx.uuid.UUID
 import kotlinx.uuid.exposed.KotlinxUUIDEntity
 import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
 import net.critika.application.user.response.RoleResponse
 import net.critika.persistence.user.entity.RoleStatistics
 import org.jetbrains.exposed.dao.id.EntityID
-import kotlinx.uuid.UUID
 
 class RoleStatistic(id: EntityID<UUID>) : KotlinxUUIDEntity(id) {
     fun toResponse(): RoleResponse {
         return RoleResponse(
-            id = this.id.value.toString(),
             role = role.name,
             gamesWon = gamesWon,
             gamesTotal = gamesTotal,

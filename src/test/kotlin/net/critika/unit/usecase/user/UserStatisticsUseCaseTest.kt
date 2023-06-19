@@ -3,11 +3,15 @@ package net.critika.unit.usecase.user
 import kotlinx.coroutines.runBlocking
 import kotlinx.uuid.UUID
 import kotlinx.uuid.generateUUID
-import net.critika.application.user.usecase.UserStatisticsUseCase
+import net.critika.application.user.command.UserRatingCommand
+import net.critika.application.user.command.UserRoleStatisticsCommand
+import net.critika.application.user.usecase.UserRatingUseCase
+import net.critika.application.user.usecase.UserRoleStatisticUseCase
 import net.critika.domain.gameprocess.model.PlayerRole
 import net.critika.domain.user.model.RoleStatistic
 import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.repository.UserRatingRepositoryPort
+import net.critika.domain.user.repository.UserRoleStatisticRepositoryPort
 import net.critika.helpers.Helpers.getMockUser
 import net.critika.helpers.Helpers.getMockUserRating
 import org.jetbrains.exposed.dao.id.EntityID
@@ -23,12 +27,16 @@ import kotlin.random.Random
 
 class UserStatisticsUseCaseTest {
     private lateinit var userRatingRepository: UserRatingRepositoryPort
-    private lateinit var userStatisticsUseCase: UserStatisticsUseCase
+    private lateinit var userRatingUseCase: UserRatingUseCase
+    private lateinit var userRoleStatisticRepository: UserRoleStatisticRepositoryPort
+    private lateinit var userRoleStatisticsUseCase: UserRoleStatisticUseCase
 
     @BeforeEach
     fun setUp() {
         userRatingRepository = mock()
-        userStatisticsUseCase = UserStatisticsUseCase(userRatingRepository)
+        userRatingUseCase = UserRatingUseCase(userRatingRepository)
+        userRoleStatisticRepository = mock()
+        userRoleStatisticsUseCase = UserRoleStatisticUseCase(userRoleStatisticRepository)
     }
 
     @Test
@@ -38,11 +46,11 @@ class UserStatisticsUseCaseTest {
         val userRating = getMockUserRating()
         whenever(userRating.userId).doReturn(user)
 
-        whenever(userRatingRepository.createUserRating(any())).thenReturn(userRating)
+        whenever(userRatingRepository.create(any())).thenReturn(userRating)
 
-        val result = userStatisticsUseCase.createUserRating(userIdMock)
+        val result = userRatingUseCase.create(UserRatingCommand.Create(userIdMock))
 
-        assertEquals(userRating, result)
+        assertEquals(userRating.toResponse(), result)
     }
 
     @Test
@@ -52,16 +60,15 @@ class UserStatisticsUseCaseTest {
         val userRating = getMockUserRating()
         whenever(userRating.userId).doReturn(user)
 
-        whenever(userRatingRepository.findUserRatingById(any())).thenReturn(userRating)
+        whenever(userRatingRepository.get(any())).thenReturn(userRating)
 
-        val result = userStatisticsUseCase.getUserRating(userRatingId)
+        val result = userRatingUseCase.get(userRatingId)
 
-        assertEquals(userRating, result)
+        assertEquals(userRating.toResponse(), result)
     }
 
     @Test
     fun `update user rating`(): Unit = runBlocking {
-        val userId = UUID.generateUUID(Random)
         val userRating = mock<UserRating>().apply {
             this.bonusPoints = 130
             this.bestMovePoints = 10
@@ -69,22 +76,23 @@ class UserStatisticsUseCaseTest {
             this.malusPoints = 40
         }
 
-        userStatisticsUseCase.updateUserRating(userRating)
+        userRatingUseCase.update(UserRatingCommand.Update(userRating))
 
-        verify(userRatingRepository).updateUserRating(userRating)
+        verify(userRatingRepository).update(UserRatingCommand.Update(userRating))
     }
 
     @Test
     fun `delete user rating`(): Unit = runBlocking {
         val userId = UUID.generateUUID(Random)
 
-        userStatisticsUseCase.deleteUserRating(userId)
+        userRatingUseCase.delete(userId)
 
-        verify(userRatingRepository).deleteUserRating(userId)
+        verify(userRatingRepository).delete(userId)
     }
 
     @Test
     fun `create role statistic`() = runBlocking {
+        val userId = UUID.generateUUID(Random)
         val userRatingId = UUID.generateUUID(Random)
         val userRating = getMockUserRating()
         val roleStatistic = mock<RoleStatistic> {
@@ -96,9 +104,9 @@ class UserStatisticsUseCaseTest {
             on { bonusPoints } doReturn 0
         }
 
-        whenever(userRatingRepository.createRoleStatistic(any(), any())).thenReturn(roleStatistic)
+        whenever(userRoleStatisticRepository.create(any())).thenReturn(roleStatistic)
 
-        val result = userStatisticsUseCase.createRoleStatistic(userRatingId, PlayerRole.CITIZEN)
+        val result = userRoleStatisticsUseCase.create(UserRoleStatisticsCommand.Create(userId, userRatingId, PlayerRole.CITIZEN.name))
 
         assertEquals(roleStatistic, result)
     }
@@ -125,17 +133,15 @@ class UserStatisticsUseCaseTest {
         }
         val roleStatistics = listOf(roleStatistic1, roleStatistic2)
 
-        whenever(userRatingRepository.findRoleStatisticsByUserRatingId(any())).thenReturn(roleStatistics)
+        whenever(userRoleStatisticRepository.findByUserRating(any())).thenReturn(roleStatistics)
 
-        val result = userStatisticsUseCase.getRoleStatisticsByUserRatingId(userRatingId)
+        val result = userRoleStatisticsUseCase.findByUserRatingId(userRatingId)
 
         assertEquals(roleStatistics, result)
     }
 
     @Test
     fun `update role statistic`(): Unit = runBlocking {
-        val roleStatisticId = UUID.generateUUID(Random)
-        val userRatingId = UUID.generateUUID(Random)
         val userRating = getMockUserRating()
         val roleStatistic = mock<RoleStatistic> {
             on { id } doReturn mock<EntityID<UUID>>()
@@ -146,17 +152,17 @@ class UserStatisticsUseCaseTest {
             on { bonusPoints } doReturn 100
         }
 
-        userStatisticsUseCase.updateRoleStatistic(roleStatistic)
+        userRoleStatisticsUseCase.update(UserRoleStatisticsCommand.Update(roleStatistic))
 
-        verify(userRatingRepository).updateRoleStatistic(roleStatistic)
+        verify(userRatingRepository).update(any())
     }
 
     @Test
     fun `delete role statistic`(): Unit = runBlocking {
         val roleStatisticId = UUID.generateUUID(Random)
 
-        userStatisticsUseCase.deleteRoleStatistic(roleStatisticId)
+        userRoleStatisticsUseCase.delete(roleStatisticId)
 
-        verify(userRatingRepository).deleteRoleStatistic(roleStatisticId)
+        verify(userRatingRepository).delete(roleStatisticId)
     }
 }

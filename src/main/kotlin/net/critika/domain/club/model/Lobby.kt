@@ -16,6 +16,8 @@ class Lobby(
 ) : KotlinxUUIDEntity(id) {
 
     companion object : KotlinxUUIDEntityClass<Lobby>(Lobbies)
+    var club by Club referencedOn Lobbies.clubId
+    var tournament by Tournament optionalReferencedOn Lobbies.tournamentId
     var date by Lobbies.date
     var creator by User referencedOn Lobbies.creator
     val players by Player optionalReferrersOn Players.lobbyId
@@ -23,9 +25,10 @@ class Lobby(
 
     fun toResponse(): LobbyResponse {
         return LobbyResponse(
-            id = this.id.value.toString(),
+            id = this.id.value,
+            club = this.club.name,
             date = this.date.toString(),
-            creator = this.creator.playerName,
+            creator = this.creator.toResponse(),
             games = this.games.map { it.toResponse() },
         )
     }

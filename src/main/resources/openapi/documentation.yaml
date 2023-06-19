@@ -34,7 +34,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -57,7 +57,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -135,7 +135,7 @@ paths:
             application/json:
               schema:
                 type: "string"
-  /api/club/{clubId}:
+  /api/club/{id}:
     get:
       security:
         - bearerAuth: [ ]
@@ -143,11 +143,11 @@ paths:
         - "Club"
       description: "Get club by id"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -155,7 +155,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ClubResponse"
-  /api/club/{clubId}/createLobby:
+  /api/club/{id}/createLobby:
     post:
       security:
         - bearerAuth: [ ]
@@ -163,17 +163,17 @@ paths:
         - "Club"
       description: "Create a lobby in a club"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubQuery"
+          type: "string"
+      - name: "date"
+        in: "query"
         required: true
+        schema:
+          type: "string"
+          format: "date-time"
       responses:
         "200":
           description: "OK"
@@ -181,7 +181,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-  /api/club/{clubId}/games:
+  /api/club/{id}/games:
     get:
       security:
         - bearerAuth: [ ]
@@ -189,11 +189,11 @@ paths:
         - "Club"
       description: "Get games in a club"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -203,7 +203,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/GameResponse"
-  /api/club/{clubId}/join:
+  /api/club/{id}/join:
     put:
       security:
         - bearerAuth: [ ]
@@ -211,17 +211,11 @@ paths:
         - "Club"
       description: "Join a club"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubMembershipQuery"
-        required: true
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -229,7 +223,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ClubResponse"
-  /api/club/{clubId}/leave:
+  /api/club/{id}/leave:
     put:
       security:
         - bearerAuth: [ ]
@@ -237,17 +231,11 @@ paths:
         - "Club"
       description: "Leave a club"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ClubMembershipQuery"
-        required: true
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -255,7 +243,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ClubResponse"
-  /api/club/{clubId}/lobbies:
+  /api/club/{id}/lobbies:
     get:
       security:
         - bearerAuth: [ ]
@@ -263,11 +251,11 @@ paths:
         - "Club"
       description: "See lobbies in a club"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -277,7 +265,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/LobbyResponse"
-  /api/club/{clubId}/members:
+  /api/club/{id}/members:
     get:
       security:
         - bearerAuth: [ ]
@@ -285,11 +273,11 @@ paths:
         - "Club"
       description: "See members in a club"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -311,16 +299,14 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
+                $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/day/{day}:
     get:
       security:
@@ -333,7 +319,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "day"
         in: "path"
         required: true
@@ -345,9 +331,7 @@ paths:
           content:
             application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
+                $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/month/{month}:
     get:
       security:
@@ -360,7 +344,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "month"
         in: "path"
         required: true
@@ -372,9 +356,7 @@ paths:
           content:
             application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
+                $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/season:
     get:
       security:
@@ -387,29 +369,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
-  /api/club/{id}/rating/week/{week}:
-    get:
-      security:
-        - bearerAuth: [ ]
-      tags:
-        - "Club"
-      description: "See club rating for a week"
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "week"
         in: "path"
         required: true
@@ -421,9 +381,7 @@ paths:
           content:
             application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
+                $ref: "#/components/schemas/RatingResponse"
   /api/club/{id}/rating/year/{year}:
     get:
       security:
@@ -436,7 +394,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "year"
         in: "path"
         required: true
@@ -448,10 +406,8 @@ paths:
           content:
             application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/RatingResponse"
-  /api/club/{clubId}/update:
+                $ref: "#/components/schemas/RatingResponse"
+  /api/club/{id}/update:
     put:
       security:
         - bearerAuth: [ ]
@@ -459,16 +415,16 @@ paths:
         - "Club"
       description: "Update club info"
       parameters:
-      - name: "clubId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Update"
+              $ref: "#/components/schemas/UpdateClub"
         required: true
       responses:
         "200":
@@ -525,7 +481,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -545,7 +501,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
@@ -570,7 +526,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
@@ -595,7 +551,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
@@ -620,7 +576,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerName"
         in: "path"
         required: true
@@ -638,12 +594,12 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
   /api/game/{id}/finish:
     post:
       security:
@@ -656,7 +612,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -681,12 +637,12 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "hostId"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -706,12 +662,12 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
   /api/game/{id}/start:
     post:
       security:
@@ -724,7 +680,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -744,7 +700,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "day"
         in: "path"
         required: true
@@ -769,7 +725,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "night"
         in: "path"
         required: true
@@ -798,7 +754,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/GameResponse"
-  /api/lobby/{lobbyId}:
+  /api/lobby/{id}:
     get:
       security:
         - bearerAuth: [ ]
@@ -806,11 +762,11 @@ paths:
         - "Lobby"
       description: "Get lobby by id"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -818,7 +774,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-  /api/lobby/{lobbyId}/addGame:
+  /api/lobby/{id}/addGame:
     put:
       security:
         - bearerAuth: [ ]
@@ -826,11 +782,11 @@ paths:
         - "Lobby"
       description: "Add game to lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -848,11 +804,6 @@ paths:
       parameters:
       - name: "lobbyId"
         in: "path"
-        required: true
-        schema:
-          $ref: "#/components/schemas/UUID"
-      - name: "playerName"
-        in: "query"
         required: true
         schema:
           type: "string"
@@ -875,12 +826,12 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -900,7 +851,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerName"
         in: "path"
         required: true
@@ -913,7 +864,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-  /api/lobby/{lobbyId}/delete:
+  /api/lobby/{id}/delete:
     put:
       security:
         - bearerAuth: [ ]
@@ -921,11 +872,11 @@ paths:
         - "Lobby"
       description: "Delete lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "204":
           description: "No Content"
@@ -933,7 +884,7 @@ paths:
             application/json:
               schema:
                 type: "object"
-  /api/lobby/{lobbyId}/games:
+  /api/lobby/{id}/games:
     get:
       security:
         - bearerAuth: [ ]
@@ -941,11 +892,11 @@ paths:
         - "Lobby"
       description: "Get games in lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -955,7 +906,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/GameResponse"
-  /api/lobby/{lobbyId}/players:
+  /api/lobby/{id}/players:
     get:
       security:
         - bearerAuth: [ ]
@@ -963,11 +914,11 @@ paths:
         - "Lobby"
       description: "Get players in lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -977,7 +928,7 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/PlayerResponse"
-  /api/lobby/{lobbyId}/removeGame/{gameId}:
+  /api/lobby/{id}/removeGame/{gameId}:
     put:
       security:
         - bearerAuth: [ ]
@@ -985,16 +936,16 @@ paths:
         - "Lobby"
       description: "Remove game from lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "gameId"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1002,7 +953,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-  /api/lobby/{lobbyId}/removePlayer:
+  /api/lobby/{id}/removePlayer:
     put:
       security:
         - bearerAuth: [ ]
@@ -1010,11 +961,11 @@ paths:
         - "Lobby"
       description: "Remove player from lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerName"
         in: "query"
         required: true
@@ -1027,7 +978,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LobbyResponse"
-  /api/lobby/{lobbyId}/removePlayer/{playerId}:
+  /api/lobby/{id}/removePlayer/{playerId}:
     put:
       security:
         - bearerAuth: [ ]
@@ -1035,16 +986,16 @@ paths:
         - "Lobby"
       description: "Remove player from lobby"
       parameters:
-      - name: "lobbyId"
+      - name: "id"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "playerId"
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1094,7 +1045,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1134,7 +1085,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1154,7 +1105,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1169,12 +1120,6 @@ paths:
       tags:
         - "Player"
       description: "Leave current game"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyQuery"
-        required: true
       responses:
         "200":
           description: "OK"
@@ -1194,13 +1139,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyQuery"
-        required: true
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1220,7 +1159,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
@@ -1245,18 +1184,12 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
         schema:
           type: "integer"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
         "200":
           description: "OK"
@@ -1276,20 +1209,13 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
         schema:
           type: "integer"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -1308,9 +1234,8 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -1329,7 +1254,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1349,21 +1274,14 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "candidate"
         in: "path"
         required: true
         schema:
           type: "integer"
           format: "int32"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -1382,13 +1300,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -1408,18 +1320,12 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "candidate"
         in: "path"
         required: true
         schema:
           type: "integer"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
         "200":
           description: "OK"
@@ -1439,20 +1345,13 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "seat"
         in: "path"
         required: true
         schema:
           type: "integer"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StageQuery"
-        required: true
       responses:
-        
         "200":
           description: "OK"
           content:
@@ -1471,7 +1370,7 @@ paths:
         in: "path"
         required: true
         schema:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
       - name: "candidate"
         in: "query"
         required: true
@@ -1490,7 +1389,189 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GameResponse"
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/GameResponse"
+  /api/tournament/{id}/join:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Join tournament"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TournamentResponse"
+  /api/tournament/{id}/leave:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Leave tournament"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TournamentResponse"
+  /api/tournament/{id}/lobbies:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Load tournament lobbies"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/LobbyResponse"
+  /api/tournament/{id}/members:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Load tournament members"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/PlayerResponse"
+  /api/tournament/{id}/rating:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Load tournament rating table"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RatingResponse"
+  /api/tournament/{id}/update:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Update tournament"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTournament"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TournamentResponse"
+  /api/tournament/create:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Create tournament"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTournament"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TournamentResponse"
+  /api/tournaments/list:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Tournament"
+      description: "Get a list of tournaments"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/TournamentResponse"
+  /api/user/role:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "User"
+      description: "Get current user's role"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
   /api/user/settings:
     get:
       security:
@@ -1593,32 +1674,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RatingResponse"
-  /api/user/role:
-    get:
-      security:
-        - bearerAuth: [ ]
-      tags:
-        - "User"
-      description: "Get user role"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: string
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
   schemas:
     UserResponse:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
         playerName:
           type: "string"
         email:
@@ -1629,6 +1691,42 @@ components:
         playerName:
           type: "string"
         email:
+          type: "string"
+    CreateTournament:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        startDate:
+          type: "string"
+        location:
+          type: "string"
+        playerLimit:
+          type: "integer"
+          format: "int32"
+        creatorId:
+          type: "string"
+        clubId:
+          type: "string"
+    UpdateTournament:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        startDate:
+          type: "string"
+        location:
+          type: "string"
+        playerLimit:
+          type: "integer"
+          format: "int32"
+        clubId:
           type: "string"
     CreateClub:
       type: "object"
@@ -1644,7 +1742,26 @@ components:
         address:
           type: "string"
         creatorId:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
+        ruleSet:
+          type: "string"
+        logo:
+          type: "string"
+    UpdateClub:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        country:
+          type: "string"
+        city:
+          type: "string"
+        address:
+          type: "string"
         ruleSet:
           type: "string"
         logo:
@@ -1659,18 +1776,11 @@ components:
       properties:
         email:
           type: "string"
-    UUID:
-      type: "string"
-    ClubQuery:
-      type: "object"
-      properties:
-        id:
-          $ref: "#/components/schemas/UUID"
     PlayerResponse:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
         seat:
           type: "integer"
           format: "int32"
@@ -1749,7 +1859,7 @@ components:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
         date:
           type: "string"
         host:
@@ -1786,11 +1896,13 @@ components:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
+        club:
+          type: "string"
         date:
           type: "string"
         creator:
-          type: "string"
+          $ref: "#/components/schemas/UserResponse"
         games:
           type: "array"
           items:
@@ -1803,7 +1915,7 @@ components:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
         name:
           type: "string"
         creator:
@@ -1836,16 +1948,9 @@ components:
           type: "string"
         ruleSet:
           type: "string"
-    ClubMembershipQuery:
-      type: "object"
-      properties:
-        userId:
-          $ref: "#/components/schemas/UUID"
     RoleResponse:
       type: "object"
       properties:
-        id:
-          $ref: "#/components/schemas/UUID"
         role:
           type: "string"
         gamesWon:
@@ -1860,8 +1965,6 @@ components:
     RatingResponse:
       type: "object"
       properties:
-        id:
-          $ref: "#/components/schemas/UUID"
         userId:
           type: "string"
         totalPoints:
@@ -1880,75 +1983,43 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/RoleResponse"
-    Update:
+    TournamentResponse:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          type: "string"
         name:
+          type: "string"
+        date:
+          type: "string"
+        clubId:
+          type: "string"
+        creator:
+          $ref: "#/components/schemas/UserResponse"
+        playerLimit:
+          type: "integer"
+          format: "int32"
+        location:
           type: "string"
         description:
           type: "string"
-        country:
-          type: "string"
-        city:
-          type: "string"
-        address:
-          type: "string"
-        ruleSet:
-          type: "string"
-        logo:
-          type: "string"
-    GameQuery:
-      type: "object"
-      properties:
-        hostId:
-          $ref: "#/components/schemas/UUID"
-        gameId:
-          $ref: "#/components/schemas/UUID"
-    PlayerQuery:
-      type: "object"
-      properties:
-        playerId:
-          $ref: "#/components/schemas/UUID"
-    LobbyQuery:
-      type: "object"
-      properties:
-        lobbyId:
-          $ref: "#/components/schemas/UUID"
-    PlayerNameQuery:
-      type: "object"
-      properties:
-        playerName:
-          type: "string"
-    StackTraceElement:
-      type: "object"
-      properties:
-        classLoaderName:
-          type: "string"
-        moduleName:
-          type: "string"
-        moduleVersion:
-          type: "string"
-        methodName:
-          type: "string"
-        fileName:
-          type: "string"
-        lineNumber:
-          type: "integer"
-          format: "int32"
-    StageQuery:
-      type: "object"
-      properties:
-        id:
-          $ref: "#/components/schemas/UUID"
+        players:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+        lobbies:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/LobbyResponse"
+        games:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GameResponse"
     UserSettingsResponse:
       type: "object"
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
-        emailConfirmed:
-          type: "boolean"
+          type: "string"
         publicVisibility:
           type: "boolean"
         pushNotificationsEnabled:

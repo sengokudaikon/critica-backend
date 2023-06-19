@@ -2,8 +2,10 @@ package net.critika.persistence.club.repository
 
 import kotlinx.uuid.UUID
 import net.critika.application.lobby.command.LobbyCommand
+import net.critika.domain.club.model.Club
 import net.critika.domain.club.model.Game
 import net.critika.domain.club.model.Lobby
+import net.critika.domain.club.model.Tournament
 import net.critika.domain.club.repository.LobbyRepositoryPort
 import net.critika.domain.user.model.User
 import net.critika.infrastructure.exception.GameException
@@ -18,6 +20,8 @@ class LobbyRepository : LobbyRepositoryPort {
         command as LobbyCommand.Create
         return suspendedTransactionAsync {
             val lobby = Lobby.new {
+                tournament = command.tournamentId?.let { Tournament.findById(it) }
+                this.club = Club.findById(command.clubId) ?: throw LobbyException.NotFound("Club not found")
                 this.creator = User.findById(command.creator) ?: throw LobbyException.NotFound("User not found")
                 this.date = command.date.let { LocalDateTime.parse(it) }
             }

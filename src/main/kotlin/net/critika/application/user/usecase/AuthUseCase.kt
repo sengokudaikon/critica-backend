@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import net.critika.application.user.command.UserCommand
+import net.critika.application.user.command.UserRatingCommand
 import net.critika.application.user.command.UserSettingsCommand
 import net.critika.domain.user.model.User
 import net.critika.domain.user.repository.UserRepositoryPort
@@ -14,7 +15,7 @@ import org.koin.core.annotation.Single
 @Single
 class AuthUseCase(
     private val userRepository: UserRepositoryPort,
-    private val userStatisticsUseCase: UserStatisticsUseCase,
+    private val userRatingUseCase: UserRatingUseCase,
     private val userSettingsUseCase: UserSettingsUseCase,
 ) : AuthPort {
     override suspend fun register(uid: String, command: UserCommand.Create): Either<Exception, User> {
@@ -24,7 +25,7 @@ class AuthUseCase(
                 command.email,
                 command.playerName,
             )
-            userStatisticsUseCase.createUserRating(user.id.value)
+            userRatingUseCase.create(UserRatingCommand.Create(user.id.value))
             userSettingsUseCase.create(UserSettingsCommand.Create(user.id.value))
             user.right()
         } catch (e: Exception) {

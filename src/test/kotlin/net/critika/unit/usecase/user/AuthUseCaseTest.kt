@@ -5,11 +5,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.uuid.UUID
 import kotlinx.uuid.generateUUID
 import net.critika.application.user.command.UserCommand
+import net.critika.application.user.command.UserRatingCommand
 import net.critika.application.user.command.UserSettingsCommand
 import net.critika.application.user.response.UserSettingsResponse
 import net.critika.application.user.usecase.AuthUseCase
+import net.critika.application.user.usecase.UserRatingUseCase
 import net.critika.application.user.usecase.UserSettingsUseCase
-import net.critika.application.user.usecase.UserStatisticsUseCase
 import net.critika.domain.user.model.UserRating
 import net.critika.domain.user.model.UserSetting
 import net.critika.domain.user.repository.UserRepositoryPort
@@ -27,18 +28,18 @@ import kotlin.random.Random
 
 class AuthUseCaseTest {
     private val userRepository: UserRepositoryPort = mock()
-    private val userStatisticsUseCase: UserStatisticsUseCase = mock()
+    private val userRatingUseCase: UserRatingUseCase = mock()
     private val userSettingsUseCase: UserSettingsUseCase = mock()
     val uid = UUID.generateUUID(Random).toString()
     private val authUseCase = AuthUseCase(
         userRepository,
-        userStatisticsUseCase,
+        userRatingUseCase,
         userSettingsUseCase,
     )
 
     @BeforeEach
     fun setUp() {
-        clearInvocations(userRepository, userStatisticsUseCase, userSettingsUseCase)
+        clearInvocations(userRepository, userRatingUseCase, userSettingsUseCase)
     }
 
     @Test
@@ -52,7 +53,7 @@ class AuthUseCaseTest {
         val userSetting: UserSetting = mock()
         val userSettings: UserSettingsResponse = mock()
         whenever(userRepository.create(any(), any(), any())).thenReturn(createdUser)
-        whenever(userStatisticsUseCase.createUserRating(any())).thenReturn(userRating)
+        whenever(userRatingUseCase.create(any())).thenReturn(userRating.toResponse())
         whenever(userSettingsRepository.createUserSettings(any())).thenReturn(userSetting)
         whenever(userSettingsUseCase.create(UserSettingsCommand.Create(any(), any()))).thenReturn(
             Either.Right(userSettings),
@@ -63,7 +64,7 @@ class AuthUseCaseTest {
 
         // Then
         verify(userRepository, times(1)).create(uid, request.email, request.playerName)
-        verify(userStatisticsUseCase, times(1)).createUserRating(createdUser.id.value)
+        verify(userRatingUseCase, times(1)).create(UserRatingCommand.Create(createdUser.id.value))
         verify(userSettingsUseCase, times(1)).create(UserSettingsCommand.Create(createdUser.id.value))
         Assertions.assertEquals(Either.Right(createdUser), result)
     }
